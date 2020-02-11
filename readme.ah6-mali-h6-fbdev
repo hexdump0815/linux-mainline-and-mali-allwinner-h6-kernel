@@ -1,0 +1,52 @@
+allwinner h6:
+
+there is no x11 allwinner h6 mali blob, so we have to use LIBGL_FB=3 of gl4es and the fbdev mali blob
+(see: https://github.com/ptitSeb/gl4es/issues/119)
+
+kernel module:
+
+git clone https://github.com/LibreELEC/mali-midgard.git
+mv mali-midgard allwinner-h6-mali-midgard
+cd allwinner-h6-mali-midgard
+git checkout TX011-SW-99002-r28p0-01rel0
+make -C /compile/source/linux-stable-aw M=`pwd`/driver/product/kernel/drivers/gpu/arm/midgard CONFIG_MALI_MIDGARD=m CONFIG_MALI_PLATFORM_NAME=sunxi
+export kver=5.3.0-stb-ah6+
+mkdir /lib/modules/${kver}/extra
+cp driver/product/kernel/drivers/gpu/arm/midgard/mali_kbase.ko /lib/modules/${kver}/extra
+tar czf /compile/result/stable-aw/${kver}-mali-h6.tar.gz /lib/modules/${kver}/extra
+# insmod mali_kbase.ko or depmod mali_kbase
+
+mali blob:
+
+git clone https://github.com/jernejsk/H6-mali-userspace.git
+mv H6-mali-userspace allwinner-h6-mali-userspace
+cd allwinner-h6-mali-userspace
+mkdir /opt/mali-h6
+cp lib64/libmali.so /opt/mali-h6/libMali.so
+=> now do the symlinks like for all other mali setups
+
+gl4es:
+
+git clone git://github.com/ptitSeb/gl4es.git
+cd gl4es
+cmake . -DODROID=1
+make
+cp lib/libGL.so.1 /opt/mali-s905-x-w
+
+udev:
+
+# cat /etc/udev/rules.d/50-mali.rules
+KERNEL=="mali", MODE="0660", GROUP="video"
+KERNEL=="mali0", MODE="0660", GROUP="video"
+
+permissions:
+usermod -a -G video mrnobody
+
+to use:
+
+export LD_LIBRARY_PATH=/opt/mali-h6
+export LIBGL_FB=3
+es2_info
+glxinfo
+glxinfo
+glxgears
