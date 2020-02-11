@@ -52,9 +52,6 @@ cp -v /compile/doc/stable-aw/config.ah6 /compile/doc/stable-aw/config.ah6.old
 cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah6
 cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah6-${kver}
 cp -v /compile/source/linux-stable-aw/*.tar.gz /compile/result/stable-aw
-cd /compile/source/linux-stable-aw
-make distclean
-rm ${kver}.tar.gz
 
 
 cat /boot/menu/extlinux.conf

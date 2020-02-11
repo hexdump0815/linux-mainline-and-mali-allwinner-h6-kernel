@@ -48,9 +48,6 @@ cp -v /compile/doc/stable-aw/config.ah3 /compile/doc/stable-aw/config.ah3.old
 cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah3
 cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah3-${kver}
 cp -v /compile/source/linux-stable-aw/*.tar.gz /compile/result/stable-aw
-cd /compile/source/linux-stable-aw
-make distclean
-rm ${kver}.tar.gz
 
 tx1:
 # cat /boot/boot.txt-4.19.36-stb-ah3+
