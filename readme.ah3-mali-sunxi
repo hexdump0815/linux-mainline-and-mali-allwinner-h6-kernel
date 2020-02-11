@@ -13,7 +13,8 @@ export kver=5.1.15-stb-ah3+
 mkdir /lib/modules/${kver}/extra
 cp mali.ko /lib/modules/${kver}/extra
 tar czf /compile/result/stable-aw/${kver}-mali-sunxi.tar.gz /lib/modules/${kver}/extra
-# insmod mali.ko or depmod mali
+# clean up the extra dir for possible further pure kernel packaging
+rm -rf /lib/modules/${kver}/extra
 
 xorg armsoc:
 
