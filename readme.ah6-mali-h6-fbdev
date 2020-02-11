@@ -14,7 +14,8 @@ export kver=5.3.0-stb-ah6+
 mkdir /lib/modules/${kver}/extra
 cp driver/product/kernel/drivers/gpu/arm/midgard/mali_kbase.ko /lib/modules/${kver}/extra
 tar czf /compile/result/stable-aw/${kver}-mali-h6.tar.gz /lib/modules/${kver}/extra
-# insmod mali_kbase.ko or depmod mali_kbase
+# clean up the extra dir for possible further pure kernel packaging
+rm -rf /lib/modules/${kver}/extra
 
 mali blob:
 
