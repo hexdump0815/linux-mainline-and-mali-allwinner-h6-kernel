@@ -9,7 +9,7 @@ INFO: based on megous tree commit ceccf37ed85ac44de5b0a1d51cce88b2b13afbab
 cp /compile/doc/stable-aw/config.ah3 /compile/source/linux-stable-aw/.config
 cd /compile/source/linux-stable-aw
 # megous changes
-patch -p1 < /compile/doc/stable-aw/misc.meg/5.4.7-diff.patch
+patch -p1 < /compile/doc/stable-aw/misc.meg/5.4.18-diff.patch
 # megous additional files
 tar xzf /compile/doc/stable-aw/misc.meg/5.4.2-added.tar.gz
 # add higher cpu clocks for h3
