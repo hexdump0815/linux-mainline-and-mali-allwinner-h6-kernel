@@ -660,13 +660,13 @@ index 74bb053cf23c..000d002228bb 100644
 +
 +			trips {
 +				cpu0_hot: cpu-hot {
-+					temperature = <80000>;
++					temperature = <100000>;
 +					hysteresis = <2000>;
 +					type = "passive";
 +				};
 +
 +				cpu0_very_hot: cpu-very-hot {
-+					temperature = <100000>;
++					temperature = <110000>;
 +					hysteresis = <0>;
 +					type = "critical";
 +				};
