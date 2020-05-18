@@ -1,29 +1,23 @@
-INFO: based on megous tree commit ceccf37ed85ac44de5b0a1d51cce88b2b13afbab
+INFO: based on megous tree commit 5.4: ceccf37ed85ac44de5b0a1d51cce88b2b13afbab
+                                  5.6: a489e6340ec68818a07a13a87394f0d8f1266d8a
 
 # name: -stb-ah6 + no auto
-# branch: orange-pi-5.1
-# branch: orange-pi-5.2
-# branch: orange-pi-5.3
-# config linux-5.1-64
-# config linux-5.2-64
+# branch: orange-pi-5.x
 
 cp /compile/doc/stable-aw/config.ah6 /compile/source/linux-stable-aw/.config
 cd /compile/source/linux-stable-aw
 # megous changes
-patch -p1 < /compile/doc/stable-aw/misc.meg/5.4.20-diff.patch
+#patch -p1 < /compile/doc/stable-aw/misc.meg/5.4.20-diff.patch
+patch -p1 < /compile/doc/stable-aw/misc.meg/5.6.12-diff.patch
 # megous additional files
-tar xzf /compile/doc/stable-aw/misc.meg/5.4.2-added.tar.gz
-# the below patches are already in the above patches included
-## fix emmc
-#patch -p1 < /compile/doc/stable-aw/misc.ah6/emmc-fix.patch
-## add ethernet support and corrected opp tables for h6 tv boxes plus tanix tx6 (no d[v]fs) and qplus dtbs
-#patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-ac200-eth-new-files.patch
-##patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-ac200-eth-and-local-changes-v5.3.patch
+#tar xzf /compile/doc/stable-aw/misc.meg/5.4.2-added.tar.gz
+tar xzf /compile/doc/stable-aw/misc.meg/5.6.12-added.tar.gz
+# fix emmc
+patch -p1 < /compile/doc/stable-aw/misc.ah6/emmc-fix.patch
+# add ethernet support and corrected opp tables for h6 tv boxes plus tanix tx6 (no d[v]fs) and qplus dtbs
+patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-ac200-eth-new-files.patch
 #patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-ac200-eth-and-local-changes-v5.4.patch
-## replaced by the above
-##patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-ac200-eth-and-local-changes.patch
-## v5.2 only
-##patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-ac200-eth-and-local-changes-v5.2.patch
+patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-ac200-eth-and-local-changes-v5.6.13.patch
 cp /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
 # set mac addr on kernel cmdline - otherwise a random one is generated
 patch -p1 < /compile/doc/stable/misc.av8/gen-stmmac-mac-addr-on-kernel-cmdline-v5.3.patch
@@ -53,7 +47,6 @@ cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah6
 cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah6-${kver}
 cp -v /compile/source/linux-stable-aw/*.tar.gz /compile/result/stable-aw
 
-
 cat /boot/menu/extlinux.conf
 TIMEOUT 50
 
@@ -62,9 +55,8 @@ DEFAULT eachlink.old
 MENU TITLE h6 boot options
 
 LABEL eachlink.old
-      MENU LABEL 5.3.0-meg-ah6+
-      LINUX ../Image-5.3.0-meg-ah6+
-      INITRD ../initrd.img-5.3.0-meg-ah6+
-      FDT ../dtb-5.3.0-meg-ah6+/sun50i-h6-eachlink-h6mini.dtb
-#      APPEND console=ttyS0,115200 console=tty0 earlycon loglevel=8 root=/dev/mmcblk0p3 rootwait ro fsck.fix=yes fsck.repair=yes net.ifnames=0 ipv6.disable=1 noresume mem=2048M drm.debug=0xe video=HDMI-A-1:e
+      MENU LABEL 5.6.13-meg-ah6+
+      LINUX ../Image-5.6.13-meg-ah6+
+      INITRD ../initrd.img-5.6.13-meg-ah6+
+      FDT ../dtb-5.6.13-meg-ah6+/sun50i-h6-eachlink-h6mini.dtb
       APPEND console=ttyS0,115200 console=tty0 earlycon loglevel=8 root=/dev/mmcblk0p3 rootwait ro fsck.fix=yes fsck.repair=yes net.ifnames=0 ipv6.disable=1 noresume mem=2048M video=HDMI-A-1:e

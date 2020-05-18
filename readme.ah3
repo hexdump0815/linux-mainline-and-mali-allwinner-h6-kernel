@@ -1,19 +1,18 @@
-INFO: based on megous tree commit ceccf37ed85ac44de5b0a1d51cce88b2b13afbab
+INFO: based on megous tree commit 5.4: ceccf37ed85ac44de5b0a1d51cce88b2b13afbab
+                                  5.6: a489e6340ec68818a07a13a87394f0d8f1266d8a
 
 # name: -stb-ah3 + no auto
-# branch: orange-pi-5.1
-# branch: orange-pi-5.2
-# config linux-5.1-64
-# config linux-5.2-64
+# branch: orange-pi-5.x
 
 cp /compile/doc/stable-aw/config.ah3 /compile/source/linux-stable-aw/.config
 cd /compile/source/linux-stable-aw
 # megous changes
-patch -p1 < /compile/doc/stable-aw/misc.meg/5.4.20-diff.patch
+#patch -p1 < /compile/doc/stable-aw/misc.meg/5.4.20-diff.patch
+patch -p1 < /compile/doc/stable-aw/misc.meg/5.6.12-diff.patch
 # megous additional files
-tar xzf /compile/doc/stable-aw/misc.meg/5.4.2-added.tar.gz
+#tar xzf /compile/doc/stable-aw/misc.meg/5.4.2-added.tar.gz
+tar xzf /compile/doc/stable-aw/misc.meg/5.6.12-added.tar.gz
 # add higher cpu clocks for h3
-#patch -p1 < /compile/doc/stable-aw/misc.ah3/sun8i-h3-higher-cpu-clocks.patch
 patch -p1 < /compile/doc/stable-aw/misc.ah3/sun8i-h3-higher-cpu-clocks-v5.4.patch
 # prepare for sunxi mali support - from https://github.com/mripard/sunxi-mali/issues/63
 patch -p1 < /compile/doc/stable/misc.av7/sunxi-drm-gem-cma-Export-with-handle-allocator.patch
@@ -50,8 +49,8 @@ cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah3-
 cp -v /compile/source/linux-stable-aw/*.tar.gz /compile/result/stable-aw
 
 tx1:
-# cat /boot/boot.txt-4.19.36-stb-ah3+
-setenv kver "4.19.36-stb-ah3+"
+# cat /boot/boot.txt-5.6.13-stb-ah3+
+setenv kver "5.6.13-stb-ah3+"
 # console=ttyS0,115200 resume=UUID=xyz
 setenv bootargs "console=tty1 root=/dev/mmcblk0p3 rootwait ro hdmi.audio=EDID:0 disp.screen0_output_mode=1280x1024 panic=10 consoleblank=0 loglevel=8 ubootpart=be330ec7-01 ubootsource=mmc usb-storage.quirks=0x2537:0x1066:u,0x2537:0x1068:u sunxi_ve_mem_reserve=0 sunxi_g2d_mem_reserve=0 sunxi_fb_mem_reserve=16 cgroup_enable=memory swapaccount=1 net.ifnames=0 fsck.repair=yes ipv6.disable=1"
 # setenv bootdelay "3"
@@ -69,8 +68,7 @@ DEFAULT v547
 MENU TITLE r39 boot options
 
 LABEL v547
-      MENU LABEL v5.4.7 kernel
-      LINUX ../zImage-5.4.7-stb-ah3+
-      FDT ../dtb-5.4.7-stb-ah3+/sun8i-h3-libretech-all-h3-cc.dtb
-#      APPEND console=tty1 console=ttyS0,115200 root=/dev/mmcblk0p3 rootwait rw hdmi.audio=EDID:0 disp.screen0_output_mode=1280x1024 loglevel=8 usb-storage.quirks=0x2537:0x1066:u,0x2537:0x1068:u sunxi_ve_mem_reserve=0 sunxi_g2d_mem_reserve=0 sunxi_fb_mem_reserve=16 net.ifnames=0 fsck.repair=yes ipv6.disable=1
+      MENU LABEL v5.6.13 kernel
+      LINUX ../zImage-5.6.13-stb-ah3+
+      FDT ../dtb-5.6.13-stb-ah3+/sun8i-h3-libretech-all-h3-cc.dtb
       APPEND console=tty1 console=ttyS0,115200 root=/dev/mmcblk0p3 rootwait rw loglevel=8 sunxi_ve_mem_reserve=0 sunxi_g2d_mem_reserve=0 sunxi_fb_mem_reserve=16 net.ifnames=0 fsck.repair=yes ipv6.disable=1
