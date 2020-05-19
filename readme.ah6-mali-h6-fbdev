@@ -9,8 +9,9 @@ git clone https://github.com/LibreELEC/mali-midgard.git
 mv mali-midgard allwinner-h6-mali-midgard
 cd allwinner-h6-mali-midgard
 git checkout TX011-SW-99002-r28p0-01rel0
+patch -p1 < /compile/doc/stable-aw/misc.ah6/fix-allwinner-h6-mali-midgard-compile-v5.6.13.patch
 make -C /compile/source/linux-stable-aw M=`pwd`/driver/product/kernel/drivers/gpu/arm/midgard CONFIG_MALI_MIDGARD=m CONFIG_MALI_PLATFORM_NAME=sunxi
-export kver=5.3.0-stb-ah6+
+export kver=5.6.13-stb-ah6+
 mkdir /lib/modules/${kver}/extra
 cp driver/product/kernel/drivers/gpu/arm/midgard/mali_kbase.ko /lib/modules/${kver}/extra
 tar czf /compile/result/stable-aw/${kver}-mali-h6.tar.gz /lib/modules/${kver}/extra

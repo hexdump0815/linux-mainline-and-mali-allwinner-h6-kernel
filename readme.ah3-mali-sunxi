@@ -5,11 +5,12 @@ cd /compile/source/sunxi-mali
 export CROSS_COMPILE=""
 export KDIR=/compile/source/linux-stable-aw
 export INSTALL_MOD_PATH=/
+patch -p1 < /compile/doc/stable-aw/misc.ah3/fix-sunxi-mali-compile-v5.6.13.patch
 ./build.sh -r r6p2 -b
 #./build.sh -r r6p2 -i
 # for recompile: run ./build.sh -r r6p2 -c before to unapply patches
 # for debug build replace release in build.sh with debug
-export kver=5.1.15-stb-ah3+
+export kver=5.6.13-stb-ah3+
 mkdir /lib/modules/${kver}/extra
 cp mali.ko /lib/modules/${kver}/extra
 tar czf /compile/result/stable-aw/${kver}-mali-sunxi.tar.gz /lib/modules/${kver}/extra
