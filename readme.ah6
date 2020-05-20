@@ -14,13 +14,18 @@ patch -p1 < /compile/doc/stable-aw/misc.meg/5.6.12-diff.patch
 tar xzf /compile/doc/stable-aw/misc.meg/5.6.12-added.tar.gz
 # fix emmc
 patch -p1 < /compile/doc/stable-aw/misc.ah6/emmc-fix.patch
-# add ethernet support and corrected opp tables for h6 tv boxes plus tanix tx6 (no d[v]fs) and qplus dtbs
-patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-ac200-eth-new-files.patch
-#patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-ac200-eth-and-local-changes-v5.4.patch
-patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-ac200-eth-and-local-changes-v5.6.13.patch
+# add extra dtbs
+patch -p1 < /compile/doc/stable-aw/misc.ah6/add-new-dtbs-to-Makefile.patch
 cp /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
 # set mac addr on kernel cmdline - otherwise a random one is generated
 patch -p1 < /compile/doc/stable/misc.av8/gen-stmmac-mac-addr-on-kernel-cmdline-v5.3.patch
+# add mali to dtb
+patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-add-mali.patch
+# add support for the ac200 onboard ethernet
+patch -p1 < /compile/doc/stable-aw/misc.ah6/ac200-eth-diff.patch
+tar xzf /compile/doc/stable-aw/misc.ah6/ac200-eth-extra-files.tar.gz
+# allow higher cpu temps
+patch -p0 < /compile/doc/stable-aw/misc.ah6/h6-higher-temps.patch
 
 # git pull
 export ARCH=arm64

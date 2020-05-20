@@ -1731,8 +1731,8 @@ CONFIG_LED_TRIGGER_PHY=y
 # MII PHY device drivers
 #
 # CONFIG_SFP is not set
-# CONFIG_ADIN_PHY is not set
 CONFIG_AC200_PHY=y
+# CONFIG_ADIN_PHY is not set
 # CONFIG_AMD_PHY is not set
 # CONFIG_AQUANTIA_PHY is not set
 # CONFIG_AX88796B_PHY is not set

@@ -1,0 +1,176 @@
+based on:
+https://lore.kernel.org/netdev/20200416185758.1388148-1-jernej.skrabec@siol.net/
+https://lore.kernel.org/netdev/20200416185758.1388148-2-jernej.skrabec@siol.net/
+https://lore.kernel.org/netdev/20200416185758.1388148-3-jernej.skrabec@siol.net/
+https://lore.kernel.org/netdev/20200416185758.1388148-4-jernej.skrabec@siol.net/
+https://lore.kernel.org/netdev/20200416185758.1388148-5-jernej.skrabec@siol.net/
+
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 2b203290e7b9..90f9a1d733f9 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -178,6 +178,15 @@ config MFD_AC100
+ 	  This driver include only the core APIs. You have to select individual
+ 	  components like codecs or RTC under the corresponding menus.
+ 
++config MFD_AC200
++	tristate "X-Powers AC200"
++	select MFD_CORE
++	depends on I2C
++	help
++	  If you say Y here you get support for the X-Powers AC200 IC.
++	  This driver include only the core APIs. You have to select individual
++	  components like Ethernet PHY or RTC under the corresponding menus.
++
+ config MFD_AXP20X
+ 	tristate
+ 	select MFD_CORE
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index b83f172545e1..06523c5e3ca4 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -142,6 +142,7 @@ obj-$(CONFIG_MFD_DA9052_SPI)	+= da9052-spi.o
+ obj-$(CONFIG_MFD_DA9052_I2C)	+= da9052-i2c.o
+ 
+ obj-$(CONFIG_MFD_AC100)		+= ac100.o
++obj-$(CONFIG_MFD_AC200)		+= ac200.o
+ obj-$(CONFIG_MFD_AXP20X)	+= axp20x.o
+ obj-$(CONFIG_MFD_AXP20X_I2C)	+= axp20x-i2c.o
+ obj-$(CONFIG_MFD_AXP20X_RSB)	+= axp20x-rsb.o
+diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
+index 9dabe03a668c..2e1d16df16ac 100644
+--- a/drivers/net/phy/Kconfig
++++ b/drivers/net/phy/Kconfig
+@@ -258,6 +258,13 @@ config SFP
+ 	depends on HWMON || HWMON=n
+ 	select MDIO_I2C
+ 
++config AC200_PHY
++	tristate "AC200 EPHY"
++	depends on NVMEM
++	depends on OF
++	help
++	  Fast ethernet PHY as found in X-Powers AC200 multi-function device.
++
+ config ADIN_PHY
+ 	tristate "Analog Devices Industrial Ethernet PHYs"
+ 	help
+diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
+index fe5badf13b65..2143587f010e 100644
+--- a/drivers/net/phy/Makefile
++++ b/drivers/net/phy/Makefile
+@@ -49,6 +49,7 @@ obj-$(CONFIG_SFP)		+= sfp.o
+ sfp-obj-$(CONFIG_SFP)		+= sfp-bus.o
+ obj-y				+= $(sfp-obj-y) $(sfp-obj-m)
+ 
++obj-$(CONFIG_AC200_PHY)		+= ac200.o
+ obj-$(CONFIG_ADIN_PHY)		+= adin.o
+ obj-$(CONFIG_AMD_PHY)		+= amd.o
+ aquantia-objs			+= aquantia_main.o
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+@@ -16,6 +16,16 @@
+ 	#address-cells = <1>;
+ 	#size-cells = <1>;
+ 
++	ac200_pwm_clk: ac200_clk {
++		compatible = "pwm-clock";
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pwm1_pin>;
++		pwms = <&pwm 1 42 0>;
++		status = "disabled";
++	};
++
+ 	cpus {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+@@ -444,6 +454,10 @@
+ 			ths_calibration: thermal-sensor-calibration@14 {
+ 				reg = <0x14 0x8>;
+ 			};
++
++			ephy_calibration: ephy-calibration@2c {
++				reg = <0x2c 0x2>;
++			};
+ 		};
+ 
+ 		watchdog: watchdog@30090a0 {
+@@ -488,6 +502,14 @@
+ 				drive-strength = <40>;
+ 			};
+ 
++			/omit-if-no-ref/
++			ext_rmii_pins: rmii_pins {
++				pins = "PA0", "PA1", "PA2", "PA3", "PA4",
++				       "PA5", "PA6", "PA7", "PA8", "PA9";
++				function = "emac";
++				drive-strength = <40>;
++			};
++
+ 			hdmi_pins: hdmi-pins {
+ 				pins = "PH8", "PH9", "PH10";
+ 				function = "hdmi";
+@@ -508,6 +530,11 @@
+ 				function = "i2c2";
+ 			};
+ 
++			i2c3_pins: i2c3-pins {
++				pins = "PB17", "PB18";
++				function = "i2c3";
++			};
++
+ 			mmc0_pins: mmc0-pins {
+ 				pins = "PF0", "PF1", "PF2", "PF3",
+ 				       "PF4", "PF5";
+@@ -525,6 +552,11 @@
+ 				bias-pull-up;
+ 			};
+ 
++			pwm1_pin: pwm1-pin {
++				pins = "PB19";
++				function = "pwm1";
++			};
++
+ 			mmc2_pins: mmc2-pins {
+ 				pins = "PC1", "PC4", "PC5", "PC6",
+ 				       "PC7", "PC8", "PC9", "PC10",
+@@ -700,6 +732,37 @@
+ 			#size-cells = <0>;
+ 		};
+ 
++		i2c3: i2c@5002c00 {
++			compatible = "allwinner,sun50i-h6-i2c",
++				     "allwinner,sun6i-a31-i2c";
++			reg = <0x05002c00 0x400>;
++			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_I2C3>;
++			resets = <&ccu RST_BUS_I2C3>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&i2c3_pins>;
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			ac200: mfd@10 {
++				compatible = "x-powers,ac200";
++				reg = <0x10>;
++				clocks = <&ac200_pwm_clk>;
++				interrupt-parent = <&pio>;
++				interrupts = <1 20 IRQ_TYPE_LEVEL_LOW>;
++				interrupt-controller;
++				#interrupt-cells = <1>;
++
++				ac200_ephy: phy {
++					compatible = "x-powers,ac200-ephy";
++					nvmem-cells = <&ephy_calibration>;
++					nvmem-cell-names = "calibration";
++					status = "disabled";
++				};
++			};
++		};
++
+ 		emac: ethernet@5020000 {
+ 			compatible = "allwinner,sun50i-h6-emac",
+ 				     "allwinner,sun50i-a64-emac";
