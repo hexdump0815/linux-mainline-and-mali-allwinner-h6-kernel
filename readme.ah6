@@ -16,7 +16,7 @@ tar xzf /compile/doc/stable-aw/misc.meg/5.6.12-added.tar.gz
 patch -p1 < /compile/doc/stable-aw/misc.ah6/emmc-fix.patch
 # add extra dtbs
 patch -p1 < /compile/doc/stable-aw/misc.ah6/add-new-dtbs-to-Makefile.patch
-cp /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
+cp -i /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
 # set mac addr on kernel cmdline - otherwise a random one is generated
 patch -p1 < /compile/doc/stable/misc.av8/gen-stmmac-mac-addr-on-kernel-cmdline-v5.3.patch
 # add mali to dtb
