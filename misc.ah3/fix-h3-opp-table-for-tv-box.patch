@@ -1,0 +1,103 @@
+diff --git a/arch/arm/boot/dts/sunxi-h3-h5.dtsi b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
+index 799f32bafd80..1a0b7b876759 100644
+--- a/arch/arm/boot/dts/sunxi-h3-h5.dtsi
++++ b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
+@@ -99,6 +99,71 @@
+ 		};
+ 	};
+ 
++	cpu0_opp_table: opp_table0 {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-480000000 {
++			opp-hz = /bits/ 64 <480000000>;
++/*			opp-microvolt = <1040000 1040000 1300000>; */
++			opp-microvolt = <1200000 1200000 1200000>;
++			clock-latency-ns = <244144>; /* 8 32k periods */
++		};
++
++		opp-648000000 {
++			opp-hz = /bits/ 64 <648000000>;
++/*			opp-microvolt = <1040000 1040000 1300000>; */
++			opp-microvolt = <1200000 1200000 1200000>;
++			clock-latency-ns = <244144>; /* 8 32k periods */
++		};
++
++		opp-816000000 {
++			opp-hz = /bits/ 64 <816000000>;
++/*			opp-microvolt = <1100000 1100000 1300000>; */
++			opp-microvolt = <1200000 1200000 1200000>;
++			clock-latency-ns = <244144>; /* 8 32k periods */
++		};
++
++		opp-960000000 {
++			opp-hz = /bits/ 64 <960000000>;
++/*			opp-microvolt = <1200000 1200000 1300000>; */
++			opp-microvolt = <1200000 1200000 1200000>;
++			clock-latency-ns = <244144>; /* 8 32k periods */
++		};
++
++		opp-1008000000 {
++			opp-hz = /bits/ 64 <1008000000>;
++/*			opp-microvolt = <1200000 1200000 1300000>; */
++			opp-microvolt = <1200000 1200000 1200000>;
++			clock-latency-ns = <244144>; /* 8 32k periods */
++		};
++
++		opp-1104000000 {
++			opp-hz = /bits/ 64 <1104000000>;
++/*			opp-microvolt = <1320000 1320000 1320000>; */
++			opp-microvolt = <1200000 1200000 1200000>;
++			clock-latency-ns = <244144>; /* 8 32k periods */
++		};
++
++		opp-1200000000 {
++			opp-hz = /bits/ 64 <1200000000>;
++			opp-microvolt = <1320000 1320000 1320000>;
++			clock-latency-ns = <244144>; /* 8 32k periods */
++		};
++
++		opp-1296000000 {
++			opp-hz = /bits/ 64 <1296000000>;
++			opp-microvolt = <1340000 1340000 1340000>;
++			clock-latency-ns = <244144>; /* 8 32k periods */
++		};
++
++		opp-1368000000 {
++			opp-hz = /bits/ 64 <1368000000>;
++			opp-microvolt = <1400000 1400000 1400000>;
++			clock-latency-ns = <244144>; /* 8 32k periods */
++		};
++	};
++
+ 	de: display-engine {
+ 		compatible = "allwinner,sun8i-h3-display-engine";
+ 		allwinner,pipelines = <&mixer0>;
+diff --git a/arch/arm/boot/dts/sunxi-libretech-all-h3-cc.dtsi b/arch/arm/boot/dts/sunxi-libretech-all-h3-cc.dtsi
+index 19b3b23cfaa8..ed5883198a00 100644
+--- a/arch/arm/boot/dts/sunxi-libretech-all-h3-cc.dtsi
++++ b/arch/arm/boot/dts/sunxi-libretech-all-h3-cc.dtsi
+@@ -203,6 +203,22 @@
+ 	status = "okay";
+ };
+ 
++/* adjusted opp table to the clocks higher than 1.008ghz */
++&cpu0_opp_table {
++	opp-1104000000 {
++		status = "disabled";
++	};
++	opp-1200000000 {
++		status = "disabled";
++	};
++	opp-1296000000 {
++		status = "disabled";
++	};
++	opp-1368000000 {
++		status = "disabled";
++	};
++};
++
+ &uart0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart0_pa_pins>;

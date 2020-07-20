@@ -1,11 +1,13 @@
 # mali kernel module
-git clone https://github.com/mripard/sunxi-mali.git
 apt-get install quilt
+git clone https://github.com/mripard/sunxi-mali.git
 cd /compile/source/sunxi-mali
+git checkout 1db4fb6c9f3712c171512c6311b844a185193a8b
 export CROSS_COMPILE=""
 export KDIR=/compile/source/linux-stable-aw
 export INSTALL_MOD_PATH=/
-patch -p1 < /compile/doc/stable-aw/misc.ah3/fix-sunxi-mali-compile-v5.6.13.patch
+# not required anymore with current sunxi-mali repo
+#patch -p1 < /compile/doc/stable-aw/misc.ah3/fix-sunxi-mali-compile-v5.6.13.patch
 ./build.sh -r r6p2 -b
 #./build.sh -r r6p2 -i
 # for recompile: run ./build.sh -r r6p2 -c before to unapply patches
