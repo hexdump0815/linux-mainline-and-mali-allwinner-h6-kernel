@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) 2017 Chen-Yu Tsai <wens@csie.org>
+ *
+ * SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ */
+
+/dts-v1/;
+#include "sun8i-h3.dtsi"
+#include "sunxi-libretech-all-h3-cc.dtsi"
+
+/ {
+	model = "r39 star tv box";
+	compatible = "libretech,all-h3-cc-h3", "allwinner,sun8i-h3";
+};
+
+/* looks like in v5.6 changing freq is broken, so just have one
+   usually it should be be able to scale from 480mhz to 1.104ghz
+   which would be a slight overclock ... in general this tv box
+   does not have any voltage scaling, thus only a fixed voltage */
+&cpu0_opp_table {
+	opp-480000000 {
+		opp-microvolt = <1200000 1200000 1200000>;
+		status = "disabled";
+	};
+	opp-648000000 {
+		opp-microvolt = <1200000 1200000 1200000>;
+		status = "disabled";
+	};
+	opp-816000000 {
+		opp-microvolt = <1200000 1200000 1200000>;
+		status = "disabled";
+	};
+	opp-960000000 {
+		opp-microvolt = <1200000 1200000 1200000>;
+		status = "disabled";
+	};
+	opp-1008000000 {
+		opp-microvolt = <1200000 1200000 1200000>;
+	};
+	opp-1104000000 {
+		opp-microvolt = <1200000 1200000 1200000>;
+		status = "disabled";
+	};
+	opp-1200000000 {
+		status = "disabled";
+	};
+	opp-1296000000 {
+		status = "disabled";
+	};
+	opp-1368000000 {
+		status = "disabled";
+	};
+};

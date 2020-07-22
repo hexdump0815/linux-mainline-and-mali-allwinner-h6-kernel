@@ -12,10 +12,10 @@ patch -p1 < /compile/doc/stable-aw/misc.meg/5.6.12-diff.patch
 # megous additional files
 #tar xzf /compile/doc/stable-aw/misc.meg/5.4.2-added.tar.gz
 tar xzf /compile/doc/stable-aw/misc.meg/5.6.12-added.tar.gz
-# add higher cpu clocks for h3 - higher clocks seems to be no longer stable in v5.6
-#patch -p1 < /compile/doc/stable-aw/misc.ah3/sun8i-h3-higher-cpu-clocks-v5.4.patch
-# adjust the libretech-h3-cc opp points for a h3 tv box with fiexed 1.2v, i.e. max. 1.008ghz
-patch -p1 < /compile/doc/stable-aw/misc.ah3/fix-h3-opp-table-for-tv-box.patch
+# add new dtbs to Makefile
+patch -p1 < /compile/doc/stable-aw/misc.ah3/add-new-dtbs-to-Makefile.patch
+# copy additional dtb files
+cp -i /compile/doc/stable-aw/misc.ah3/dtb/*.dts arch/arm/boot/dts
 # prepare for sunxi mali support - from https://github.com/mripard/sunxi-mali/issues/63
 patch -p1 < /compile/doc/stable/misc.av7/sunxi-drm-gem-cma-Export-with-handle-allocator.patch
 patch -p1 < /compile/doc/stable/misc.av7/sunxi-drm-sun4i-Add-GEM-allocator.patch
