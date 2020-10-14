@@ -21,17 +21,24 @@ cp -i /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
 patch -p1 < /compile/doc/stable/misc.av8/gen-stmmac-mac-addr-on-kernel-cmdline-v5.3.patch
 # add mali to dtb
 patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-add-mali.patch
+# below is still to be done
 # add support for the ac200 onboard ethernet
-patch -p1 < /compile/doc/stable-aw/misc.ah6/ac200-eth-diff.patch
+#patch -p1 < /compile/doc/stable-aw/misc.ah6/ac200-eth-diff.patch
+patch -p1 < /compile/doc/stable-aw/misc.ah6/ac200-eth-diff-v5.9.patch
 tar xzf /compile/doc/stable-aw/misc.ah6/ac200-eth-extra-files.tar.gz
 # allow higher cpu temps
-patch -p0 < /compile/doc/stable-aw/misc.ah6/h6-higher-temps.patch
+patch -p0 < /compile/doc/stable-aw/misc.ah6/h6-higher-temps-v5.9.patch
 
 # git pull
 export ARCH=arm64
 # make defconfig + fix options - see misc.ah6/options
 make oldconfig
 make -j 4 Image dtbs modules
+cd tools/perf
+make
+cd ../power/cpupower
+make
+cd ../../..
 export kver=`make kernelrelease`
 echo ${kver}
 # remove debug info if there and wanted
@@ -40,6 +47,10 @@ make modules_install
 # make headers_install INSTALL_HDR_PATH=/usr
 cp -v .config /boot/config-${kver}
 cp -v arch/arm64/boot/Image /boot/Image-${kver}
+mkdir -p /boot/tools-${kver}
+cp -v tools/perf/perf /boot/tools-${kver}
+cp -v tools/power/cpupower/cpupower /boot/tools-${kver}
+cp -v tools/power/cpupower/libcpupower.so.0.0.1 /boot/tools-${kver}/libcpupower.so.0
 mkdir /boot/dtb-${kver}
 cp -v arch/arm64/boot/dts/allwinner/sun50i-h6-*.dtb /boot/dtb-${kver}/
 cp -v System.map /boot/System.map-${kver}
