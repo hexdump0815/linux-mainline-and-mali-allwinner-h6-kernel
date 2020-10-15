@@ -3,6 +3,8 @@ and: https://lkml.org/lkml/2019/8/24/105
 
 fixes: sun6i-rtc 7000000.rtc: rtc is still busy.
 
+update: does not seem to be a real fix - https://freenode.irclog.whitequark.org/linux-sunxi/2020-10-15#28150851
+
 --- drivers/rtc/rtc-sun6i.c.org	2020-10-15 23:43:23.725860798 +0200
 +++ drivers/rtc/rtc-sun6i.c	2020-10-15 23:43:33.029613452 +0200
 @@ -33,7 +33,7 @@
