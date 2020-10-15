@@ -10,6 +10,7 @@ mv mali-midgard allwinner-h6-mali-midgard
 cd allwinner-h6-mali-midgard
 git checkout TX011-SW-99002-r28p0-01rel0
 patch -p1 < /compile/doc/stable-aw/misc.ah6/fix-allwinner-h6-mali-midgard-compile-v5.6.13.patch
+patch -p0 < /compile/doc/stable-aw/misc.ah6/fix-allwinner-h6-mali-midgard-compile-v5.9.patch
 make -C /compile/source/linux-stable-aw M=`pwd`/driver/product/kernel/drivers/gpu/arm/midgard CONFIG_MALI_MIDGARD=m CONFIG_MALI_PLATFORM_NAME=sunxi
 export kver=5.6.13-stb-ah6+
 mkdir /lib/modules/${kver}/extra
