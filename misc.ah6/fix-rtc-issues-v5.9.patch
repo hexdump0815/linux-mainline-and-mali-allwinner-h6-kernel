@@ -1,0 +1,16 @@
+see: https://patchwork.kernel.org/project/linux-arm-kernel/patch/20190412120730.473-3-megous@megous.com/#22798591
+and: https://lkml.org/lkml/2019/8/24/105
+
+fixes: sun6i-rtc 7000000.rtc: rtc is still busy.
+
+--- drivers/rtc/rtc-sun6i.c.org	2020-10-15 23:43:23.725860798 +0200
++++ drivers/rtc/rtc-sun6i.c	2020-10-15 23:43:33.029613452 +0200
+@@ -33,7 +33,7 @@
+ /* Control register */
+ #define SUN6I_LOSC_CTRL				0x0000
+ #define SUN6I_LOSC_CTRL_KEY			(0x16aa << 16)
+-#define SUN6I_LOSC_CTRL_AUTO_SWT_BYPASS		BIT(15)
++#define SUN6I_LOSC_CTRL_AUTO_SWT_BYPASS		BIT(14)
+ #define SUN6I_LOSC_CTRL_ALM_DHMS_ACC		BIT(9)
+ #define SUN6I_LOSC_CTRL_RTC_HMS_ACC		BIT(8)
+ #define SUN6I_LOSC_CTRL_RTC_YMD_ACC		BIT(7)

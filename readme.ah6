@@ -28,6 +28,8 @@ patch -p1 < /compile/doc/stable-aw/misc.ah6/ac200-eth-diff-v5.9.patch
 tar xzf /compile/doc/stable-aw/misc.ah6/ac200-eth-extra-files.tar.gz
 # allow higher cpu temps
 patch -p0 < /compile/doc/stable-aw/misc.ah6/h6-higher-temps-v5.9.patch
+# rtc error fix for v5.9
+patch -p0 < /compile/doc/stable-aw/misc.ah6/fix-rtc-issues-v5.9.patch
 
 # git pull
 export ARCH=arm64
