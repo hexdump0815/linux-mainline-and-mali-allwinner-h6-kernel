@@ -27,7 +27,9 @@
 		compatible = "hdmi-connector";
 		ddc-en-gpios = <&pio 7 2 GPIO_ACTIVE_HIGH>; /* PH2 */
 		type = "a";
-		ddc-supply = <&reg_ddc>;
+// looks like this is no longer needed - with it i got: "Couldn't get ddc-en gpio"
+// and no hdmi - without it hdmi is working fine ...
+//		ddc-supply = <&reg_ddc>;
 
 		port {
 			hdmi_con_in: endpoint {
@@ -36,14 +38,15 @@
 		};
 	};
 
-	reg_ddc: ddc-io {
-		compatible = "regulator-fixed";
-		regulator-name = "ddc-io";
-		regulator-min-microvolt = <5000000>;
-		regulator-max-microvolt = <5000000>;
-		enable-active-high;
-		gpio = <&pio 7 2 GPIO_ACTIVE_HIGH>; /* PH2 */
-	};
+// looks like this is no longer needed - with it i got: "Couldn't get ddc-en gpio"
+//	reg_ddc: ddc-io {
+//		compatible = "regulator-fixed";
+//		regulator-name = "ddc-io";
+//		regulator-min-microvolt = <5000000>;
+//		regulator-max-microvolt = <5000000>;
+//		enable-active-high;
+//		gpio = <&pio 7 2 GPIO_ACTIVE_HIGH>; /* PH2 */
+//	};
 
 	reg_vcc3v3: vcc3v3 {
 		compatible = "regulator-fixed";
