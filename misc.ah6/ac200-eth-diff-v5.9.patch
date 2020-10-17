@@ -86,6 +86,17 @@ index fe5badf13b65..2143587f010e 100644
  	cpus {
  		#address-cells = <1>;
  		#size-cells = <0>;
+@@ -335,6 +335,10 @@
+ 			cpu_speed_grade: cpu-speed-grade@1c {
+ 				reg = <0x1c 0x4>;
+ 			};
++
++			ephy_calibration: ephy-calibration@2c {
++				reg = <0x2c 0x2>;
++			};
+ 		};
+ 
+ 		watchdog: watchdog@30090a0 {
 @@ -369,6 +379,14 @@
  				drive-strength = <40>;
  			};
@@ -125,17 +136,6 @@ index fe5badf13b65..2143587f010e 100644
  			mmc2_pins: mmc2-pins {
  				pins = "PC1", "PC4", "PC5", "PC6",
  				       "PC7", "PC8", "PC9", "PC10",
-@@ -459,6 +487,10 @@
- 				pins = "PG8", "PG9";
- 				function = "uart1";
- 			};
-+
-+			ephy_calibration: ephy-calibration@2c {
-+				reg = <0x2c 0x2>;
-+			};
- 		};
- 
- 		gic: interrupt-controller@3021000 {
 @@ -645,6 +677,37 @@
  			#size-cells = <0>;
  		};
