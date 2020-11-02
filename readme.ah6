@@ -1,7 +1,10 @@
-INFO: based on megous tree commit 5.4: ceccf37ed85ac44de5b0a1d51cce88b2b13afbab
-                                  5.6: a489e6340ec68818a07a13a87394f0d8f1266d8a
-                                  5.9: 5a2074b14eea5447a4b215b0071244cfe5ef94d5 (around that one)
-                                       bbf5c979011a099af5dc76498918ed7df445635b (maybe rather this one)
+# INFO: based on megous tree commit 5.4: ceccf37ed85ac44de5b0a1d51cce88b2b13afbab
+#                                   5.6: a489e6340ec68818a07a13a87394f0d8f1266d8a
+#                                   5.9: 5a2074b14eea5447a4b215b0071244cfe5ef94d5 (around that one)
+#                                        bbf5c979011a099af5dc76498918ed7df445635b (maybe rather this one)
+repo: https://github.com/megous/linux.git
+branch: orange-pi-5.9
+                                  5.9.3: ceee359cbb0fac4820f5b8abd8439089cbba00d1
 
 # name: -stb-ah6 + no auto
 # branch: orange-pi-5.x
@@ -11,11 +14,13 @@ cd /compile/source/linux-stable-aw
 # megous changes
 #patch -p1 < /compile/doc/stable-aw/misc.meg/5.4.20-diff.patch
 #patch -p1 < /compile/doc/stable-aw/misc.meg/5.6.12-diff.patch
-patch -p1 < /compile/doc/stable-aw/misc.meg/5.9.0-diff.patch
+# not needed anymore as we are based on the megous tree directly again now
+#patch -p1 < /compile/doc/stable-aw/misc.meg/5.9.0-diff.patch
 # megous additional files
 #tar xzf /compile/doc/stable-aw/misc.meg/5.4.2-added.tar.gz
 #tar xzf /compile/doc/stable-aw/misc.meg/5.6.12-added.tar.gz
-tar xzf /compile/doc/stable-aw/misc.meg/5.9.0-added.tar.gz
+# not needed anymore as we are based on the megous tree directly again now
+#tar xzf /compile/doc/stable-aw/misc.meg/5.9.0-added.tar.gz
 # fix emmc
 patch -p1 < /compile/doc/stable-aw/misc.ah6/emmc-fix.patch
 # add extra dtbs
