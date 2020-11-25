@@ -28,8 +28,8 @@ patch -p1 < /compile/doc/stable-aw/misc.ah6/add-new-dtbs-to-Makefile.patch
 cp -i /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
 # set mac addr on kernel cmdline - otherwise a random one is generated
 patch -p1 < /compile/doc/stable/misc.av8/gen-stmmac-mac-addr-on-kernel-cmdline-v5.3.patch
-# add mali to dtb
-patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-add-mali.patch
+# add mali to dtb - no longer used - panfrost is working well enough meanwhile
+#patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-add-mali.patch
 # below is still to be done
 # add support for the ac200 onboard ethernet
 #patch -p1 < /compile/doc/stable-aw/misc.ah6/ac200-eth-diff.patch
