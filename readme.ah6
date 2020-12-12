@@ -55,13 +55,13 @@ echo ${kver}
 # remove debug info if there and wanted
 # find . -type f -name '*.ko' | sudo xargs -n 1 objcopy --strip-unneeded
 make modules_install
+mkdir -p /lib/modules/${kver}/tools
+cp -v tools/perf/perf /lib/modules/${kver}/tools
+cp -v tools/power/cpupower/cpupower /lib/modules/${kver}/tools
+cp -v tools/power/cpupower/libcpupower.so.0.0.1 /lib/modules/${kver}/tools/libcpupower.so.0
 # make headers_install INSTALL_HDR_PATH=/usr
 cp -v .config /boot/config-${kver}
 cp -v arch/arm64/boot/Image /boot/Image-${kver}
-mkdir -p /boot/tools-${kver}
-cp -v tools/perf/perf /boot/tools-${kver}
-cp -v tools/power/cpupower/cpupower /boot/tools-${kver}
-cp -v tools/power/cpupower/libcpupower.so.0.0.1 /boot/tools-${kver}/libcpupower.so.0
 mkdir /boot/dtb-${kver}
 cp -v arch/arm64/boot/dts/allwinner/sun50i-h6-*.dtb /boot/dtb-${kver}/
 cp -v System.map /boot/System.map-${kver}
