@@ -1,44 +1,25 @@
-# INFO: based on megous tree commit 5.4: ceccf37ed85ac44de5b0a1d51cce88b2b13afbab
-#                                   5.6: a489e6340ec68818a07a13a87394f0d8f1266d8a
-#                                   5.9: 5a2074b14eea5447a4b215b0071244cfe5ef94d5 (around that one)
-#                                        bbf5c979011a099af5dc76498918ed7df445635b (maybe rather this one)
-repo: https://github.com/megous/linux.git
-branch: orange-pi-5.9
-                                  5.9.3: ceee359cbb0fac4820f5b8abd8439089cbba00d1
+# INFO: based on megous tree commit: cf48c321c3ebd42d33234bf5fc1b7f8b4de86c95
+#                       from branch: orange-pi-5.10
 
-# name: -stb-ah6 + no auto
-# branch: orange-pi-5.x
+# directories:
+# - /compile/doc/stable-aw - the files in this dir
+# - /compile/source/linux-stable-aw - the kernel sources checked out from gitrepo
+# - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
+
+# patches:
+# fix emmc - needed for some tv boxes
+patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/emmc-fix.patch
+# add extra dtbs
+patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-new-dtbs-to-Makefile.patch
+cp -i /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
+# add support for the ac200 onboard ethernet
+patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
+tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
+# allow higher cpu temps
+patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
 
 cp /compile/doc/stable-aw/config.ah6 /compile/source/linux-stable-aw/.config
 cd /compile/source/linux-stable-aw
-# megous changes
-#patch -p1 < /compile/doc/stable-aw/misc.meg/5.4.20-diff.patch
-#patch -p1 < /compile/doc/stable-aw/misc.meg/5.6.12-diff.patch
-# not needed anymore as we are based on the megous tree directly again now
-#patch -p1 < /compile/doc/stable-aw/misc.meg/5.9.0-diff.patch
-# megous additional files
-#tar xzf /compile/doc/stable-aw/misc.meg/5.4.2-added.tar.gz
-#tar xzf /compile/doc/stable-aw/misc.meg/5.6.12-added.tar.gz
-# not needed anymore as we are based on the megous tree directly again now
-#tar xzf /compile/doc/stable-aw/misc.meg/5.9.0-added.tar.gz
-# fix emmc
-patch -p1 < /compile/doc/stable-aw/misc.ah6/emmc-fix.patch
-# add extra dtbs
-patch -p1 < /compile/doc/stable-aw/misc.ah6/add-new-dtbs-to-Makefile.patch
-cp -i /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
-# set mac addr on kernel cmdline - otherwise a random one is generated
-patch -p1 < /compile/doc/stable/misc.av8/gen-stmmac-mac-addr-on-kernel-cmdline-v5.3.patch
-# add mali to dtb - no longer used - panfrost is working well enough meanwhile
-#patch -p1 < /compile/doc/stable-aw/misc.ah6/h6-add-mali.patch
-# below is still to be done
-# add support for the ac200 onboard ethernet
-#patch -p1 < /compile/doc/stable-aw/misc.ah6/ac200-eth-diff.patch
-patch -p1 < /compile/doc/stable-aw/misc.ah6/ac200-eth-diff-v5.9.patch
-tar xzf /compile/doc/stable-aw/misc.ah6/ac200-eth-extra-files.tar.gz
-# allow higher cpu temps
-patch -p0 < /compile/doc/stable-aw/misc.ah6/h6-higher-temps-v5.9.patch
-# # rtc error fix for v5.9 - not really a fix and no longer needed
-# patch -p0 < /compile/doc/stable-aw/misc.ah6/fix-rtc-issues-v5.9.patch
 
 # git pull
 export ARCH=arm64
@@ -73,6 +54,7 @@ cp -v /compile/doc/stable-aw/config.ah6 /compile/doc/stable-aw/config.ah6.old
 cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah6
 cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah6-${kver}
 cp -v /compile/source/linux-stable-aw/*.tar.gz /compile/result/stable-aw
+
 
 cat /boot/menu/extlinux.conf
 TIMEOUT 50
