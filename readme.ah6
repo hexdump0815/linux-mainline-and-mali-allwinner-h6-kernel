@@ -1,10 +1,11 @@
-# INFO: based on megous tree commit: cf48c321c3ebd42d33234bf5fc1b7f8b4de86c95
-#                       from branch: orange-pi-5.10
-
 # directories:
 # - /compile/doc/stable-aw - the files in this dir
 # - /compile/source/linux-stable-aw - the kernel sources checked out from gitrepo
 # - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
+# name: stb-ah6
+
+# INFO: based on megous tree commit: cf48c321c3ebd42d33234bf5fc1b7f8b4de86c95
+#                       from branch: orange-pi-5.10
 
 # patches:
 # fix emmc - needed for some tv boxes
