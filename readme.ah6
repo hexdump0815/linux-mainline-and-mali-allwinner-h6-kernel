@@ -24,7 +24,9 @@ cd /compile/source/linux-stable-aw
 
 # git pull
 export ARCH=arm64
-# make defconfig + fix options - see misc.ah6/options
+# make defconfig
+# /compile/doc/stable-aw/misc.ah6/options/enable-docker-options.sh
+# /compile/doc/stable-aw/misc.ah6/options/enable-additional-options.sh
 make oldconfig
 make -j 4 Image dtbs modules
 cd tools/perf
@@ -49,7 +51,7 @@ cp -v arch/arm64/boot/dts/allwinner/sun50i-h6-*.dtb /boot/dtb-${kver}/
 cp -v System.map /boot/System.map-${kver}
 cd /boot
 update-initramfs -c -k ${kver}
-mkimage -A arm64 -O linux -T ramdisk -a 0x0 -e 0x0 -n initrd.img-${kver} -d initrd.img-${kver} uInitrd-${kver}
+#mkimage -A arm64 -O linux -T ramdisk -a 0x0 -e 0x0 -n initrd.img-${kver} -d initrd.img-${kver} uInitrd-${kver}
 tar cvzf /compile/source/linux-stable-aw/${kver}.tar.gz /boot/*-${kver} /lib/modules/${kver}
 cp -v /compile/doc/stable-aw/config.ah6 /compile/doc/stable-aw/config.ah6.old
 cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah6

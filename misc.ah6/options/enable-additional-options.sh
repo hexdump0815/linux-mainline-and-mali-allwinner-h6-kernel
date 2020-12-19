@@ -20,6 +20,9 @@ cd /compile/source/linux-stable-aw
 ./scripts/config -d CONFIG_REISERFS_FS
 ./scripts/config -d CONFIG_OCFS2_FS
 
+./scripts/config -d CONFIG_LOCALVERSION_AUTO
+./scripts/config --set-str CONFIG_LOCALVERSION "-stb-ah6"
+
 for i in `cat /compile/doc/stable-aw/misc.ah6/options/additional-options-*-yes.txt`; do
   echo $i
   ./scripts/config -e $i
