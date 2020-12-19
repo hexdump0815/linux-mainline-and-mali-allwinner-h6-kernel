@@ -19,6 +19,12 @@ tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
 # allow higher cpu temps
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
 
+# add the xr819 sdio wifi driver
+cd drivers/staging
+git clone https://github.com/fifteenhex/xradio.git
+cd ../..
+patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-xradio-driver.patch
+
 cp /compile/doc/stable-aw/config.ah6 /compile/source/linux-stable-aw/.config
 cd /compile/source/linux-stable-aw
 

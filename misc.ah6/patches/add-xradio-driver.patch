@@ -1,0 +1,80 @@
+diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
+index 2d0310448eba..6e4aabcc4792 100644
+--- a/drivers/staging/Kconfig
++++ b/drivers/staging/Kconfig
+@@ -118,4 +118,6 @@ source "drivers/staging/wfx/Kconfig"
+ 
+ source "drivers/staging/hikey9xx/Kconfig"
+ 
++source "drivers/staging/xradio/Kconfig"
++
+ endif # STAGING
+diff --git a/drivers/staging/Makefile b/drivers/staging/Makefile
+index 6357cb5354e6..d6ebe5e89cee 100644
+--- a/drivers/staging/Makefile
++++ b/drivers/staging/Makefile
+@@ -50,3 +50,4 @@ obj-$(CONFIG_QLGE)		+= qlge/
+ obj-$(CONFIG_WFX)		+= wfx/
+ obj-y				+= hikey9xx/
+ obj-$(CONFIG_RTL8723CS)		+= rtl8723cs/
++obj-$(CONFIG_XRADIO)		+= xradio/
+diff --git a/drivers/staging/xradio/Kconfig b/drivers/staging/xradio/Kconfig
+index 7244e5f..1a6667d 100644
+--- a/drivers/staging/xradio/Kconfig
++++ b/drivers/staging/xradio/Kconfig
+@@ -3,7 +3,6 @@ config XRADIO
+        depends on MAC80211
+        default n
+        help
+-
+          This is an experimental driver for the XRADIO chip-set.
+          Enabling this option enables the generic driver without
+          any platform support.
+@@ -15,7 +14,7 @@ config XRADIO_NON_POWER_OF_TWO_BLOCKSIZES
+ 	bool "Platform supports non-power-of-two SDIO transfer"
+ 	depends on XRADIO
+ 	default y
+-	---help---
++	help
+ 	  Say N here only if you are running the driver on a platform
+ 	  which does not have support for non-power-of-two SDIO transfer.
+ 	  If unsure, say Y.
+@@ -24,14 +23,14 @@ config XRADIO_5GHZ_SUPPORT
+ 	bool "5GHz band support"
+ 	depends on XRADIO
+ 	default n
+-	---help---
++	help
+ 	  Say Y if your device supports 5GHz band. If unsure, say N.
+ 
+ config XRADIO_WAPI_SUPPORT
+ 	bool "WAPI support"
+ 	depends on XRADIO
+ 	default n
+-	---help---
++	help
+ 	  Say Y if your compat-wireless support WAPI.
+ 	  If unsure, say N.
+ 
+@@ -39,7 +38,7 @@ config XRADIO_USE_EXTENSIONS
+ 	bool "Extensions for WFD and PS mode"
+ 	depends on XRADIO
+ 	default y
+-	---help---
++	help
+ 	  Say Y if you want to include XR extensions
+ 	  If unsure, say Y.
+ 
+diff --git a/drivers/staging/xradio/sdio.c b/drivers/staging/xradio/sdio.c
+index adec058..8ca3908 100644
+--- a/drivers/staging/xradio/sdio.c
++++ b/drivers/staging/xradio/sdio.c
+@@ -15,7 +15,7 @@
+ #include <linux/mmc/sdio_func.h>
+ #include <linux/mmc/card.h>
+ #include <linux/mmc/sdio.h>
+-#include <asm/mach-types.h>
++// #include <asm/mach-types.h>
+ #include <linux/of.h>
+ #include <linux/of_irq.h>
+ 
