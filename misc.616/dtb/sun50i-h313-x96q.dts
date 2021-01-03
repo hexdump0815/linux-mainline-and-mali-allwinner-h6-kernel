@@ -30,14 +30,14 @@
 		power {
 			function = LED_FUNCTION_POWER;
 			color = <LED_COLOR_ID_BLUE>;
-			gpios = <&pio 7 6 GPIO_ACTIVE_HIGH>; /* PC6 */
+			gpios = <&pio 7 6 GPIO_ACTIVE_HIGH>; /* PH6 */
 			default-state = "on";
 		};
 
 		status {
 			function = LED_FUNCTION_STATUS;
 			color = <LED_COLOR_ID_RED>;
-			gpios = <&pio 7 7 GPIO_ACTIVE_HIGH>; /* PC7 */
+			gpios = <&pio 7 7 GPIO_ACTIVE_HIGH>; /* PH7 */
 		};
 	};
 
@@ -57,7 +57,7 @@
 		regulator-max-microvolt = <5000000>;
 		vin-supply = <&reg_vcc5v>;
 		enable-active-high;
-		gpio = <&pio 7 8 GPIO_ACTIVE_HIGH>; /* PC8 */
+		gpio = <&pio 7 8 GPIO_ACTIVE_HIGH>; /* PH8 */
 		status = "okay";
 	};
 };
