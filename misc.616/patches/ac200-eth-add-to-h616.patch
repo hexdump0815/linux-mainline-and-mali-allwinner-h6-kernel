@@ -1,3 +1,5 @@
+inspired by: https://freenode.irclog.whitequark.org/linux-sunxi/2021-01-03#28736084
+
 --- arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi.org	2021-01-03 09:33:34.890274355 +0100
 +++ arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi	2021-01-03 10:32:31.736081160 +0100
 @@ -164,6 +164,14 @@
