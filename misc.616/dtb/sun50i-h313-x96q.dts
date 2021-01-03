@@ -12,11 +12,11 @@
 #include <dt-bindings/leds/common.h>
 
 / {
-	model = "OrangePi Zero2";
-	compatible = "xunlong,orangepi-zero2", "allwinner,sun50i-h616";
+	model = "Shenzhen Amediatech Technology Co., Ltd X96Q TV Box";
+	compatible = "amediatech,x96q", "allwinner,sun50i-h616";
 
 	aliases {
-		ethernet0 = &emac0;
+		ethernet0 = &emac1;
 		serial0 = &uart0;
 	};
 
@@ -29,15 +29,15 @@
 
 		power {
 			function = LED_FUNCTION_POWER;
-			color = <LED_COLOR_ID_RED>;
-			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* PC12 */
+			color = <LED_COLOR_ID_BLUE>;
+			gpios = <&pio 7 6 GPIO_ACTIVE_HIGH>; /* PC6 */
 			default-state = "on";
 		};
 
 		status {
 			function = LED_FUNCTION_STATUS;
-			color = <LED_COLOR_ID_GREEN>;
-			gpios = <&pio 2 13 GPIO_ACTIVE_HIGH>; /* PC13 */
+			color = <LED_COLOR_ID_RED>;
+			gpios = <&pio 7 7 GPIO_ACTIVE_HIGH>; /* PC7 */
 		};
 	};
 
@@ -57,7 +57,7 @@
 		regulator-max-microvolt = <5000000>;
 		vin-supply = <&reg_vcc5v>;
 		enable-active-high;
-		gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; /* PC16 */
+		gpio = <&pio 7 8 GPIO_ACTIVE_HIGH>; /* PC8 */
 		status = "okay";
 	};
 };
@@ -70,21 +70,20 @@
 	status = "okay";
 };
 
-/* USB 2 & 3 are on headers only. */
-
-&emac0 {
+&emac1 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&ext_rgmii_pins>;
-	phy-mode = "rgmii";
-	phy-handle = <&ext_rgmii_phy>;
-	phy-supply = <&reg_dcdce>;
-	allwinner,rx-delay-ps = <3100>;
-	allwinner,tx-delay-ps = <700>;
+	pinctrl-0 = <&ext_rmii_pins>;
+	phy-mode = "rmii";
+	phy-handle = <&ext_rmii_phy>;
 	status = "okay";
 };
 
-&mdio0 {
-	ext_rgmii_phy: ethernet-phy@1 {
+&i2c3 {
+	status = "okay";
+};
+
+&mdio1 {
+	ext_rmii_phy: ethernet-phy@1 {
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <1>;
 	};
@@ -95,6 +94,17 @@
 	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
 	bus-width = <4>;
 	status = "okay";
+};
+
+&mmc2 {
+        pinctrl-names = "default";
+        pinctrl-0 = <&mmc2_pins>;
+        vmmc-supply = <&reg_aldo1>;
+        vqmmc-supply = <&reg_aldo1>;
+        non-removable;
+        cap-mmc-hw-reset;
+        bus-width = <8>;
+        status = "okay";
 };
 
 &ohci0 {
@@ -211,18 +221,6 @@
 	};
 };
 
-&spi0  {
-	status = "okay";
-
-	flash@0 {
-		#address-cells = <1>;
-		#size-cells = <1>;
-		compatible = "jedec,spi-nor";
-		reg = <0>;
-		spi-max-frequency = <40000000>;
-	};
-};
-
 &uart0 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&uart0_ph_pins>;
@@ -230,30 +228,11 @@
 };
 
 &usbotg {
-	dr_mode = "peripheral";
+	dr_mode = "host";
 	status = "okay";
 };
 
 &usbphy {
 	usb1_vbus-supply = <&reg_usb1_vbus>;
 	status = "okay";
-};
-
-&emac1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&ext_rmii_pins>;
-	phy-mode = "rmii";
-	phy-handle = <&ext_rmii_phy>;
-	status = "okay";
-};
-
-&i2c3 {
-	status = "okay";
-};
-
-&mdio1 {
-	ext_rmii_phy: ethernet-phy@1 {
-		compatible = "ethernet-phy-ieee802.3-c22";
-		reg = <1>;
-	};
 };
