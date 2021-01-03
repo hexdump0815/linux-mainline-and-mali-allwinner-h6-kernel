@@ -1,0 +1,53 @@
+# directories:
+# - /compile/doc/stable-aw - the files in this dir
+# - /compile/source/linux-stable-h616 - the kernel sources checked out from gitrepo
+# - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
+# name: stb-616
+
+# INFO: based on apritzel tree commit: 7953fc4428d6b208651506a9cd10857b49401e13
+#                         from branch: h616-v2
+
+# patches:
+# bring the tree to 5.10.0 to get rid of the long version string
+patch -p1 < /compile/doc/stable-aw/misc.616/patches/5.10-rc5-to-5.10.0.patch
+# patch up to 5.10.4
+patch -p1 < /compile/doc/stable-aw/misc.616/patches/patch-5.10.4
+
+cp /compile/doc/stable-aw/config.616 /compile/source/linux-stable-h616/.config
+cd /compile/source/linux-stable-h616
+
+# git pull
+export ARCH=arm64
+# make defconfig
+# /compile/doc/stable-aw/misc.616/options/enable-docker-options.sh
+# /compile/doc/stable-aw/misc.616/options/enable-additional-options.sh
+make oldconfig
+make -j 4 Image dtbs modules
+cd tools/perf
+make
+cd ../power/cpupower
+make
+cd ../../..
+export kver=`make kernelrelease`
+echo ${kver}
+# remove debug info if there and wanted
+# find . -type f -name '*.ko' | sudo xargs -n 1 objcopy --strip-unneeded
+make modules_install
+mkdir -p /lib/modules/${kver}/tools
+cp -v tools/perf/perf /lib/modules/${kver}/tools
+cp -v tools/power/cpupower/cpupower /lib/modules/${kver}/tools
+cp -v tools/power/cpupower/libcpupower.so.0.0.1 /lib/modules/${kver}/tools/libcpupower.so.0
+# make headers_install INSTALL_HDR_PATH=/usr
+cp -v .config /boot/config-${kver}
+cp -v arch/arm64/boot/Image /boot/Image-${kver}
+mkdir /boot/dtb-${kver}
+cp -v arch/arm64/boot/dts/allwinner/sun50i-h616-*.dtb /boot/dtb-${kver}/
+cp -v System.map /boot/System.map-${kver}
+cd /boot
+update-initramfs -c -k ${kver}
+#mkimage -A arm64 -O linux -T ramdisk -a 0x0 -e 0x0 -n initrd.img-${kver} -d initrd.img-${kver} uInitrd-${kver}
+tar cvzf /compile/source/linux-stable-h616/${kver}.tar.gz /boot/*-${kver} /lib/modules/${kver}
+cp -v /compile/doc/stable-aw/config.616 /compile/doc/stable-aw/config.616.old
+cp -v /compile/source/linux-stable-h616/.config /compile/doc/stable-aw/config.616
+cp -v /compile/source/linux-stable-h616/.config /compile/doc/stable-aw/config.616-${kver}
+cp -v /compile/source/linux-stable-h616/*.tar.gz /compile/result/stable-aw
