@@ -52,6 +52,27 @@
 	cpu-supply = <&reg_vdd_cpu_gpu>;
 };
 
+&cpu_opp_table {
+	opp@1896000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1896000000>;
+
+		opp-microvolt-speed0 = <1160000 1160000 1200000>;
+		opp-microvolt-speed1 = <1100000 1100000 1200000>;
+		opp-microvolt-speed2 = <1100000 1100000 1200000>;
+		status = "disabled"
+	};
+	opp@1992000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1992000000>;
+
+		opp-microvolt-speed0 = <1160000 1160000 1200000>;
+		opp-microvolt-speed1 = <1100000 1100000 1200000>;
+		opp-microvolt-speed2 = <1100000 1100000 1200000>;
+		status = "disabled"
+	};
+};
+
 &de {
 	status = "okay";
 };
