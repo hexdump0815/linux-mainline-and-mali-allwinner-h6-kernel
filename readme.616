@@ -14,7 +14,7 @@ patch -p1 < /compile/doc/stable-aw/misc.616/patches/5.10-rc5-to-5.10.0.patch
 patch -p1 < /compile/doc/stable-aw/misc.616/patches/patch-5.10.4
 # add extra dtbs
 patch -p1 < /compile/doc/stable-aw/misc.616/patches/add-new-dtbs-to-Makefile.patch
-cp -i /compile/doc/stable-aw/misc.616/dtb/*.dts arch/arm64/boot/dts/allwinner
+cp -i /compile/doc/stable-aw/misc.616/dtb/*.dts* arch/arm64/boot/dts/allwinner
 # add ac200 eth often used by tv boxes
 patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
 tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz

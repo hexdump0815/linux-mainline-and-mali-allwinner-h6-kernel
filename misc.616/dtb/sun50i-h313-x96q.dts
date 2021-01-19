@@ -18,6 +18,8 @@
 	aliases {
 		ethernet0 = &emac1;
 		serial0 = &uart0;
+		mmc0 = &mmc0;
+		mmc2 = &mmc2;
 	};
 
 	chosen {
@@ -72,9 +74,12 @@
 
 &emac1 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&ext_rmii_pins>;
+	pinctrl-0 = <&rmii_pins>;
 	phy-mode = "rmii";
-	phy-handle = <&ext_rmii_phy>;
+	phy-handle = <&rmii_phy>;
+	phy-supply = <&reg_aldo1>;
+	allwinner,rx-delay-ps = <3100>;
+	allwinner,tx-delay-ps = <700>;
 	status = "okay";
 };
 
@@ -83,7 +88,7 @@
 };
 
 &mdio1 {
-	ext_rmii_phy: ethernet-phy@1 {
+	rmii_phy: ethernet-phy@1 {
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <1>;
 	};
@@ -97,10 +102,12 @@
 };
 
 &mmc2 {
-        pinctrl-names = "default";
-        pinctrl-0 = <&mmc2_pins>;
-        vmmc-supply = <&reg_aldo1>;
-        vqmmc-supply = <&reg_aldo1>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc2_pins>;
+	vmmc-supply = <&reg_aldo1>;
+	vqmmc-supply = <&reg_aldo1>;
+//        vqmmc-supply = <&reg_ldo1>;
+//        vmmc-supply = <&reg_ldo2>;
         non-removable;
         cap-mmc-hw-reset;
         bus-width = <8>;
@@ -123,6 +130,11 @@
 			     "x-powers,axp806";
 		reg = <0x36>;
 
+		/* dummy interrupt to appease the driver for now */
+		interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+		interrupt-controller;
+		#interrupt-cells = <1>;
+
 		x-powers,self-working-mode;
 		vina-supply = <&reg_vcc5v>;
 		vinb-supply = <&reg_vcc5v>;
@@ -141,14 +153,14 @@
 				regulator-name = "vcc-sys";
 			};
 
-			reg_aldo2: aldo2 {	/* 3.3V on headers */
+			reg_aldo2: aldo2 {
 				regulator-always-on;
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-name = "vcc3v3-ext";
 			};
 
-			reg_aldo3: aldo3 {	/* 3.3V on headers */
+			reg_aldo3: aldo3 {
 				regulator-always-on;
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
@@ -214,6 +226,20 @@
 				regulator-name = "vcc-eth-mmc";
 			};
 
+			reg_ldo1: ldo1 {
+				regulator-always-on;
+				regulator-min-microvolt = <1800000>;
+				regulator-max-microvolt = <1800000>;
+				regulator-name = "vcc1v8-emmc";
+			};
+
+			reg_ldo2: ldo2 {
+				regulator-always-on;
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+				regulator-name = "vcc3v3-emmc";
+			};
+
 			sw {
 				/* unused */
 			};
@@ -228,6 +254,7 @@
 };
 
 &usbotg {
+//	dr_mode = "peripheral";
 	dr_mode = "host";
 	status = "okay";
 };
