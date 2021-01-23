@@ -72,6 +72,14 @@
 	status = "okay";
 };
 
+&ehci2 {
+	status = "okay";
+};
+
+&ehci3 {
+	status = "okay";
+};
+
 &emac1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&rmii_pins>;
@@ -119,6 +127,14 @@
 };
 
 &ohci1 {
+	status = "disabled";
+};
+
+&ohci2 {
+	status = "disabled";
+};
+
+&ohci3 {
 	status = "okay";
 };
 
