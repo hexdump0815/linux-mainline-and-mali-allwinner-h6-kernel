@@ -69,7 +69,7 @@
 };
 
 &ehci1 {
-	status = "okay";
+	status = "disabled";
 };
 
 &ehci2 {
@@ -131,7 +131,7 @@
 };
 
 &ohci2 {
-	status = "disabled";
+	status = "okay";
 };
 
 &ohci3 {
