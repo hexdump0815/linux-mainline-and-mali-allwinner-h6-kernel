@@ -4,7 +4,7 @@
 # - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
 # name: stb-ah6
 
-# INFO: based on megous tree commit: cf48c321c3ebd42d33234bf5fc1b7f8b4de86c95
+# INFO: based on megous tree commit: 34395726b53257d8eec3ca2ba6766fe1d6b6e3b2
 #                       from branch: orange-pi-5.10
 
 # patches:
@@ -18,6 +18,8 @@ patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
 tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
 # allow higher cpu temps
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
+# patch the tree up to 5.10.14 to by in sync with the other kernel builds
+patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/patch-5.10.13-14
 
 # add the xr819 sdio wifi driver
 cd drivers/staging
