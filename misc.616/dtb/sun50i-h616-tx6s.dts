@@ -26,6 +26,17 @@
 		stdout-path = "serial0:115200n8";
 	};
 
+	connector {
+		compatible = "hdmi-connector";
+		type = "d";
+
+		port {
+			hdmi_con_in: endpoint {
+				remote-endpoint = <&hdmi_out_con>;
+			};
+		};
+	};
+
 // there is no led on this box
 //	leds {
 //		compatible = "gpio-leds";
@@ -65,6 +76,10 @@
 	};
 };
 
+&de {
+	status = "okay";
+};
+
 &ehci0 {
 	status = "okay";
 };
@@ -90,6 +105,17 @@
 	allwinner,rx-delay-ps = <3100>;
 	allwinner,tx-delay-ps = <700>;
 	status = "okay";
+};
+
+&hdmi {
+	hvcc-supply = <&reg_bldo1>;
+	status = "okay";
+};
+
+&hdmi_out {
+	hdmi_out_con: endpoint {
+		remote-endpoint = <&hdmi_con_in>;
+	};
 };
 
 &i2c3 {
@@ -139,18 +165,18 @@
 	status = "okay";
 };
 
-&r_i2c {
+&r_rsb {
 	status = "okay";
 
-	axp305: pmic@36 {
+	axp305: pmic@745 {
 		compatible = "x-powers,axp305", "x-powers,axp805",
 			     "x-powers,axp806";
-		reg = <0x36>;
+		interrupt-controller;
+		#interrupt-cells = <1>;
+		reg = <0x745>;
 
 		/* dummy interrupt to appease the driver for now */
 		interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-		interrupt-controller;
-		#interrupt-cells = <1>;
 
 		x-powers,self-working-mode;
 		vina-supply = <&reg_vcc5v>;

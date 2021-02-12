@@ -4,17 +4,13 @@
 # - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
 # name: stb-616
 
-# INFO: based on apritzel tree commit: 7953fc4428d6b208651506a9cd10857b49401e13
-#                         from branch: h616-v2
+# INFO: based on jernej tree commit: 37c9ecc749cc97d4987529bd86b31a8c60d5af2e
+#                       from branch: h616-hdmi
 
 # patches:
-# bring the tree to 5.10.0 to get rid of the long version string
-patch -p1 < /compile/doc/stable-aw/misc.616/patches/5.10-rc5-to-5.10.0.patch
-# patch up to 5.10.4
-patch -p1 < /compile/doc/stable-aw/misc.616/patches/patch-5.10.4
 # add extra dtbs
 patch -p1 < /compile/doc/stable-aw/misc.616/patches/add-new-dtbs-to-Makefile.patch
-cp -i /compile/doc/stable-aw/misc.616/dtb/*.dts* arch/arm64/boot/dts/allwinner
+cp -i /compile/doc/stable-aw/misc.616/dtb/*.dts arch/arm64/boot/dts/allwinner
 # add ac200 eth often used by tv boxes
 patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
 tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
