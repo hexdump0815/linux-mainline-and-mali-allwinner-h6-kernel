@@ -56,6 +56,13 @@ cp -v .config /boot/config-${kver}
 cp -v arch/arm64/boot/Image /boot/Image-${kver}
 mkdir /boot/dtb-${kver}
 cp -v arch/arm64/boot/dts/allwinner/sun50i-h6-*.dtb /boot/dtb-${kver}/
+cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-plus.dtb /boot/dtb-${kver}/
+cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dtb /boot/dtb-${kver}/
+cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dtb /boot/dtb-${kver}/
+cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dtb /boot/dtb-${kver}/
+cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dtb /boot/dtb-${kver}/
+cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dtb /boot/dtb-${kver}/
+cp -v arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dtb /boot/dtb-${kver}/
 cp -v System.map /boot/System.map-${kver}
 cd /boot
 update-initramfs -c -k ${kver}
