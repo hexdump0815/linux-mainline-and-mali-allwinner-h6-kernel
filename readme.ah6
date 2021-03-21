@@ -18,8 +18,8 @@ patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
 tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
 # allow higher cpu temps
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
-# patch the tree up to 5.10.14 to by in sync with the other kernel builds
-patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/patch-5.10.13-14
+# patch the tree up to 5.10.25 to by in sync with the other kernel builds
+patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/patch-5.10.19-25-adjustet.patch
 
 # add the xr819 sdio wifi driver
 cd drivers/staging
@@ -30,11 +30,10 @@ patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-xradio-driver.patch
 cp /compile/doc/stable-aw/config.ah6 /compile/source/linux-stable-aw/.config
 cd /compile/source/linux-stable-aw
 
-# git pull
 export ARCH=arm64
-# make defconfig
-# /compile/doc/stable-aw/misc.ah6/options/enable-docker-options.sh
-# /compile/doc/stable-aw/misc.ah6/options/enable-additional-options.sh
+make defconfig
+/compile/doc/stable-aw/misc.ah6/options/enable-docker-options.sh
+/compile/doc/stable-aw/misc.ah6/options/enable-additional-options.sh
 make oldconfig
 make -j 4 Image dtbs modules
 cd tools/perf
