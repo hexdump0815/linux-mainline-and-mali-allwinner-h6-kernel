@@ -7,7 +7,7 @@ inspired by: https://freenode.irclog.whitequark.org/linux-sunxi/2021-01-03#28736
  			};
  
 +			/omit-if-no-ref/
-+			ext_rmii_pins: rmii_pins {
++			rmii_pins: rmii_pins {
 +				pins = "PA0", "PA1", "PA2", "PA3", "PA4",
 +				       "PA5", "PA6", "PA7", "PA8", "PA9";
 +				function = "emac1";
