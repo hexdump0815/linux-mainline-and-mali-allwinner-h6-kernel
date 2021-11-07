@@ -2,10 +2,13 @@
 # - /compile/doc/stable-aw - the files in this dir
 # - /compile/source/linux-stable-aw - the kernel sources checked out from gitrepo
 # - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
+# - /compile/doc/kernel-config-options - https://github.com/hexdump0815/kernel-config-options
 # name: stb-ah6
 
-# INFO: based on megous tree commit: 34395726b53257d8eec3ca2ba6766fe1d6b6e3b2
-#                       from branch: orange-pi-5.10
+# INFO: based on megous tree commit: 3cc817fa5bfb1f9c6c1630707cd7aa6d00f4efe3
+#                       from branch: orange-pi-5.15
+
+cd /compile/source/linux-stable-aw
 
 # patches:
 # fix emmc - needed for some tv boxes
@@ -18,23 +21,18 @@ patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
 tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
 # allow higher cpu temps
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
-# patch the tree up to 5.10.25 to by in sync with the other kernel builds
-patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/patch-5.10.19-25-adjustet.patch
 
-# add the xr819 sdio wifi driver
-cd drivers/staging
-git clone https://github.com/fifteenhex/xradio.git
-cd ../..
-patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-xradio-driver.patch
-
-cp /compile/doc/stable-aw/config.ah6 /compile/source/linux-stable-aw/.config
-cd /compile/source/linux-stable-aw
+# add the xr819 sdio wifi driver - leave this out for now as there are better things upcoming
+# see: https://oftc.irclog.whitequark.org/linux-sunxi/2021-06-22#30025909 and the following days there
+#cd drivers/staging
+#git clone https://github.com/fifteenhex/xradio.git
+#cd ../..
+#patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-xradio-driver.patch
 
 export ARCH=arm64
-make defconfig
-/compile/doc/stable-aw/misc.ah6/options/enable-docker-options.sh
-/compile/doc/stable-aw/misc.ah6/options/enable-additional-options.sh
-make oldconfig
+scripts/kconfig/merge_config.sh -m arch/arm64/configs/defconfig /compile/doc/kernel-config-options/docker-options.cfg /compile/doc/kernel-config-options/options-to-remove-generic.cfg /compile/doc/stable-aw/misc.ah6/options/options-to-remove-special.cfg /compile/doc/kernel-config-options/additional-options-generic.cfg /compile/doc/kernel-config-options/additional-options-aarch64.cfg /compile/doc/stable-aw/misc.ah6/options/additional-options-special.cfg
+( cd /compile/doc/kernel-config-options ; git rev-parse --verify HEAD ) > /compile/doc/stable-aw/misc.ah6/options/kernel-config-options.version
+make olddefconfig
 make -j 4 Image dtbs modules
 cd tools/perf
 make
