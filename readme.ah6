@@ -21,6 +21,8 @@ patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
 tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
 # allow higher cpu temps
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
+# make sure mmc devices always end up with the same device number
+patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
 
 # add the xr819 sdio wifi driver - leave this out for now as there are better things upcoming
 # see: https://oftc.irclog.whitequark.org/linux-sunxi/2021-06-22#30025909 and the following days there
