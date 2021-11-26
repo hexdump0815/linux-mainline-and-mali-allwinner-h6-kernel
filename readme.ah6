@@ -1,6 +1,6 @@
 # directories:
 # - /compile/doc/stable-aw - the files in this dir
-# - /compile/source/linux-stable-aw - the kernel sources checked out from gitrepo
+# - /compile/source/linux-stable-ah6 - the kernel sources checked out from gitrepo
 # - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
 # - /compile/doc/kernel-config-options - https://github.com/hexdump0815/kernel-config-options
 # name: stb-ah6
@@ -8,7 +8,7 @@
 # INFO: based on megous tree commit: 3cc817fa5bfb1f9c6c1630707cd7aa6d00f4efe3
 #                       from branch: orange-pi-5.15
 
-cd /compile/source/linux-stable-aw
+cd /compile/source/linux-stable-ah6
 
 # patches:
 # fix emmc - needed for some tv boxes
@@ -21,8 +21,8 @@ patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
 tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
 # allow higher cpu temps
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
-# make sure mmc devices always end up with the same device number
-patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
+## make sure mmc devices always end up with the same device number - not required for megous tree
+#patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
 
 # add the xr819 sdio wifi driver - leave this out for now as there are better things upcoming
 # see: https://oftc.irclog.whitequark.org/linux-sunxi/2021-06-22#30025909 and the following days there
@@ -66,11 +66,11 @@ cp -v System.map /boot/System.map-${kver}
 cd /boot
 update-initramfs -c -k ${kver}
 #mkimage -A arm64 -O linux -T ramdisk -a 0x0 -e 0x0 -n initrd.img-${kver} -d initrd.img-${kver} uInitrd-${kver}
-tar cvzf /compile/source/linux-stable-aw/${kver}.tar.gz /boot/*-${kver} /lib/modules/${kver}
+tar cvzf /compile/source/linux-stable-ah6/${kver}.tar.gz /boot/*-${kver} /lib/modules/${kver}
 cp -v /compile/doc/stable-aw/config.ah6 /compile/doc/stable-aw/config.ah6.old
-cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah6
-cp -v /compile/source/linux-stable-aw/.config /compile/doc/stable-aw/config.ah6-${kver}
-cp -v /compile/source/linux-stable-aw/*.tar.gz /compile/result/stable-aw
+cp -v /compile/source/linux-stable-ah6/.config /compile/doc/stable-aw/config.ah6
+cp -v /compile/source/linux-stable-ah6/.config /compile/doc/stable-aw/config.ah6-${kver}
+cp -v /compile/source/linux-stable-ah6/*.tar.gz /compile/result/stable-aw
 
 
 cat /boot/menu/extlinux.conf
