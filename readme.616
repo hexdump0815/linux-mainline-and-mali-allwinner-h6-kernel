@@ -1,30 +1,32 @@
 # directories:
 # - /compile/doc/stable-aw - the files in this dir
-# - /compile/source/linux-stable-h616 - the kernel sources checked out from gitrepo
+# - /compile/source/linux-stable-616 - the kernel sources checked out from gitrepo
 # - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
+# - /compile/doc/kernel-config-options - https://github.com/hexdump0815/kernel-config-options
 # name: stb-616
 
-# INFO: based on jernej tree commit: 37c9ecc749cc97d4987529bd86b31a8c60d5af2e
-#                       from branch: h616-hdmi
+# INFO: based on warpme minimyth2 patches from https://github.com/warpme/minimyth2
+#       at commit 1c71b1bad4a5d04b8b4d7948f1c356575fb50f99
 
-# patches:
-# add extra dtbs
-patch -p1 < /compile/doc/stable-aw/misc.616/patches/add-new-dtbs-to-Makefile.patch
-cp -i /compile/doc/stable-aw/misc.616/dtb/*.dts arch/arm64/boot/dts/allwinner
-# add ac200 eth often used by tv boxes
-patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
-tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
-patch -p0 < /compile/doc/stable-aw/misc.616/patches/ac200-eth-add-to-h616.patch
+cd /compile/source/linux-stable-616
 
-cp /compile/doc/stable-aw/config.616 /compile/source/linux-stable-h616/.config
-cd /compile/source/linux-stable-h616
+# minimyth2 h616 patches
+for i in /compile/doc/stable-aw/misc.616/patches/minimyth2/*.patch; do
+  echo === $i
+  patch -p1 < $i
+done
 
-# git pull
+# fix required to get the kernel with the above patches compiled
+patch -p0 < /compile/doc/stable-aw/misc.616/patches/sunxi-ccu-probe-fix.patch
+
+# add some own dtb files
+cp -v /compile/doc/stable-aw/misc.616/dtb/*.dts arch/arm64/boot/dts/allwinner
+patch -p0 < /compile/doc/stable-aw/misc.616/patches/add-own-dtb-files.patch
+
 export ARCH=arm64
-# make defconfig
-# /compile/doc/stable-aw/misc.616/options/enable-docker-options.sh
-# /compile/doc/stable-aw/misc.616/options/enable-additional-options.sh
-make oldconfig
+scripts/kconfig/merge_config.sh -m arch/arm64/configs/defconfig /compile/doc/kernel-config-options/docker-options.cfg /compile/doc/kernel-config-options/options-to-remove-generic.cfg /compile/doc/stable-aw/misc.616/options/options-to-remove-special.cfg /compile/doc/kernel-config-options/additional-options-generic.cfg /compile/doc/kernel-config-options/additional-options-aarch64.cfg /compile/doc/stable-aw/misc.616/options/additional-options-special.cfg
+( cd /compile/doc/kernel-config-options ; git rev-parse --verify HEAD ) > /compile/doc/stable-aw/misc.616/options/kernel-config-options.version
+make olddefconfig
 make -j 4 Image dtbs modules
 cd tools/perf
 make
@@ -50,8 +52,8 @@ cp -v System.map /boot/System.map-${kver}
 cd /boot
 update-initramfs -c -k ${kver}
 #mkimage -A arm64 -O linux -T ramdisk -a 0x0 -e 0x0 -n initrd.img-${kver} -d initrd.img-${kver} uInitrd-${kver}
-tar cvzf /compile/source/linux-stable-h616/${kver}.tar.gz /boot/*-${kver} /lib/modules/${kver}
+tar cvzf /compile/source/linux-stable-616/${kver}.tar.gz /boot/*-${kver} /lib/modules/${kver}
 cp -v /compile/doc/stable-aw/config.616 /compile/doc/stable-aw/config.616.old
-cp -v /compile/source/linux-stable-h616/.config /compile/doc/stable-aw/config.616
-cp -v /compile/source/linux-stable-h616/.config /compile/doc/stable-aw/config.616-${kver}
-cp -v /compile/source/linux-stable-h616/*.tar.gz /compile/result/stable-aw
+cp -v /compile/source/linux-stable-616/.config /compile/doc/stable-aw/config.616
+cp -v /compile/source/linux-stable-616/.config /compile/doc/stable-aw/config.616-${kver}
+cp -v /compile/source/linux-stable-616/*.tar.gz /compile/result/stable-aw

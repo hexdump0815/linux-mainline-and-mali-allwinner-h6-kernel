@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: (GPL-2.0+ or MIT)
 /*
- * Copyright (C) 2020 Arm Ltd.
+ * Author: piotr.oniszczuk@gmail.com
  */
 
 /dts-v1/;
@@ -10,16 +10,16 @@
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/interrupt-controller/arm-gic.h>
 #include <dt-bindings/leds/common.h>
+#include "sun50i-h616-cpu-opp.dtsi"
 
 / {
-	model = "Tanix TX6S TV Box";
-	compatible = "oranth,tanix-tx6s", "allwinner,sun50i-h616";
+	model = "Tanix TX6s";
+	compatible = "tanix,tx6s", "allwinner,sun50i-h616";
 
 	aliases {
 		ethernet0 = &emac1;
 		serial0 = &uart0;
-		mmc0 = &mmc0;
-		mmc2 = &mmc2;
+		ethernet1 = &wlan;
 	};
 
 	chosen {
@@ -37,23 +37,16 @@
 		};
 	};
 
-// there is no led on this box
-//	leds {
-//		compatible = "gpio-leds";
-//
-//		power {
-//			function = LED_FUNCTION_POWER;
-//			color = <LED_COLOR_ID_BLUE>;
-//			gpios = <&pio 7 6 GPIO_ACTIVE_HIGH>; /* PH6 */
-//			default-state = "on";
-//		};
-//
-//		status {
-//			function = LED_FUNCTION_STATUS;
-//			color = <LED_COLOR_ID_RED>;
-//			gpios = <&pio 7 7 GPIO_ACTIVE_HIGH>; /* PH7 */
-//		};
-//	};
+	leds {
+		compatible = "gpio-leds";
+
+		led-0 {
+			function = LED_FUNCTION_POWER;
+			color = <LED_COLOR_ID_RED>;
+			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* PC12 */
+			default-state = "on";
+		};
+	};
 
 	reg_vcc5v: vcc5v {
 		/* board wide 5V supply directly from the USB-C socket */
@@ -71,9 +64,30 @@
 		regulator-max-microvolt = <5000000>;
 		vin-supply = <&reg_vcc5v>;
 		enable-active-high;
-		gpio = <&pio 7 8 GPIO_ACTIVE_HIGH>; /* PH8 */
+		/* gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; PC16 */
 		status = "okay";
 	};
+
+	reg_vcc_wifi: reg_vcc_wifi {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc-wifi";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&pio 6 18 GPIO_ACTIVE_HIGH>; /* PG18 WL_REG_ON */
+		regulator-always-on;
+		enable-active-high;
+		status = "okay";
+	};
+
+	wifi_pwrseq: wifi_pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		post-power-on-delay-ms = <200>;
+	};
+};
+
+&cpu0 {
+	cpu-supply = <&reg_dcdca>;
+	status = "okay";
 };
 
 &de {
@@ -96,17 +110,6 @@
 	status = "okay";
 };
 
-&emac1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&rmii_pins>;
-	phy-mode = "rmii";
-	phy-handle = <&rmii_phy>;
-	phy-supply = <&reg_aldo1>;
-	allwinner,rx-delay-ps = <3100>;
-	allwinner,tx-delay-ps = <700>;
-	status = "okay";
-};
-
 &hdmi {
 	hvcc-supply = <&reg_bldo1>;
 	status = "okay";
@@ -118,7 +121,23 @@
 	};
 };
 
+&gpu {
+	mali-supply = <&reg_dcdcc>;
+	status = "okay";
+};
+
 &i2c3 {
+	status = "okay";
+};
+
+&emac1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&rmii_pins>;
+	phy-mode = "rmii";
+	phy-handle = <&rmii_phy>;
+	phy-supply = <&reg_aldo1>;
+	allwinner,rx-delay-ps = <3100>;
+	allwinner,tx-delay-ps = <700>;
 	status = "okay";
 };
 
@@ -136,17 +155,31 @@
 	status = "okay";
 };
 
+&mmc1 {
+	vmmc-supply = <&reg_dcdce>;
+	vqmmc-supply = <&reg_vcc_wifi>;
+	mmc-pwrseq = <&wifi_pwrseq>;
+	bus-width = <4>;
+	non-removable;
+	status = "okay";
+
+	wlan: wifi@1 {
+		reg = <1>;
+		compatible = "xradio,xr819",
+			     "brcm,bcm4329-fmac";
+		interrupt-parent = <&pio>;
+		interrupts = <6 15 IRQ_TYPE_EDGE_RISING>; /* PG15 WL_HOSTWAKE*/
+		interrupt-names = "host-wake";
+		local-mac-address = [dc 44 6d c0 ff 02];
+	};
+};
+
 &mmc2 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&mmc2_pins>;
-	vmmc-supply = <&reg_aldo1>;
-	vqmmc-supply = <&reg_aldo1>;
-//        vqmmc-supply = <&reg_ldo1>;
-//        vmmc-supply = <&reg_ldo2>;
-        non-removable;
-        cap-mmc-hw-reset;
-        bus-width = <8>;
-        status = "okay";
+	vmmc-supply = <&reg_dcdce>;
+	bus-width = <8>;
+	non-removable;
+	cap-mmc-hw-reset;
+	status = "okay";
 };
 
 &ohci0 {
@@ -175,9 +208,6 @@
 		#interrupt-cells = <1>;
 		reg = <0x745>;
 
-		/* dummy interrupt to appease the driver for now */
-		interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-
 		x-powers,self-working-mode;
 		vina-supply = <&reg_vcc5v>;
 		vinb-supply = <&reg_vcc5v>;
@@ -196,14 +226,14 @@
 				regulator-name = "vcc-sys";
 			};
 
-			reg_aldo2: aldo2 {
+			reg_aldo2: aldo2 {	/* 3.3V on headers */
 				regulator-always-on;
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-name = "vcc3v3-ext";
 			};
 
-			reg_aldo3: aldo3 {
+			reg_aldo3: aldo3 {	/* 3.3V on headers */
 				regulator-always-on;
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
@@ -244,14 +274,14 @@
 			reg_dcdca: dcdca {
 				regulator-always-on;
 				regulator-min-microvolt = <810000>;
-				regulator-max-microvolt = <1080000>;
+				regulator-max-microvolt = <1160000>;
 				regulator-name = "vdd-cpu";
 			};
 
 			reg_dcdcc: dcdcc {
 				regulator-always-on;
 				regulator-min-microvolt = <810000>;
-				regulator-max-microvolt = <1080000>;
+				regulator-max-microvolt = <1160000>;
 				regulator-name = "vdd-gpu-sys";
 			};
 
@@ -263,24 +293,10 @@
 			};
 
 			reg_dcdce: dcdce {
-				regulator-boot-on;
+				regulator-always-on;
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-name = "vcc-eth-mmc";
-			};
-
-			reg_ldo1: ldo1 {
-				regulator-always-on;
-				regulator-min-microvolt = <1800000>;
-				regulator-max-microvolt = <1800000>;
-				regulator-name = "vcc1v8-emmc";
-			};
-
-			reg_ldo2: ldo2 {
-				regulator-always-on;
-				regulator-min-microvolt = <3300000>;
-				regulator-max-microvolt = <3300000>;
-				regulator-name = "vcc3v3-emmc";
 			};
 
 			sw {
@@ -296,13 +312,35 @@
 	status = "okay";
 };
 
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pins>, <&uart1_rts_cts_pins>;
+	uart-has-rtscts;
+	status = "okay";
+
+	bluetooth {
+		compatible = "brcm,bcm43438-bt";
+		clocks = <&rtc 1>;
+		clock-names = "lpo";
+		vbat-supply = <&reg_dcdce>;
+		vddio-supply = <&reg_dcdce>;
+		device-wakeup-gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>; /* PL6 */
+		host-wakeup-gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>; /* PL5 */
+		shutdown-gpios = <&r_pio 0 4 GPIO_ACTIVE_HIGH>; /* PL4 */
+	};
+};
+
 &usbotg {
-//	dr_mode = "peripheral";
-	dr_mode = "host";
+	dr_mode = "peripheral";
 	status = "okay";
 };
 
 &usbphy {
 	usb1_vbus-supply = <&reg_usb1_vbus>;
+	status = "okay";
+};
+
+&ir {
+	linux,rc-map-name = "rc-beelink-gs1";
 	status = "okay";
 };

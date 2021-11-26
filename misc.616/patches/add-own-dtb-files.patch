@@ -1,0 +1,8 @@
+--- arch/arm64/boot/dts/allwinner/Makefile.org	2021-11-26 19:00:09.870791123 +0100
++++ arch/arm64/boot/dts/allwinner/Makefile	2021-11-26 18:59:56.046112665 +0100
+@@ -41,3 +41,5 @@
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tanix-tx6s.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-t95.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h313-x96q.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tx6s.dtb

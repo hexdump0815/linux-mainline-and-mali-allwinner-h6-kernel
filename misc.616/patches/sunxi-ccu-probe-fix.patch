@@ -1,0 +1,13 @@
+inspired by: https://www.spinics.net/lists/stable/msg510313.html
+
+--- drivers/clk/sunxi-ng/sun8i-de33.c.org	2021-11-26 13:22:34.787188901 +0100
++++ drivers/clk/sunxi-ng/sun8i-de33.c	2021-11-26 13:22:46.371468964 +0100
+@@ -152,7 +152,7 @@
+ 	writel(0, reg + 0x24);
+ 	writel(0x0000A980, reg + 0x28);
+ 
+-	ret = sunxi_ccu_probe(pdev->dev.of_node, reg, ccu_desc);
++	ret = devm_sunxi_ccu_probe(&pdev->dev, reg, ccu_desc);
+ 	if (ret)
+ 		goto err_assert_reset;
+ 
