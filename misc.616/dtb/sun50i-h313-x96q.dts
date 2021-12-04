@@ -357,48 +357,56 @@
 		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <480000000>;
 		opp-microvolt = <820000 880000 1120000>;
+		status = "okay";
 	};
 
 	opp-600000000 {
 		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <600000000>;
 		opp-microvolt = <820000 880000 1120000>;
+		status = "okay";
 	};
 
 	opp-792000000 {
 		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <792000000>;
 		opp-microvolt = <860000 940000 1120000>;
+		status = "okay";
 	};
 
 	opp-1008000000 {
 		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1008000000>;
 		opp-microvolt = <900000 1020000 1120000>;
+		status = "okay";
 	};
 
 	opp-1200000000 {
 		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1200000000>;
 		opp-microvolt = <960000 1100000 11200000>;
+		status = "okay";
 	};
 
 	opp-1344000000 {
 		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1344000000>;
 		opp-microvolt = <1120000 1120000 1120000>;
+		status = "okay";
 	};
 
 	opp-1416000000 {
 		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1416000000>;
 		opp-microvolt = <1120000 1120000 1120000>;
+		status = "disabled";
 	};
 
 	opp-1512000000 {
 		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1512000000>;
 		opp-microvolt = <1120000 1120000 1120000>;
+		status = "disabled";
 	};
 
 	opp-1608000000 {
@@ -428,18 +436,22 @@
 	opp-125000000 {
 		opp-hz = /bits/ 64 <125000000>;
 		opp-microvolt = <860000>;
+		status = "okay";
 	};
 	opp-250000000 {
 		opp-hz = /bits/ 64 <250000000>;
 		opp-microvolt = <860000>;
+		status = "okay";
 	};
 	opp-432000000 {
 		opp-hz = /bits/ 64 <432000000>;
 		opp-microvolt = <860000>;
+		status = "okay";
 	};
 	opp-600000000 {
 		opp-hz = /bits/ 64 <600000000>;
 		opp-microvolt = <1020000>;
+		status = "disabled";
 	};
 	opp-800000000 {
 		opp-hz = /bits/ 64 <800000000>;
