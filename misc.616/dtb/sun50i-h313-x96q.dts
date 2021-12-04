@@ -350,3 +350,100 @@
 	linux,rc-map-name = "rc-beelink-gs1";
 	status = "okay";
 };
+
+/* adjust opp table for the h313 a bit so that it still runs stable */
+&cpu_opp_table {
+	opp-480000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <480000000>;
+		opp-microvolt = <820000 880000 1120000>;
+	};
+
+	opp-600000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <600000000>;
+		opp-microvolt = <820000 880000 1120000>;
+	};
+
+	opp-792000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <792000000>;
+		opp-microvolt = <860000 940000 1120000>;
+	};
+
+	opp-1008000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1008000000>;
+		opp-microvolt = <900000 1020000 1120000>;
+	};
+
+	opp-1200000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1200000000>;
+		opp-microvolt = <960000 1100000 11200000>;
+	};
+
+	opp-1344000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1344000000>;
+		opp-microvolt = <1120000 1120000 1120000>;
+	};
+
+	opp-1416000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1416000000>;
+		opp-microvolt = <1120000 1120000 1120000>;
+	};
+
+	opp-1512000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1512000000>;
+		opp-microvolt = <1120000 1120000 1120000>;
+	};
+
+	opp-1608000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1608000000>;
+		opp-microvolt = <1120000 1120000 1120000>;
+		status = "disabled";
+	};
+
+	opp-1704000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1704000000>;
+		opp-microvolt = <1120000 1120000 1120000>;
+		status = "disabled";
+	};
+
+	opp-1800000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1800000000>;
+		opp-microvolt = <1120000 1120000 1120000>;
+		status = "disabled";
+	};
+};
+
+&gpu_opp_table {
+	compatible = "operating-points-v2";
+	opp-125000000 {
+		opp-hz = /bits/ 64 <125000000>;
+		opp-microvolt = <860000>;
+	};
+	opp-250000000 {
+		opp-hz = /bits/ 64 <250000000>;
+		opp-microvolt = <860000>;
+	};
+	opp-432000000 {
+		opp-hz = /bits/ 64 <432000000>;
+		opp-microvolt = <860000>;
+	};
+	opp-600000000 {
+		opp-hz = /bits/ 64 <600000000>;
+		opp-microvolt = <1020000>;
+	};
+	opp-800000000 {
+		opp-hz = /bits/ 64 <800000000>;
+		opp-microvolt = <1080000>;
+		status = "disabled";
+	};
+};
