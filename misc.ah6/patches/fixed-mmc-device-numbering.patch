@@ -1,8 +1,6 @@
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-index 30d396e8c762..f8cd59e00892 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-@@ -16,6 +16,12 @@ / {
+--- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi.org	2021-12-27 18:07:38.037856275 +0100
++++ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi	2021-12-27 18:06:48.064368578 +0100
+@@ -16,6 +16,12 @@
  	#address-cells = <1>;
  	#size-cells = <1>;
  
@@ -12,6 +10,6 @@ index 30d396e8c762..f8cd59e00892 100644
 +		mmc2 = &mmc2;
 +	};
 +
- 	cpus {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
+ 	ac200_pwm_clk: ac200_clk {
+ 		compatible = "pwm-clock";
+ 		#clock-cells = <0>;

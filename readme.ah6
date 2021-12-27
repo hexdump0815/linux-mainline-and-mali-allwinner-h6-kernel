@@ -5,31 +5,42 @@
 # - /compile/doc/kernel-config-options - https://github.com/hexdump0815/kernel-config-options
 # name: stb-ah6
 
-# INFO: based on megous tree commit: 3cc817fa5bfb1f9c6c1630707cd7aa6d00f4efe3
+# INFO: based on megous tree commit: 09fde4113b9bdf170d23a97e715206da3dec46e7
 #                       from branch: orange-pi-5.15
+#                       no longer used - linux-stable plus minimyth2 patches is used now
 
 cd /compile/source/linux-stable-ah6
 
 # patches:
-# fix emmc - needed for some tv boxes
-patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/emmc-fix.patch
-# add extra dtbs
-patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-new-dtbs-to-Makefile.patch
-cp -i /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
-# add support for the ac200 onboard ethernet
-patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
-tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
-# allow higher cpu temps
-patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
-## make sure mmc devices always end up with the same device number - not required for megous tree
-#patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
+# no longer used - linux-stable plus minimyth2 patches is used now
+# # fix emmc - needed for some tv boxes - this is included now in the megous tree
+# #patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/emmc-fix.patch
+# # add extra dtbs
+# patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-new-dtbs-to-Makefile.patch
+# cp -i /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
+# # add support for the ac200 onboard ethernet
+# patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
+# tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
+# # allow higher cpu temps
+# patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
+# ## make sure mmc devices always end up with the same device number - not required for megous tree
+# #patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
+# 
+# # add the xr819 sdio wifi driver - leave this out for now as there are better things upcoming
+# # see: https://oftc.irclog.whitequark.org/linux-sunxi/2021-06-22#30025909 and the following days there
+# #cd drivers/staging
+# #git clone https://github.com/fifteenhex/xradio.git
+# #cd ../..
+# #patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-xradio-driver.patch
 
-# add the xr819 sdio wifi driver - leave this out for now as there are better things upcoming
-# see: https://oftc.irclog.whitequark.org/linux-sunxi/2021-06-22#30025909 and the following days there
-#cd drivers/staging
-#git clone https://github.com/fifteenhex/xradio.git
-#cd ../..
-#patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-xradio-driver.patch
+# minimyth2 h6 patches
+for i in /compile/doc/stable-aw/misc.ah6/patches/minimyth2/*.patch; do
+  echo === $i
+  patch -p1 < $i
+done
+
+# make sure mmc devices always end up with the same device number
+patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
 
 export ARCH=arm64
 scripts/kconfig/merge_config.sh -m arch/arm64/configs/defconfig /compile/doc/kernel-config-options/docker-options.cfg /compile/doc/kernel-config-options/options-to-remove-generic.cfg /compile/doc/stable-aw/misc.ah6/options/options-to-remove-special.cfg /compile/doc/kernel-config-options/additional-options-generic.cfg /compile/doc/kernel-config-options/additional-options-aarch64.cfg /compile/doc/stable-aw/misc.ah6/options/additional-options-special.cfg
@@ -55,13 +66,14 @@ cp -v .config /boot/config-${kver}
 cp -v arch/arm64/boot/Image /boot/Image-${kver}
 mkdir /boot/dtb-${kver}
 cp -v arch/arm64/boot/dts/allwinner/sun50i-h6-*.dtb /boot/dtb-${kver}/
-cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-plus.dtb /boot/dtb-${kver}/
-cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dtb /boot/dtb-${kver}/
-cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dtb /boot/dtb-${kver}/
-cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dtb /boot/dtb-${kver}/
-cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dtb /boot/dtb-${kver}/
-cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dtb /boot/dtb-${kver}/
-cp -v arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dtb /boot/dtb-${kver}/
+# the below ones would only be relevant for the megous tree
+#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-plus.dtb /boot/dtb-${kver}/
+#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dtb /boot/dtb-${kver}/
+#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dtb /boot/dtb-${kver}/
+#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dtb /boot/dtb-${kver}/
+#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dtb /boot/dtb-${kver}/
+#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dtb /boot/dtb-${kver}/
+#cp -v arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dtb /boot/dtb-${kver}/
 cp -v System.map /boot/System.map-${kver}
 cd /boot
 update-initramfs -c -k ${kver}
