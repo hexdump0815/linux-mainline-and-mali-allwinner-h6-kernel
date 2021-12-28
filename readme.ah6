@@ -5,14 +5,14 @@
 # - /compile/doc/kernel-config-options - https://github.com/hexdump0815/kernel-config-options
 # name: stb-ah6
 
-# INFO: based on megous tree commit: 09fde4113b9bdf170d23a97e715206da3dec46e7
-#                       from branch: orange-pi-5.15
-#                       no longer used - linux-stable plus minimyth2 patches is used now
-
-cd /compile/source/linux-stable-ah6
-
-# patches:
-# no longer used - linux-stable plus minimyth2 patches is used now
+# older v5.10 megous tree based version - see below for newer approach
+# # INFO: based on megous tree commit: 09fde4113b9bdf170d23a97e715206da3dec46e7
+# #                       from branch: orange-pi-5.15
+# #                       no longer used - linux-stable plus minimyth2 patches is used now
+#
+# cd /compile/source/linux-stable-ah6
+#
+# # patches:
 # # fix emmc - needed for some tv boxes - this is included now in the megous tree
 # #patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/emmc-fix.patch
 # # add extra dtbs
@@ -25,6 +25,8 @@ cd /compile/source/linux-stable-ah6
 # patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
 # ## make sure mmc devices always end up with the same device number - not required for megous tree
 # #patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
+# # patch the megous v5.10.19 tree up to v5.10.25
+# patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/patch-5.10.19-25-adjustet.patch
 # 
 # # add the xr819 sdio wifi driver - leave this out for now as there are better things upcoming
 # # see: https://oftc.irclog.whitequark.org/linux-sunxi/2021-06-22#30025909 and the following days there
@@ -33,6 +35,10 @@ cd /compile/source/linux-stable-ah6
 # #cd ../..
 # #patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-xradio-driver.patch
 
+# newer v5.15 linux-stable based version
+cd /compile/source/linux-stable-ah6
+
+# patches:
 # minimyth2 h6 patches
 for i in /compile/doc/stable-aw/misc.ah6/patches/minimyth2/*.patch; do
   echo === $i
@@ -70,13 +76,13 @@ cp -v arch/arm64/boot/Image /boot/Image-${kver}
 mkdir /boot/dtb-${kver}
 cp -v arch/arm64/boot/dts/allwinner/sun50i-h6-*.dtb /boot/dtb-${kver}/
 # the below ones would only be relevant for the megous tree
-#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-plus.dtb /boot/dtb-${kver}/
-#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dtb /boot/dtb-${kver}/
-#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dtb /boot/dtb-${kver}/
-#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dtb /boot/dtb-${kver}/
-#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dtb /boot/dtb-${kver}/
-#cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dtb /boot/dtb-${kver}/
-#cp -v arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dtb /boot/dtb-${kver}/
+# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-plus.dtb /boot/dtb-${kver}/
+# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dtb /boot/dtb-${kver}/
+# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dtb /boot/dtb-${kver}/
+# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dtb /boot/dtb-${kver}/
+# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dtb /boot/dtb-${kver}/
+# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dtb /boot/dtb-${kver}/
+# cp -v arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dtb /boot/dtb-${kver}/
 cp -v System.map /boot/System.map-${kver}
 cd /boot
 update-initramfs -c -k ${kver}
@@ -95,9 +101,9 @@ DEFAULT eachlink.old
  
 MENU TITLE h6 boot options
 
-LABEL eachlink.old
-      MENU LABEL 5.6.13-meg-ah6+
-      LINUX ../Image-5.6.13-meg-ah6+
-      INITRD ../initrd.img-5.6.13-meg-ah6+
-      FDT ../dtb-5.6.13-meg-ah6+/sun50i-h6-eachlink-h6mini.dtb
+LABEL eachlink
+      MENU LABEL 5.15.11-stb-ah6+
+      LINUX ../Image-5.15.11-stb-ah6+
+      INITRD ../initrd.img-5.15.11-stb-ah6+
+      FDT ../dtb-5.15.11-stb-ah6+/sun50i-h6-eachlink-h6mini.dtb
       APPEND console=ttyS0,115200 console=tty0 earlycon loglevel=8 root=/dev/mmcblk0p3 rootwait ro fsck.fix=yes fsck.repair=yes net.ifnames=0 ipv6.disable=1 noresume mem=2048M video=HDMI-A-1:e
