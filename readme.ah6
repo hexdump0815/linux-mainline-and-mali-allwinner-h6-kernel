@@ -5,37 +5,6 @@
 # - /compile/doc/kernel-config-options - https://github.com/hexdump0815/kernel-config-options
 # name: stb-ah6
 
-# older v5.10 megous tree based version - see below for newer approach
-# # INFO: based on megous tree commit: 09fde4113b9bdf170d23a97e715206da3dec46e7
-# #                       from branch: orange-pi-5.15
-# #                       no longer used - linux-stable plus minimyth2 patches is used now
-#
-# cd /compile/source/linux-stable-ah6
-#
-# # patches:
-# # fix emmc - needed for some tv boxes - this is included now in the megous tree
-# #patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/emmc-fix.patch
-# # add extra dtbs
-# patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-new-dtbs-to-Makefile.patch
-# cp -i /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
-# # add support for the ac200 onboard ethernet
-# patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-diff-v5.9.patch
-# tar xzf /compile/doc/stable-aw/misc.ah6/patches/ac200-eth-extra-files.tar.gz
-# # allow higher cpu temps
-# patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.9.patch
-# ## make sure mmc devices always end up with the same device number - not required for megous tree
-# #patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
-# # patch the megous v5.10.19 tree up to v5.10.25
-# patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/patch-5.10.19-25-adjustet.patch
-# 
-# # add the xr819 sdio wifi driver - leave this out for now as there are better things upcoming
-# # see: https://oftc.irclog.whitequark.org/linux-sunxi/2021-06-22#30025909 and the following days there
-# #cd drivers/staging
-# #git clone https://github.com/fifteenhex/xradio.git
-# #cd ../..
-# #patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-xradio-driver.patch
-
-# newer v5.15 linux-stable based version
 cd /compile/source/linux-stable-ah6
 
 # patches:
@@ -49,7 +18,10 @@ done
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
 
 # with proper cooling some h6 tv boxes run fine up to 2ghz - add disabled opp points for this
-patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/eachlink-add-extra-opp-points.patch
+patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/eachlink-add-extra-opp-points-v5.15.patch
+
+# raise the temp limits a bit to avoid throttling too much
+patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v5.15.patch
 
 export ARCH=arm64
 scripts/kconfig/merge_config.sh -m arch/arm64/configs/defconfig /compile/doc/kernel-config-options/docker-options.cfg /compile/doc/kernel-config-options/options-to-remove-generic.cfg /compile/doc/stable-aw/misc.ah6/options/options-to-remove-special.cfg /compile/doc/kernel-config-options/additional-options-generic.cfg /compile/doc/kernel-config-options/additional-options-aarch64.cfg /compile/doc/stable-aw/misc.ah6/options/additional-options-special.cfg
