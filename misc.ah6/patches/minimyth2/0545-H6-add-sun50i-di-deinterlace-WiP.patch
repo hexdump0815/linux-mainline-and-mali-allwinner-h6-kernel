@@ -15,14 +15,12 @@ Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
  create mode 100644 drivers/media/platform/sunxi/sun50i-di/sun50i-di.c
  create mode 100644 drivers/media/platform/sunxi/sun50i-di/sun50i-di.h
 
-diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+diff --git a/drivers/media/platform/sunxi/sun8i-di/Kconfig b/drivers/media/platform/sunxi/sun8i-di/Kconfig
 index c57ee78fa99d..0d3b25d96b10 100644
---- a/drivers/media/platform/Kconfig
-+++ b/drivers/media/platform/Kconfig
-@@ -495,6 +495,19 @@ config VIDEO_QCOM_VENUS
- 	  on various Qualcomm SoCs.
- 	  To compile this driver as a module choose m here.
- 
+--- a/drivers/media/platform/sunxi/sun8i-di/Kconfig
++++ b/drivers/media/platform/sunxi/sun8i-di/Kconfig
+@@ -2,2 +2,15 @@ config VIDEO_QCOM_VENUS
+ # SPDX-License-Identifier: GPL-2.0-only
 +config VIDEO_SUN50I_DEINTERLACE
 +	tristate "Allwinner Deinterlace v2 driver"
 +	depends on VIDEO_DEV && VIDEO_V4L2
