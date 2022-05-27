@@ -17,9 +17,9 @@ index 41ce680e5f8..9ba4b5d9265 100644
 --- a/arch/arm64/boot/dts/allwinner/Makefile
 +++ b/arch/arm64/boot/dts/allwinner/Makefile
 @@ -36,3 +36,4 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-orangepi-one-plus.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64.dtb
  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
 +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
 diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
 new file mode 100644
@@ -71,13 +71,13 @@ index 00000000000..e6de49f89e3
 +			function = LED_FUNCTION_POWER;
 +			color = <LED_COLOR_ID_RED>;
 +			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* PC12 */
-+			default-state = "on";
 +		};
 +
 +		led-1 {
 +			function = LED_FUNCTION_STATUS;
 +			color = <LED_COLOR_ID_GREEN>;
 +			gpios = <&pio 2 13 GPIO_ACTIVE_HIGH>; /* PC13 */
++			default-state = "on";
 +		};
 +	};
 +

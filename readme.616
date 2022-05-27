@@ -3,10 +3,11 @@
 # - /compile/source/linux-stable-616 - the kernel sources checked out from gitrepo
 # - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
 # - /compile/doc/kernel-config-options - https://github.com/hexdump0815/kernel-config-options
+# - /compile/doc/kernel-extra-patches - https://github.com/hexdump0815/kernel-extra-patches
 # name: stb-616
 
 # INFO: based on warpme minimyth2 patches from https://github.com/warpme/minimyth2
-#       at commit 1c71b1bad4a5d04b8b4d7948f1c356575fb50f99
+#       at commit a3099694b8231b5683b6ae6903112e0b799c8a9e
 
 cd /compile/source/linux-stable-616
 
@@ -17,7 +18,7 @@ for i in /compile/doc/stable-aw/misc.616/patches/minimyth2/*.patch; do
 done
 
 # fix required to get the kernel with the above patches compiled
-patch -p0 < /compile/doc/stable-aw/misc.616/patches/sunxi-ccu-probe-fix.patch
+patch -p0 < /compile/doc/stable-aw/misc.616/patches/sunxi-ccu-probe-fix-v5.18.patch
 
 # add some own dtb files
 cp -v /compile/doc/stable-aw/misc.616/dtb/*.dts arch/arm64/boot/dts/allwinner
@@ -25,6 +26,12 @@ patch -p0 < /compile/doc/stable-aw/misc.616/patches/add-own-dtb-files.patch
 
 # make sure mmc devices always end up with the same device number
 patch -p0 < /compile/doc/stable-aw/misc.616/patches/fixed-mmc-device-numbering.patch
+
+# apply the multi gen lru kernel extra patches
+for i in /compile/doc/kernel-extra-patches/multi-gen-lru/v11/*.diff; do
+  echo === $i
+  patch -p1 < $i
+done
 
 export ARCH=arm64
 scripts/kconfig/merge_config.sh -m arch/arm64/configs/defconfig /compile/doc/kernel-config-options/docker-options.cfg /compile/doc/kernel-config-options/options-to-remove-generic.cfg /compile/doc/stable-aw/misc.616/options/options-to-remove-special.cfg /compile/doc/kernel-config-options/additional-options-generic.cfg /compile/doc/kernel-config-options/additional-options-aarch64.cfg /compile/doc/stable-aw/misc.616/options/additional-options-special.cfg
