@@ -4,7 +4,7 @@
 # - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
 # - /compile/doc/kernel-config-options - https://github.com/hexdump0815/kernel-config-options
 # - /compile/doc/kernel-extra-patches - https://github.com/hexdump0815/kernel-extra-patches
-# name: stb-616
+# name: stb-616 - allwinner h616
 
 # INFO: based on warpme minimyth2 patches from https://github.com/warpme/minimyth2
 #       at commit a3099694b8231b5683b6ae6903112e0b799c8a9e
