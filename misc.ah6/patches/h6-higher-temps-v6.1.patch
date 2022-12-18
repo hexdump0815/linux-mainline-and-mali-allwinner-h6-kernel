@@ -1,0 +1,18 @@
+--- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi.org	2020-10-15 00:00:56.136742978 +0200
++++ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi	2020-10-15 00:02:52.049799383 +0200
+@@ -1124,13 +1124,13 @@
+ 
+ 			trips {
+ 				cpu_alert: cpu-alert {
+-					temperature = <85000>;
++					temperature = <95000>;
+ 					hysteresis = <2000>;
+ 					type = "passive";
+ 				};
+ 
+ 				cpu-crit {
+-					temperature = <100000>;
++					temperature = <105000>;
+ 					hysteresis = <0>;
+ 					type = "critical";
+ 				};

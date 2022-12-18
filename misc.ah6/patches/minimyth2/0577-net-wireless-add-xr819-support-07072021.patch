@@ -724,8 +724,8 @@ index 236022d4ae2..0cac44fac9f 100644
  	}
  
  	/* Enable asynchronous join calls */
--	if (!conf->ibss_joined) {
-+	if (priv->fw_api != CW1200_FW_API_XRADIO && !conf->ibss_joined) {
+-	if (!priv->vif->cfg.ibss_joined) {
++	if (priv->fw_api != CW1200_FW_API_XRADIO && !priv->vif->cfg.ibss_joined) {
  		join.flags |= WSM_JOIN_FLAGS_FORCE;
  		join.flags |= WSM_JOIN_FLAGS_FORCE_WITH_COMPLETE_IND;
  	}

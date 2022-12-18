@@ -1,18 +1,16 @@
-From fa11b2ef7b8359f70d010d3b76b7dfd90250dc5c Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Jernej Skrabec <jernej.skrabec@siol.net>
 Date: Fri, 16 Aug 2019 16:40:20 +0200
 Subject: [PATCH] arm64: dts: allwinner: h6: Add AC200 EPHY related nodes
 
 Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
 ---
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 51 ++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 56 ++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-index 8eec8685a50b..5eeb7da7a0ab 100644
 --- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
 +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-@@ -17,6 +17,16 @@
+@@ -16,6 +16,16 @@
  	#address-cells = <1>;
  	#size-cells = <1>;
  
@@ -29,7 +27,7 @@ index 8eec8685a50b..5eeb7da7a0ab 100644
  	cpus {
  		#address-cells = <1>;
  		#size-cells = <0>;
-@@ -218,6 +228,10 @@
+@@ -319,6 +329,10 @@
  			cpu_speed_grade: cpu-speed-grade@1c {
  				reg = <0x1c 0x4>;
  			};
@@ -39,9 +37,23 @@ index 8eec8685a50b..5eeb7da7a0ab 100644
 +			};
  		};
  
- 		watchdog: watchdog@30090a0 {
-@@ -268,6 +284,11 @@
+ 		timer@3009000 {
+@@ -373,6 +387,13 @@
  				drive-strength = <40>;
+ 			};
+ 
++			ext_rmii_pins: rmii_pins {
++				pins = "PA0", "PA1", "PA2", "PA3", "PA4",
++				       "PA5", "PA6", "PA7", "PA8", "PA9";
++				function = "emac";
++				drive-strength = <40>;
++			};
++
+ 			hdmi_pins: hdmi-pins {
+ 				pins = "PH8", "PH9", "PH10";
+ 				function = "hdmi";
+@@ -393,6 +414,11 @@
+ 				function = "i2c2";
  			};
  
 +			i2c3_pins: i2c3-pins {
@@ -49,10 +61,10 @@ index 8eec8685a50b..5eeb7da7a0ab 100644
 +				function = "i2c3";
 +			};
 +
- 			hdmi_pins: hdmi-pins {
- 				pins = "PH8", "PH9", "PH10";
- 				function = "hdmi";
-@@ -290,6 +311,11 @@
+ 			mmc0_pins: mmc0-pins {
+ 				pins = "PF0", "PF1", "PF2", "PF3",
+ 				       "PF4", "PF5";
+@@ -419,6 +445,11 @@
  				bias-pull-up;
  			};
  
@@ -61,11 +73,11 @@ index 8eec8685a50b..5eeb7da7a0ab 100644
 +				function = "pwm1";
 +			};
 +
- 			mmc2_pins: mmc2-pins {
- 				pins = "PC1", "PC4", "PC5", "PC6",
- 				       "PC7", "PC8", "PC9", "PC10",
-@@ -408,6 +434,31 @@
- 			status = "disabled";
+ 			/omit-if-no-ref/
+ 			spi0_pins: spi0-pins {
+ 				pins = "PC0", "PC2", "PC3";
+@@ -652,6 +683,31 @@
+ 			#size-cells = <0>;
  		};
  
 +		i2c3: i2c@5002c00 {
@@ -96,6 +108,3 @@ index 8eec8685a50b..5eeb7da7a0ab 100644
  		emac: ethernet@5020000 {
  			compatible = "allwinner,sun50i-h6-emac",
  				     "allwinner,sun50i-a64-emac";
--- 
-2.22.1
-
