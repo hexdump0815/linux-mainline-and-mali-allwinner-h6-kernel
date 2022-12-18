@@ -1,20 +1,14 @@
-for h6 for now:
 origin	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git (fetch)
 origin	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git (push)
 
-h6 old:
+another good h6 repo:
 origin	https://github.com/megous/linux.git (fetch)
 origin	https://github.com/megous/linux.git (push)
 
-for h616 for now:
-origin	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git (fetch)
-origin	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git (push)
-
-h616 old:
+some h616 stuff can be found here ...
 origin https://github.com/jernejsk/linux-1.git (fetch)
 origin https://github.com/jernejsk/linux-1.git (push)
-branch: h616-hdmi
 
-h616 older:
+... and here in some branches
 origin	https://github.com/apritzel/linux.git (fetch)
 origin	https://github.com/apritzel/linux.git (push)
