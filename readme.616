@@ -6,7 +6,7 @@
 # name: stb-616 - allwinner h616
 
 # INFO: based on warpme minimyth2 patches from https://github.com/warpme/minimyth2
-#       at commit a23b55bf348dd12c917a5d255d2e57e92d3c35a1
+#       at commit d9c383487c5af85b89d4956d32db031fd7da8979
 
 cd /compile/source/linux-stable-616
 
