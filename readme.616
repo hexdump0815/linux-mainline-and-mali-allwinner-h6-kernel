@@ -3,10 +3,12 @@
 # - /compile/source/linux-stable-616 - the kernel sources checked out from gitrepo
 # - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
 # - /compile/doc/kernel-config-options - https://github.com/hexdump0815/kernel-config-options
-# name: stb-616 - allwinner h616
+# name: stb-616 - allwinner h616 and h618
 
 # INFO: based on warpme minimyth2 patches from https://github.com/warpme/minimyth2
-#       at commit d9c383487c5af85b89d4956d32db031fd7da8979
+#       at commit d9c383487c5af85b89d4956d32db031fd7da8979 (linux-6.1 tree)
+#       some more patches for axp313a pmic and h618 support taken from minimyth2
+#       at commit 81707136ae62b65c94fd9929fda8f3bc030a78a6 (linux-6.4 tree)
 
 cd /compile/source/linux-stable-616
 
@@ -16,10 +18,9 @@ for i in /compile/doc/stable-aw/misc.616/patches/minimyth2/*.patch; do
   patch -p1 < $i
 done
 
-# fix required to get the kernel with the above patches compiled
-patch -p0 < /compile/doc/stable-aw/misc.616/patches/sunxi-ccu-probe-fix-v5.18.patch
 # add some own dtb files
 cp -v /compile/doc/stable-aw/misc.616/dtb/*.dts arch/arm64/boot/dts/allwinner
+cp -v /compile/doc/stable-aw/misc.616/dtb/*.dtsi arch/arm64/boot/dts/allwinner
 patch -p0 < /compile/doc/stable-aw/misc.616/patches/add-own-dtb-files.patch
 # make sure mmc devices always end up with the same device number
 patch -p0 < /compile/doc/stable-aw/misc.616/patches/fixed-mmc-device-numbering.patch
@@ -47,8 +48,9 @@ cp -v tools/power/cpupower/libcpupower.so.0.0.1 /lib/modules/${kver}/tools/libcp
 cp -v .config /boot/config-${kver}
 cp -v arch/arm64/boot/Image /boot/Image-${kver}
 mkdir /boot/dtb-${kver}
-cp -v arch/arm64/boot/dts/allwinner/sun50i-h616-*.dtb /boot/dtb-${kver}/
 cp -v arch/arm64/boot/dts/allwinner/sun50i-h313-*.dtb /boot/dtb-${kver}/
+cp -v arch/arm64/boot/dts/allwinner/sun50i-h616-*.dtb /boot/dtb-${kver}/
+cp -v arch/arm64/boot/dts/allwinner/sun50i-h618-*.dtb /boot/dtb-${kver}/
 cp -v System.map /boot/System.map-${kver}
 cd /boot
 update-initramfs -c -k ${kver}
