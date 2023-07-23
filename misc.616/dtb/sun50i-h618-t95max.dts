@@ -345,7 +345,7 @@
 		clock-latency-ns = <488288>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1512000000>;
 		opp-microvolt = <1160000 1160000 1160000>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	opp-1560000000 {
