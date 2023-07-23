@@ -24,6 +24,8 @@ cp -v /compile/doc/stable-aw/misc.616/dtb/*.dtsi arch/arm64/boot/dts/allwinner
 patch -p0 < /compile/doc/stable-aw/misc.616/patches/add-own-dtb-files.patch
 # make sure mmc devices always end up with the same device number
 patch -p0 < /compile/doc/stable-aw/misc.616/patches/fixed-mmc-device-numbering.patch
+# raise the temp limits a bit to avoid throttling too much
+patch -p0 < /compile/doc/stable-aw/misc.616/patches/h616-higher-temps-v6.1.patch
 
 export ARCH=arm64
 scripts/kconfig/merge_config.sh -m arch/arm64/configs/defconfig /compile/doc/kernel-config-options/docker-options.cfg /compile/doc/kernel-config-options/options-to-remove-generic.cfg /compile/doc/stable-aw/misc.616/options/options-to-remove-special.cfg /compile/doc/kernel-config-options/additional-options-generic.cfg /compile/doc/kernel-config-options/additional-options-aarch64.cfg /compile/doc/stable-aw/misc.616/options/additional-options-special.cfg
