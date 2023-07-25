@@ -144,9 +144,9 @@
 };
 
 &mdio1 {
-	rmii_phy: ethernet-phy@1 {
+	rmii_phy: ethernet-phy@0 {
 		compatible = "ethernet-phy-ieee802.3-c22";
-		reg = <1>;
+		reg = <0>;
 	};
 };
 
@@ -294,103 +294,184 @@
 /* adjust opp table for the bin 1 h616 a bit so that it still runs stable */
 &cpu_opp_table {
 	opp-480000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
+		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <480000000>;
-		opp-microvolt = <900000 900000 900000>;
+		opp-microvolt = <820000 880000 1120000>;
 		status = "okay";
 	};
 
 	opp-600000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
+		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <600000000>;
-		opp-microvolt = <900000 900000 900000>;
+		opp-microvolt = <820000 880000 1120000>;
 		status = "okay";
 	};
 
 	opp-792000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
+		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <792000000>;
-		opp-microvolt = <900000 900000 900000>;
+		opp-microvolt = <860000 940000 1120000>;
 		status = "okay";
 	};
 
 	opp-1008000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
+		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1008000000>;
-		opp-microvolt = <920000 920000 920000>;
+		opp-microvolt = <900000 1020000 1120000>;
 		status = "okay";
 	};
 
 	opp-1200000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
+		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1200000000>;
-		opp-microvolt = <980000 980000 980000>;
+		opp-microvolt = <960000 1100000 11200000>;
 		status = "okay";
 	};
 
 	opp-1344000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
+		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1344000000>;
 		opp-microvolt = <1120000 1120000 1120000>;
-		status = "okay";
-	};
-
-	opp-1416000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
-		opp-hz = /bits/ 64 <1416000000>;
-		opp-microvolt = <1150000 1150000 1150000>;
-		status = "okay";
-	};
-
-	opp-1512000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
-		opp-hz = /bits/ 64 <1512000000>;
-		opp-microvolt = <1160000 1160000 1160000>;
 		status = "disabled";
 	};
 
-	opp-1560000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
-		opp-hz = /bits/ 64 <1560000000>;
-		opp-microvolt = <1160000 1160000 1160000>;
+	opp-1416000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1416000000>;
+		opp-microvolt = <1120000 1120000 1120000>;
+		status = "disabled";
+	};
+
+	opp-1512000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1512000000>;
+		opp-microvolt = <1120000 1120000 1120000>;
 		status = "disabled";
 	};
 
 	opp-1608000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
+		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1608000000>;
-		opp-microvolt = <1160000 1160000 1160000>;
-		status = "disabled";
-	};
-
-	opp-1656000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
-		opp-hz = /bits/ 64 <1656000000>;
-		opp-microvolt = <1160000 1160000 1160000>;
+		opp-microvolt = <1120000 1120000 1120000>;
 		status = "disabled";
 	};
 
 	opp-1704000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
+		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1704000000>;
-		opp-microvolt = <1160000 1160000 1160000>;
-		status = "disabled";
-	};
-
-	opp-1752000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
-		opp-hz = /bits/ 64 <1752000000>;
-		opp-microvolt = <1160000 1160000 1160000>;
+		opp-microvolt = <1120000 1120000 1120000>;
 		status = "disabled";
 	};
 
 	opp-1800000000 {
-		clock-latency-ns = <488288>; /* 8 32k periods */
+		clock-latency-ns = <244144>; /* 8 32k periods */
 		opp-hz = /bits/ 64 <1800000000>;
-		opp-microvolt = <1160000 1160000 1160000>;
+		opp-microvolt = <1120000 1120000 1120000>;
 		status = "disabled";
 	};
 };
+
+/* alternative opp table based on the warpme h313 table with higher
+   voltages and some extra opp points added on top of that */
+//&cpu_opp_table {
+//	opp-480000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <480000000>;
+//		opp-microvolt = <900000 900000 900000>;
+//		status = "okay";
+//	};
+
+//	opp-600000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <600000000>;
+//		opp-microvolt = <900000 900000 900000>;
+//		status = "okay";
+//	};
+
+//	opp-792000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <792000000>;
+//		opp-microvolt = <900000 900000 900000>;
+//		status = "okay";
+//	};
+
+//	opp-1008000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1008000000>;
+//		opp-microvolt = <920000 920000 920000>;
+//		status = "okay";
+//	};
+
+//	opp-1200000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1200000000>;
+//		opp-microvolt = <980000 980000 980000>;
+//		status = "okay";
+//	};
+
+//	opp-1344000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1344000000>;
+//		opp-microvolt = <1120000 1120000 1120000>;
+//		status = "disabled";
+//	};
+
+//	opp-1416000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1416000000>;
+//		opp-microvolt = <1150000 1150000 1150000>;
+//		status = "disabled";
+//	};
+
+//	opp-1512000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1512000000>;
+//		opp-microvolt = <1160000 1160000 1160000>;
+//		status = "disabled";
+//	};
+
+//	opp-1560000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1560000000>;
+//		opp-microvolt = <1160000 1160000 1160000>;
+//		status = "disabled";
+//	};
+
+//	opp-1608000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1608000000>;
+//		opp-microvolt = <1160000 1160000 1160000>;
+//		status = "disabled";
+//	};
+
+//	opp-1656000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1656000000>;
+//		opp-microvolt = <1160000 1160000 1160000>;
+//		status = "disabled";
+//	};
+
+//	opp-1704000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1704000000>;
+//		opp-microvolt = <1160000 1160000 1160000>;
+//		status = "disabled";
+//	};
+
+//	opp-1752000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1752000000>;
+//		opp-microvolt = <1160000 1160000 1160000>;
+//		status = "disabled";
+//	};
+
+//	opp-1800000000 {
+//		clock-latency-ns = <488288>; /* 8 32k periods */
+//		opp-hz = /bits/ 64 <1800000000>;
+//		opp-microvolt = <1160000 1160000 1160000>;
+//		status = "disabled";
+//	};
+//};
 
 &gpu_opp_table {
 	compatible = "operating-points-v2";

@@ -1,0 +1,31 @@
+inspired by: https://oftc.irclog.whitequark.org/linux-sunxi/2023-03-30#32022694
+
+--- drivers/clk/sunxi-ng/ccu-sun50i-h616.c.org	2023-07-25 18:42:23.955613507 +0200
++++ drivers/clk/sunxi-ng/ccu-sun50i-h616.c	2023-07-25 18:43:10.322213618 +0200
+@@ -363,7 +363,7 @@
+ static SUNXI_CCU_GATE(bus_psi_clk, "bus-psi", "psi-ahb1-ahb2",
+ 		      0x79c, BIT(0), 0);
+ 
+-static SUNXI_CCU_GATE(bus_pwm_clk, "bus-pwm", "apb1", 0x7ac, BIT(0), 0);
++// static SUNXI_CCU_GATE(bus_pwm_clk, "bus-pwm", "apb1", 0x7ac, BIT(0), 0);
+ 
+ static SUNXI_CCU_GATE(bus_iommu_clk, "bus-iommu", "apb1", 0x7bc, BIT(0), 0);
+ 
+@@ -770,7 +770,7 @@
+ 	&avs_clk.common,
+ 	&bus_dbg_clk.common,
+ 	&bus_psi_clk.common,
+-	&bus_pwm_clk.common,
++// 	&bus_pwm_clk.common,
+ 	&bus_iommu_clk.common,
+ 	&dram_clk.common,
+ 	&mbus_dma_clk.common,
+@@ -903,7 +903,7 @@
+ 		[CLK_AVS]		= &avs_clk.common.hw,
+ 		[CLK_BUS_DBG]		= &bus_dbg_clk.common.hw,
+ 		[CLK_BUS_PSI]		= &bus_psi_clk.common.hw,
+-		[CLK_BUS_PWM]		= &bus_pwm_clk.common.hw,
++// 		[CLK_BUS_PWM]		= &bus_pwm_clk.common.hw,
+ 		[CLK_BUS_IOMMU]		= &bus_iommu_clk.common.hw,
+ 		[CLK_DRAM]		= &dram_clk.common.hw,
+ 		[CLK_MBUS_DMA]		= &mbus_dma_clk.common.hw,
