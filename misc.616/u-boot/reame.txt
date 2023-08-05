@@ -1,0 +1,4 @@
+the following commands were used to extract the boot blocks from the minimyth2
+images from https://github.com/warpme/minimyth2/releases
+
+xzcat MiniArch-20230212-6.4.3-board-h616.tanix_tx6s_axp313-SD-Image.img.xz | dd of=boot-h618-axp313a.dd bs=512 count=32768
