@@ -626,7 +626,7 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm
  			status = "disabled";
  			#address-cells = <1>;
  			#size-cells = <0>;
-@@ -479,13 +725,15 @@ spi1: spi@5011000 {
+@@ -479,24 +715,25 @@
  			clocks = <&ccu CLK_BUS_SPI1>, <&ccu CLK_SPI1>;
  			clock-names = "ahb", "mod";
  			resets = <&ccu RST_BUS_SPI1>;
@@ -641,8 +641,22 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm
 -			compatible = "allwinner,sun50i-h616-emac0",
 +			compatible = "allwinner,sun50i-h616-emac",
  				     "allwinner,sun50i-a64-emac";
++			syscon = <&syscon>;
  			reg = <0x05020000 0x10000>;
  			interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "macirq";
+-			clocks = <&ccu CLK_BUS_EMAC0>;
+-			clock-names = "stmmaceth";
+ 			resets = <&ccu RST_BUS_EMAC0>;
+ 			reset-names = "stmmaceth";
+-			syscon = <&syscon>;
++			clocks = <&ccu CLK_BUS_EMAC0>;
++			clock-names = "stmmaceth";
+ 			status = "disabled";
+-			aw-hdmi-codec-quirk;
+ 
+ 			mdio0: mdio {
+ 				compatible = "snps,dwmac-mdio";
 @@ -505,21 +742,383 @@
  			};
  		};
