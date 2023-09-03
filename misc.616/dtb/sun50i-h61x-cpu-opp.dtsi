@@ -1,0 +1,81 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+// Copyright (C) 2021 hexdump0815
+
+/ {
+	cpu_opp_table: cpu-opp-table {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		opp-480000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <480000000>;
+			opp-microvolt = <820000 820000 820000>;
+		};
+
+		opp-600000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <600000000>;
+			opp-microvolt = <820000 820000 820000>;
+		};
+
+		opp-792000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <792000000>;
+			opp-microvolt = <860000 860000 860000>;
+		};
+
+		opp-1008000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <1008000000>;
+			opp-microvolt = <900000 900000 900000>;
+		};
+
+		opp-1200000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <1200000000>;
+			opp-microvolt = <960000 960000 960000>;
+		};
+
+		opp-1320000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <1320000000>;
+			opp-microvolt = <1050000 1050000 1050000>;
+			turbo-mode;
+		};
+
+		opp-1416000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <1416000000>;
+			opp-microvolt = <1100000 1100000 1100000>;
+			turbo-mode;
+		};
+
+		opp-1512000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <1512000000>;
+			opp-microvolt = <1100000 1100000 1100000>;
+			turbo-mode;
+		};
+
+		opp-1608000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <1608000000>;
+			opp-microvolt = <1100000 1100000 1100000>;
+			turbo-mode;
+		};
+
+		opp-1704000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <1704000000>;
+			opp-microvolt = <1100000 1100000 1100000>;
+			turbo-mode;
+		};
+
+		opp-1800000000 {
+			clock-latency-ns = <244144>; /* 8 32k periods */
+			opp-hz = /bits/ 64 <1800000000>;
+			opp-microvolt = <1100000 1100000 1100000>;
+			turbo-mode;
+		};
+	};
+};
