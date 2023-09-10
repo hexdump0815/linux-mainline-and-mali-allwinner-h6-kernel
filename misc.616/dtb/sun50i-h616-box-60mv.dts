@@ -6,14 +6,14 @@
 /dts-v1/;
 
 #include "sun50i-h616.dtsi"
-#include "sun50i-h61x-50mv-cpu-opp.dtsi"
+#include "sun50i-h61x-60mv-cpu-opp.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/interrupt-controller/arm-gic.h>
 #include <dt-bindings/leds/common.h>
 
 / {
-	model = "h616-box-50mv";
-	compatible = "h616,box-50mv", "allwinner,sun50i-h616";
+	model = "h616-box-60mv";
+	compatible = "h616,box-60mv", "allwinner,sun50i-h616";
 
 	aliases {
 		mmc0 = &mmc0;
