@@ -1,6 +1,6 @@
 --- ./arch/arm64/boot/dts/allwinner/Makefile.org	2024-01-28 10:14:47.010893420 +0100
 +++ ./arch/arm64/boot/dts/allwinner/Makefile	2024-01-28 10:15:47.869349037 +0100
-@@ -47,3 +47,9 @@
+@@ -47,3 +47,13 @@
  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h313-x96-q-lpddr3.dtb
  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h618-vontar-h618.dtb
  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h618-orangepi-zero2w.dtb
