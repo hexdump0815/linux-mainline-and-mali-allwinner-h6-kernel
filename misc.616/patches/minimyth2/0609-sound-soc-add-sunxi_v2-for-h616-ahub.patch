@@ -1,47 +1,13 @@
-From cfe0a8df18c2418f77acb24b17b88c9271d9613c Mon Sep 17 00:00:00 2001
-From: orangepi-xunlong <258384131@qq.com>
+
+sound: soc: Add sunxi_v2 for h616 ahub
+
+Code based on orangepi-xunlong <258384131@qq.com>
 Date: Mon, 5 Jun 2023 14:38:46 +0800
-Subject: [PATCH] sound: soc: Add sunxi_v2 for h616 ahub
 
----
- drivers/clk/sunxi-ng/ccu-sun50i-h616.c    |   33 +-
- sound/soc/Kconfig                         |    1 +
- sound/soc/Makefile                        |    1 +
- sound/soc/sunxi_v2/Kconfig                |   48 +
- sound/soc/sunxi_v2/Makefile               |   11 +
- sound/soc/sunxi_v2/drv_hdmi.h             |   63 +
- sound/soc/sunxi_v2/snd_sunxi_ahub.c       | 1459 +++++++++++++++++++++
- sound/soc/sunxi_v2/snd_sunxi_ahub.h       |   67 +
- sound/soc/sunxi_v2/snd_sunxi_ahub_dam.c   |  534 ++++++++
- sound/soc/sunxi_v2/snd_sunxi_ahub_dam.h   |  291 ++++
- sound/soc/sunxi_v2/snd_sunxi_common.c     |  267 ++++
- sound/soc/sunxi_v2/snd_sunxi_common.h     |   67 +
- sound/soc/sunxi_v2/snd_sunxi_log.h        |   30 +
- sound/soc/sunxi_v2/snd_sunxi_mach.c       |  479 +++++++
- sound/soc/sunxi_v2/snd_sunxi_mach.h       |   17 +
- sound/soc/sunxi_v2/snd_sunxi_mach_utils.c |  422 ++++++
- sound/soc/sunxi_v2/snd_sunxi_mach_utils.h |  116 ++
- 17 files changed, 3889 insertions(+), 17 deletions(-)
- create mode 100644 sound/soc/sunxi_v2/Kconfig
- create mode 100644 sound/soc/sunxi_v2/Makefile
- create mode 100644 sound/soc/sunxi_v2/drv_hdmi.h
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_ahub.c
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_ahub.h
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_ahub_dam.c
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_ahub_dam.h
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_common.c
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_common.h
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_log.h
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_mach.c
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_mach.h
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_mach_utils.c
- create mode 100644 sound/soc/sunxi_v2/snd_sunxi_mach_utils.h
-
-diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h616.c b/drivers/clk/sunxi-ng/ccu-sun50i-h616.c
-index 21e918582aa56..ad4ad6be00577 100644
---- a/drivers/clk/sunxi-ng/ccu-sun50i-h616.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun50i-h616.c
-@@ -215,20 +215,22 @@ static struct ccu_nkmp pll_de_clk = {
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/drivers/clk/sunxi-ng/ccu-sun50i-h616.c linux-6.6/drivers/clk/sunxi-ng/ccu-sun50i-h616.c
+--- linux-6.6/drivers/clk/sunxi-ng/ccu-sun50i-h616.c	2023-10-30 03:31:08.000000000 +0100
++++ linux-6.6/drivers/clk/sunxi-ng/ccu-sun50i-h616.c	2023-11-01 16:57:58.210005860 +0100
+@@ -215,20 +215,22 @@
  	},
  };
  
@@ -72,7 +38,7 @@ index 21e918582aa56..ad4ad6be00577 100644
  		.reg		= 0x078,
  		.hw.init	= CLK_HW_INIT("pll-audio-hs", "osc24M",
  					      &ccu_nm_ops,
-@@ -688,13 +690,13 @@ static const struct clk_hw *clk_parent_pll_audio[] = {
+@@ -688,13 +690,13 @@
   */
  static CLK_FIXED_FACTOR_HWS(pll_audio_1x_clk, "pll-audio-1x",
  			    clk_parent_pll_audio,
@@ -89,7 +55,7 @@ index 21e918582aa56..ad4ad6be00577 100644
  
  static const struct clk_hw *pll_periph0_parents[] = {
  	&pll_periph0_clk.common.hw
-@@ -1130,13 +1132,10 @@ static int sun50i_h616_ccu_probe(struct platform_device *pdev)
+@@ -1130,13 +1132,10 @@
  		writel(val, reg + usb2_clk_regs[i]);
  	}
  
@@ -106,11 +72,10 @@ index 21e918582aa56..ad4ad6be00577 100644
  
  	/*
  	 * First clock parent (osc32K) is unusable for CEC. But since there
-diff --git a/sound/soc/Kconfig b/sound/soc/Kconfig
-index 848fbae26c3bf..e73097fbc55d4 100644
---- a/sound/soc/Kconfig
-+++ b/sound/soc/Kconfig
-@@ -94,6 +94,7 @@ source "sound/soc/sprd/Kconfig"
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/Kconfig linux-6.6/sound/soc/Kconfig
+--- linux-6.6/sound/soc/Kconfig	2023-10-30 03:31:08.000000000 +0100
++++ linux-6.6/sound/soc/Kconfig	2023-11-01 16:57:58.210005860 +0100
+@@ -108,6 +108,7 @@
  source "sound/soc/sti/Kconfig"
  source "sound/soc/stm/Kconfig"
  source "sound/soc/sunxi/Kconfig"
@@ -118,11 +83,10 @@ index 848fbae26c3bf..e73097fbc55d4 100644
  source "sound/soc/tegra/Kconfig"
  source "sound/soc/ti/Kconfig"
  source "sound/soc/uniphier/Kconfig"
-diff --git a/sound/soc/Makefile b/sound/soc/Makefile
-index 507eaed1d6a13..62e676678e850 100644
---- a/sound/soc/Makefile
-+++ b/sound/soc/Makefile
-@@ -62,6 +62,7 @@ obj-$(CONFIG_SND_SOC)	+= sprd/
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/Makefile linux-6.6/sound/soc/Makefile
+--- linux-6.6/sound/soc/Makefile	2023-10-30 03:31:08.000000000 +0100
++++ linux-6.6/sound/soc/Makefile	2023-11-01 16:57:58.210005860 +0100
+@@ -65,6 +65,7 @@
  obj-$(CONFIG_SND_SOC)	+= sti/
  obj-$(CONFIG_SND_SOC)	+= stm/
  obj-$(CONFIG_SND_SOC)	+= sunxi/
@@ -130,82 +94,9 @@ index 507eaed1d6a13..62e676678e850 100644
  obj-$(CONFIG_SND_SOC)	+= tegra/
  obj-$(CONFIG_SND_SOC)	+= ti/
  obj-$(CONFIG_SND_SOC)	+= uniphier/
-diff --git a/sound/soc/sunxi_v2/Kconfig b/sound/soc/sunxi_v2/Kconfig
-new file mode 100644
-index 0000000000000..37fc579ba9dbf
---- /dev/null
-+++ b/sound/soc/sunxi_v2/Kconfig
-@@ -0,0 +1,48 @@
-+# common
-+config SND_SOC_SUNXI_MACH
-+	tristate
-+
-+# ahub dam
-+config SND_SOC_SUNXI_AHUB_DAM
-+	tristate
-+
-+config SND_SOC_SUNXI_INTERNALCODEC
-+	tristate
-+
-+config SND_SOC_SUNXI_SUN50IW9_CODEC
-+	tristate
-+
-+# menu select
-+menu "Allwinner SoC Audio support V2"
-+	depends on ARCH_SUNXI
-+
-+# aaudio
-+config SND_SOC_SUNXI_AAUDIO
-+	tristate "Allwinner AAUDIO support"
-+	select REGMAP_MMIO
-+	select SND_SOC_GENERIC_DMAENGINE_PCM
-+	select SND_SOC_SUNXI_MACH
-+	select SND_SOC_SUNXI_INTERNALCODEC
-+	select SND_SOC_SUNXI_SUN50IW9_CODEC
-+	depends on ARCH_SUNXI
-+	help
-+	    Select Y or M to support analog-audio Module in the Allwinner SoCs.
-+
-+# ahub
-+config SND_SOC_SUNXI_AHUB
-+	tristate "Allwinner AHUB Support"
-+	select REGMAP_MMIO
-+	select SND_SOC_GENERIC_DMAENGINE_PCM
-+	select SND_SOC_SUNXI_MACH
-+	select SND_SOC_SUNXI_AHUB_DAM
-+	depends on ARCH_SUNXI
-+	help
-+	    Select Y or M to support audio-hub Module in Allwinner SoCs.
-+
-+config SND_SOC_SUNXI_DEBUG
-+	tristate "Components Debug"
-+	depends on SND_SOC_SUNXI_COMPONENTS
-+	help
-+	    Select Y or M to support debug components.
-+
-+endmenu
-diff --git a/sound/soc/sunxi_v2/Makefile b/sound/soc/sunxi_v2/Makefile
-new file mode 100644
-index 0000000000000..c7c2ef8f9fe99
---- /dev/null
-+++ b/sound/soc/sunxi_v2/Makefile
-@@ -0,0 +1,11 @@
-+# platform -> ahub
-+snd_soc_sunxi_ahub_dam-objs			+= snd_sunxi_ahub_dam.o
-+obj-$(CONFIG_SND_SOC_SUNXI_AHUB_DAM)		+= snd_soc_sunxi_ahub_dam.o
-+
-+snd_soc_sunxi_ahub-objs				+= snd_sunxi_ahub.o
-+obj-$(CONFIG_SND_SOC_SUNXI_AHUB)		+= snd_soc_sunxi_ahub.o
-+
-+# common -> machine (note: Finally compile, save system startup time)
-+snd_soc_sunxi_machine-objs			+= snd_sunxi_mach.o
-+snd_soc_sunxi_machine-objs			+= snd_sunxi_mach_utils.o
-+obj-$(CONFIG_SND_SOC_SUNXI_MACH)		+= snd_soc_sunxi_machine.o
-diff --git a/sound/soc/sunxi_v2/drv_hdmi.h b/sound/soc/sunxi_v2/drv_hdmi.h
-new file mode 100644
-index 0000000000000..2e05489b01e1d
---- /dev/null
-+++ b/sound/soc/sunxi_v2/drv_hdmi.h
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/drv_hdmi.h linux-6.6/sound/soc/sunxi_v2/drv_hdmi.h
+--- linux-6.6/sound/soc/sunxi_v2/drv_hdmi.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/drv_hdmi.h	2023-11-01 16:57:58.210005860 +0100
 @@ -0,0 +1,63 @@
 +/*
 + * Allwinner SoCs hdmi driver.
@@ -270,12 +161,77 @@ index 0000000000000..2e05489b01e1d
 +/******************** SND_HDMI for sunxi_v2 end ******************************/
 +
 +#endif
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_ahub.c b/sound/soc/sunxi_v2/snd_sunxi_ahub.c
-new file mode 100644
-index 0000000000000..fcdecd6952d18
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_ahub.c
-@@ -0,0 +1,1460 @@
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/Kconfig linux-6.6/sound/soc/sunxi_v2/Kconfig
+--- linux-6.6/sound/soc/sunxi_v2/Kconfig	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/Kconfig	2023-11-01 16:57:58.210005860 +0100
+@@ -0,0 +1,48 @@
++# common
++config SND_SOC_SUNXI_MACH
++	tristate
++
++# ahub dam
++config SND_SOC_SUNXI_AHUB_DAM
++	tristate
++
++config SND_SOC_SUNXI_INTERNALCODEC
++	tristate
++
++config SND_SOC_SUNXI_SUN50IW9_CODEC
++	tristate
++
++# menu select
++menu "Allwinner SoC Audio support V2"
++	depends on ARCH_SUNXI
++
++# aaudio
++config SND_SOC_SUNXI_AAUDIO
++	tristate "Allwinner AAUDIO support"
++	select REGMAP_MMIO
++	select SND_SOC_GENERIC_DMAENGINE_PCM
++	select SND_SOC_SUNXI_MACH
++	select SND_SOC_SUNXI_INTERNALCODEC
++	select SND_SOC_SUNXI_SUN50IW9_CODEC
++	depends on ARCH_SUNXI
++	help
++	    Select Y or M to support analog-audio Module in the Allwinner SoCs.
++
++# ahub
++config SND_SOC_SUNXI_AHUB
++	tristate "Allwinner AHUB Support"
++	select REGMAP_MMIO
++	select SND_SOC_GENERIC_DMAENGINE_PCM
++	select SND_SOC_SUNXI_MACH
++	select SND_SOC_SUNXI_AHUB_DAM
++	depends on ARCH_SUNXI
++	help
++	    Select Y or M to support audio-hub Module in Allwinner SoCs.
++
++config SND_SOC_SUNXI_DEBUG
++	tristate "Components Debug"
++	depends on SND_SOC_SUNXI_COMPONENTS
++	help
++	    Select Y or M to support debug components.
++
++endmenu
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/Makefile linux-6.6/sound/soc/sunxi_v2/Makefile
+--- linux-6.6/sound/soc/sunxi_v2/Makefile	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/Makefile	2023-11-01 16:57:58.210005860 +0100
+@@ -0,0 +1,11 @@
++# platform -> ahub
++snd_soc_sunxi_ahub_dam-objs			+= snd_sunxi_ahub_dam.o
++obj-$(CONFIG_SND_SOC_SUNXI_AHUB_DAM)		+= snd_soc_sunxi_ahub_dam.o
++
++snd_soc_sunxi_ahub-objs				+= snd_sunxi_ahub.o
++obj-$(CONFIG_SND_SOC_SUNXI_AHUB)		+= snd_soc_sunxi_ahub.o
++
++# common -> machine (note: Finally compile, save system startup time)
++snd_soc_sunxi_machine-objs			+= snd_sunxi_mach.o
++snd_soc_sunxi_machine-objs			+= snd_sunxi_mach_utils.o
++obj-$(CONFIG_SND_SOC_SUNXI_MACH)		+= snd_soc_sunxi_machine.o
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub.c linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub.c
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub.c	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub.c	2023-11-01 16:35:26.890001343 +0100
+@@ -0,0 +1,1477 @@
 +/*
 + * sound\soc\sunxi\snd_sunxi_ahub.c
 + * (C) Copyright 2021-2025
@@ -564,7 +520,7 @@ index 0000000000000..fcdecd6952d18
 +
 +	regmap_update_bits(regmap, SUNXI_AHUB_I2S_CLKD(tdm_num),
 +			   0xf << I2S_CLKD_BCLKDIV,
-+			   bclk_ratio << I2S_CLKD_BCLKDIV);
++			   (bclk_ratio - 2) << I2S_CLKD_BCLKDIV);
 +
 +	return 0;
 +}
@@ -793,6 +749,23 @@ index 0000000000000..fcdecd6952d18
 +	tdm_num = ahub_info->dts_info.tdm_num;
 +	tx_pin = ahub_info->dts_info.tx_pin;
 +	rx_pin = ahub_info->dts_info.rx_pin;
++
++	/* configure DMA */
++	switch (params_physical_width(params)) {
++	case 16:
++		ahub_info->playback_dma_param.addr_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
++		ahub_info->capture_dma_param.addr_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
++		break;
++	case 24:
++	case 32:
++		ahub_info->playback_dma_param.addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++		ahub_info->capture_dma_param.addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++		break;
++	default:
++		dev_err(dai->dev, "Unsupported physical sample width: %d\n",
++			params_physical_width(params));
++		return -EINVAL;
++	}
 +
 +	/* set bits */
 +	switch (params_format(params)) {
@@ -1110,21 +1083,6 @@ index 0000000000000..fcdecd6952d18
 +	}
 +}
 +
-+static const struct snd_soc_dai_ops sunxi_ahub_dai_ops = {
-+	/* call by machine */
-+	.set_pll	= sunxi_ahub_dai_set_pll,	// set pllclk
-+	.set_sysclk	= sunxi_ahub_dai_set_sysclk,	// set mclk
-+	.set_bclk_ratio	= sunxi_ahub_dai_set_bclk_ratio,// set bclk freq
-+	.set_tdm_slot	= sunxi_ahub_dai_set_tdm_slot,	// set slot num and width
-+	.set_fmt	= sunxi_ahub_dai_set_fmt,	// set tdm fmt
-+	/* call by asoc */
-+	.startup	= sunxi_ahub_dai_startup,
-+	.hw_params	= sunxi_ahub_dai_hw_params,	// set hardware params
-+	.prepare	= sunxi_ahub_dai_prepare,	// clean irq and fifo
-+	.trigger	= sunxi_ahub_dai_trigger,	// set drq
-+	.shutdown	= sunxi_ahub_dai_shutdown,
-+};
-+
 +static void snd_soc_sunxi_ahub_init(struct sunxi_ahub_info *ahub_info)
 +{
 +	struct regmap *regmap = NULL;
@@ -1266,10 +1224,25 @@ index 0000000000000..fcdecd6952d18
 +	return 0;
 +}
 +
++static const struct snd_soc_dai_ops sunxi_ahub_dai_ops = {
++	/* call by machine */
++	.set_pll	= sunxi_ahub_dai_set_pll,	// set pllclk
++	.set_sysclk	= sunxi_ahub_dai_set_sysclk,	// set mclk
++	.set_bclk_ratio	= sunxi_ahub_dai_set_bclk_ratio,// set bclk freq
++	.set_tdm_slot	= sunxi_ahub_dai_set_tdm_slot,	// set slot num and width
++	.set_fmt	= sunxi_ahub_dai_set_fmt,	// set tdm fmt
++	/* call by asoc */
++	.probe		= sunxi_ahub_dai_probe,
++	.startup	= sunxi_ahub_dai_startup,
++	.hw_params	= sunxi_ahub_dai_hw_params,	// set hardware params
++	.prepare	= sunxi_ahub_dai_prepare,	// clean irq and fifo
++	.trigger	= sunxi_ahub_dai_trigger,	// set drq
++	.remove		= sunxi_ahub_dai_remove,
++	.shutdown	= sunxi_ahub_dai_shutdown,
++};
++
 +static struct snd_soc_dai_driver sunxi_ahub_dai = {
 +	.name		= "ahub_plat",
-+	.probe		= sunxi_ahub_dai_probe,
-+	.remove		= sunxi_ahub_dai_remove,
 +	.playback = {
 +		.stream_name	= "Playback",
 +		.channels_min	= 1,
@@ -1561,12 +1534,12 @@ index 0000000000000..fcdecd6952d18
 +	ahub_info->playback_dma_param.addr =
 +		res->start + SUNXI_AHUB_APBIF_TXFIFO(dts_info->apb_num);
 +	ahub_info->playback_dma_param.maxburst = 8;
-+	ahub_info->playback_dma_param.addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++	//ahub_info->playback_dma_param.addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
 +
 +	ahub_info->capture_dma_param.addr =
 +		res->start + SUNXI_AHUB_APBIF_RXFIFO(dts_info->apb_num);
 +	ahub_info->capture_dma_param.maxburst = 8;
-+	ahub_info->capture_dma_param.addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++	//ahub_info->capture_dma_param.addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
 +};
 +
 +static int sunxi_ahub_dev_probe(struct platform_device *pdev)
@@ -1736,84 +1709,9 @@ index 0000000000000..fcdecd6952d18
 +MODULE_AUTHOR("Dby@allwinnertech.com");
 +MODULE_LICENSE("GPL");
 +MODULE_DESCRIPTION("sunxi soundcard platform of ahub");
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_ahub.h b/sound/soc/sunxi_v2/snd_sunxi_ahub.h
-new file mode 100644
-index 0000000000000..ee5df64800268
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_ahub.h
-@@ -0,0 +1,67 @@
-+/* sound\soc\sunxi\snd_sunxi_ahub.h
-+ * (C) Copyright 2021-2025
-+ * Allwinner Technology Co., Ltd. <www.allwinnertech.com>
-+ * Dby <dby@allwinnertech.com>
-+ *
-+ * This program is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU General Public License as
-+ * published by the Free Software Foundation; either version 2 of
-+ * the License, or (at your option) any later version.
-+ */
-+
-+#ifndef __SND_SUNXI_AHUB_H
-+#define __SND_SUNXI_AHUB_H
-+
-+#include "snd_sunxi_ahub_dam.h"
-+
-+struct sunxi_ahub_pinctl_info {
-+	struct pinctrl *pinctrl;
-+	struct pinctrl_state *pinstate;
-+	struct pinctrl_state *pinstate_sleep;
-+
-+	bool pinctrl_used;
-+};
-+
-+struct sunxi_ahub_dts_info {
-+	unsigned int dai_type;
-+	unsigned int apb_num;
-+	unsigned int tdm_num;
-+	unsigned int tx_pin;
-+	unsigned int rx_pin;
-+
-+	/* value must be (2^n)Kbyte */
-+	size_t playback_cma;
-+	size_t playback_fifo_size;
-+	size_t capture_cma;
-+	size_t capture_fifo_size;
-+};
-+
-+struct sunxi_ahub_regulator_info {
-+	struct regulator *regulator;
-+	const char *regulator_name;
-+};
-+
-+struct sunxi_ahub_info {
-+	struct device *dev;
-+
-+	struct sunxi_ahub_mem_info mem_info;
-+	struct sunxi_ahub_clk_info clk_info;
-+	struct sunxi_ahub_pinctl_info pin_info;
-+	struct sunxi_ahub_dts_info dts_info;
-+	struct sunxi_ahub_regulator_info regulator_info;
-+
-+	//struct sunxi_dma_params playback_dma_param;
-+	//struct sunxi_dma_params capture_dma_param;
-+        struct snd_dmaengine_dai_dma_data playback_dma_param;
-+        struct snd_dmaengine_dai_dma_data capture_dma_param;
-+
-+	/* for Hardware param setting */
-+	unsigned int fmt;
-+	unsigned int pllclk_freq;
-+	unsigned int moduleclk_freq;
-+	unsigned int mclk_freq;
-+	unsigned int lrck_freq;
-+	unsigned int bclk_freq;
-+};
-+
-+#endif /* __SND_SUNXI_AHUB_H */
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.c b/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.c
-new file mode 100644
-index 0000000000000..1fcc8aefd50c5
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.c
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.c linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.c
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.c	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.c	2023-11-01 16:57:58.210005860 +0100
 @@ -0,0 +1,534 @@
 +/*
 + * sound\soc\sunxi\snd_sunxi_ahub_dam.c
@@ -2349,11 +2247,9 @@ index 0000000000000..1fcc8aefd50c5
 +MODULE_AUTHOR("Dby@allwinnertech.com");
 +MODULE_LICENSE("GPL");
 +MODULE_DESCRIPTION("sunxi soundcard platform of ahub_dam");
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.h b/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.h
-new file mode 100644
-index 0000000000000..b7679bf545e93
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.h
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.h linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.h
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub_dam.h	2023-11-01 16:57:58.210005860 +0100
 @@ -0,0 +1,291 @@
 +/* sound\soc\sunxi\snd_sunxi_ahub_dam.h
 + * (C) Copyright 2021-2025
@@ -2647,11 +2543,80 @@ index 0000000000000..b7679bf545e93
 +
 +#endif /* __SND_SUNXI_AHUB_DAM_H */
 \ No newline at end of file
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_common.c b/sound/soc/sunxi_v2/snd_sunxi_common.c
-new file mode 100644
-index 0000000000000..410ab75aea5aa
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_common.c
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub.h linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub.h
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_ahub.h	2023-11-01 16:57:58.210005860 +0100
+@@ -0,0 +1,67 @@
++/* sound\soc\sunxi\snd_sunxi_ahub.h
++ * (C) Copyright 2021-2025
++ * Allwinner Technology Co., Ltd. <www.allwinnertech.com>
++ * Dby <dby@allwinnertech.com>
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License as
++ * published by the Free Software Foundation; either version 2 of
++ * the License, or (at your option) any later version.
++ */
++
++#ifndef __SND_SUNXI_AHUB_H
++#define __SND_SUNXI_AHUB_H
++
++#include "snd_sunxi_ahub_dam.h"
++
++struct sunxi_ahub_pinctl_info {
++	struct pinctrl *pinctrl;
++	struct pinctrl_state *pinstate;
++	struct pinctrl_state *pinstate_sleep;
++
++	bool pinctrl_used;
++};
++
++struct sunxi_ahub_dts_info {
++	unsigned int dai_type;
++	unsigned int apb_num;
++	unsigned int tdm_num;
++	unsigned int tx_pin;
++	unsigned int rx_pin;
++
++	/* value must be (2^n)Kbyte */
++	size_t playback_cma;
++	size_t playback_fifo_size;
++	size_t capture_cma;
++	size_t capture_fifo_size;
++};
++
++struct sunxi_ahub_regulator_info {
++	struct regulator *regulator;
++	const char *regulator_name;
++};
++
++struct sunxi_ahub_info {
++	struct device *dev;
++
++	struct sunxi_ahub_mem_info mem_info;
++	struct sunxi_ahub_clk_info clk_info;
++	struct sunxi_ahub_pinctl_info pin_info;
++	struct sunxi_ahub_dts_info dts_info;
++	struct sunxi_ahub_regulator_info regulator_info;
++
++	//struct sunxi_dma_params playback_dma_param;
++	//struct sunxi_dma_params capture_dma_param;
++        struct snd_dmaengine_dai_dma_data playback_dma_param;
++        struct snd_dmaengine_dai_dma_data capture_dma_param;
++
++	/* for Hardware param setting */
++	unsigned int fmt;
++	unsigned int pllclk_freq;
++	unsigned int moduleclk_freq;
++	unsigned int mclk_freq;
++	unsigned int lrck_freq;
++	unsigned int bclk_freq;
++};
++
++#endif /* __SND_SUNXI_AHUB_H */
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_common.c linux-6.6/sound/soc/sunxi_v2/snd_sunxi_common.c
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_common.c	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_common.c	2023-11-01 16:57:58.210005860 +0100
 @@ -0,0 +1,267 @@
 +/*
 + * sound\soc\sunxi\snd_sunxi_common.c
@@ -2920,11 +2885,9 @@ index 0000000000000..410ab75aea5aa
 +		gpio_set_value(pa_cfg[i].pin, !pa_cfg[i].level);
 +	}
 +}
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_common.h b/sound/soc/sunxi_v2/snd_sunxi_common.h
-new file mode 100644
-index 0000000000000..7b88d20c25e0b
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_common.h
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_common.h linux-6.6/sound/soc/sunxi_v2/snd_sunxi_common.h
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_common.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_common.h	2023-11-01 16:57:58.210005860 +0100
 @@ -0,0 +1,67 @@
 +/* sound\soc\sunxi\snd_sunxi_common.h
 + * (C) Copyright 2021-2025
@@ -2994,11 +2957,9 @@ index 0000000000000..7b88d20c25e0b
 +
 +#endif /* __SND_SUNXI_COMMON_H */
 \ No newline at end of file
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_log.h b/sound/soc/sunxi_v2/snd_sunxi_log.h
-new file mode 100644
-index 0000000000000..ee26c2997f9b0
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_log.h
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_log.h linux-6.6/sound/soc/sunxi_v2/snd_sunxi_log.h
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_log.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_log.h	2023-11-01 16:57:58.210005860 +0100
 @@ -0,0 +1,30 @@
 +/*
 + * sound\soc\sunxi\snd_sunxi_log.h
@@ -3030,11 +2991,9 @@ index 0000000000000..ee26c2997f9b0
 +
 +#endif /* __SND_SUNXI_LOG_H */
 +
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_mach.c b/sound/soc/sunxi_v2/snd_sunxi_mach.c
-new file mode 100644
-index 0000000000000..27c2cd475e6e0
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_mach.c
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach.c linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach.c
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach.c	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach.c	2023-11-01 16:57:58.210005860 +0100
 @@ -0,0 +1,479 @@
 +/*
 + * sound\soc\sunxi\snd_sunxi_mach.c
@@ -3515,11 +3474,9 @@ index 0000000000000..27c2cd475e6e0
 +MODULE_AUTHOR("Dby@allwinnertech.com");
 +MODULE_LICENSE("GPL");
 +MODULE_DESCRIPTION("sunxi soundcard machine");
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_mach.h b/sound/soc/sunxi_v2/snd_sunxi_mach.h
-new file mode 100644
-index 0000000000000..ab429c8841abd
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_mach.h
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach.h linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach.h
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach.h	2023-11-01 16:57:58.210005860 +0100
 @@ -0,0 +1,17 @@
 +/* sound\soc\sunxi\snd_sunxi_mach.h
 + * (C) Copyright 2021-2025
@@ -3538,11 +3495,9 @@ index 0000000000000..ab429c8841abd
 +#include "snd_sunxi_mach_utils.h"
 +
 +#endif /* __SND_SUNXI_MACH_H */
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_mach_utils.c b/sound/soc/sunxi_v2/snd_sunxi_mach_utils.c
-new file mode 100644
-index 0000000000000..65f8057281fd1
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_mach_utils.c
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach_utils.c linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach_utils.c
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach_utils.c	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach_utils.c	2023-11-01 16:57:58.210005860 +0100
 @@ -0,0 +1,422 @@
 +/*
 + * sound\soc\sunxi\snd_sunxi_mach_utils.c
@@ -3899,7 +3854,7 @@ index 0000000000000..65f8057281fd1
 +	 * 2) user need to rebind Sound Card everytime
 +	 *    if he unbinded CPU or Codec.
 +	 */
-+	ret = snd_soc_of_get_dai_name(node, &dlc->dai_name);
++	ret = snd_soc_of_get_dai_name(node, &dlc->dai_name, 0);
 +	if (ret < 0)
 +		return ret;
 +
@@ -3966,11 +3921,9 @@ index 0000000000000..65f8057281fd1
 +MODULE_AUTHOR("Dby@allwinnertech.com");
 +MODULE_LICENSE("GPL");
 +MODULE_DESCRIPTION("sunxi soundcard machine utils");
-diff --git a/sound/soc/sunxi_v2/snd_sunxi_mach_utils.h b/sound/soc/sunxi_v2/snd_sunxi_mach_utils.h
-new file mode 100644
-index 0000000000000..6a9ec18b46378
---- /dev/null
-+++ b/sound/soc/sunxi_v2/snd_sunxi_mach_utils.h
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach_utils.h linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach_utils.h
+--- linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach_utils.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.6/sound/soc/sunxi_v2/snd_sunxi_mach_utils.h	2023-11-01 16:57:58.210005860 +0100
 @@ -0,0 +1,116 @@
 +/* sound\soc\sunxi\snd_sunxi_mach_utils.h
 + * (C) Copyright 2021-2025

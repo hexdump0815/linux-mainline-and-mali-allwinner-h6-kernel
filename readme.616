@@ -3,12 +3,10 @@
 # - /compile/source/linux-stable-616 - the kernel sources checked out from gitrepo
 # - /compile/result/stable-aw - the resulting kernel, modules etc. tar.gz files
 # - /compile/doc/kernel-config-options - https://github.com/hexdump0815/kernel-config-options
-# name: stb-616 - allwinner h616 and h618
+# name: stb-616 - allwinner h313, h616 and h618
 
 # INFO: based on warpme minimyth2 patches from https://github.com/warpme/minimyth2
-#       at commit d9c383487c5af85b89d4956d32db031fd7da8979 (linux-6.1 tree)
-#       some more patches for axp313a pmic and h618 support taken from minimyth2
-#       at commit 81707136ae62b65c94fd9929fda8f3bc030a78a6 (linux-6.4 tree)
+#       at commit 67c1dec6e93743c8f4de1d5299d06f4036a8ea2b (linux-6.6 subdir)
 
 cd /compile/source/linux-stable-616
 
@@ -21,14 +19,15 @@ done
 # add some own dtb files
 cp -v /compile/doc/stable-aw/misc.616/dtb/*.dts arch/arm64/boot/dts/allwinner
 cp -v /compile/doc/stable-aw/misc.616/dtb/*.dtsi arch/arm64/boot/dts/allwinner
-patch -p0 < /compile/doc/stable-aw/misc.616/patches/add-own-dtb-files.patch
-patch -p0 < /compile/doc/stable-aw/misc.616/patches/add-own-extra-box-dtb-files.patch
+patch -p0 < /compile/doc/stable-aw/misc.616/patches/add-own-dtb-files-v6.6.patch
 # make sure mmc devices always end up with the same device number
 patch -p0 < /compile/doc/stable-aw/misc.616/patches/fixed-mmc-device-numbering.patch
 # raise the temp limits a bit to avoid throttling too much
 patch -p0 < /compile/doc/stable-aw/misc.616/patches/h616-higher-temps-v6.1.patch
 # fix/hack eth for h618
 patch -p0 < /compile/doc/stable-aw/misc.616/patches/fix-h618-eth-hack.patch
+# fix kernel version number: + instead of -dirty at the end
+patch -p1 < /compile/doc/stable-aw/misc.616/patches/fix-kernel-version-number-v6.6.patch
 
 export ARCH=arm64
 scripts/kconfig/merge_config.sh -m arch/arm64/configs/defconfig /compile/doc/kernel-config-options/docker-options.cfg /compile/doc/kernel-config-options/options-to-remove-generic.cfg /compile/doc/stable-aw/misc.616/options/options-to-remove-special.cfg /compile/doc/kernel-config-options/additional-options-generic.cfg /compile/doc/kernel-config-options/additional-options-aarch64.cfg /compile/doc/stable-aw/misc.616/options/additional-options-special.cfg

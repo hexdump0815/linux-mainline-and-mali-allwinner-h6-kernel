@@ -1,0 +1,16 @@
+--- ./arch/arm64/boot/dts/allwinner/Makefile.org	2024-01-28 10:14:47.010893420 +0100
++++ ./arch/arm64/boot/dts/allwinner/Makefile	2024-01-28 10:15:47.869349037 +0100
+@@ -47,3 +47,9 @@
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h313-x96-q-lpddr3.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h618-vontar-h618.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h618-orangepi-zero2w.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h313-x96q.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tx6s.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h618-lemfo.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h618-t95max.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-box.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-box-30mv.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-box-60mv.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h618-box.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h618-box-30mv.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h618-box-60mv.dtb

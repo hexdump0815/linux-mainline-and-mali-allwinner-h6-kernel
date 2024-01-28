@@ -1,15 +1,15 @@
-diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm64/boot/dts/allwinner/Makefile linux-6.0-rc4/arch/arm64/boot/dts/allwinner/Makefile
---- linux-6.0-rc4/arch/arm64/boot/dts/allwinner/Makefile	2022-09-06 11:13:18.243186118 +0200
-+++ linux-6.0-rc4/arch/arm64/boot/dts/allwinner/Makefile	2022-09-06 11:12:22.589853789 +0200
-@@ -42,3 +42,4 @@
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
-+dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tanix-tx6s.dtb
-diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm64/boot/dts/allwinner/sun50i-h616-tanix-tx6s.dts linux-6.0-rc4/arch/arm64/boot/dts/allwinner/sun50i-h616-tanix-tx6s.dts
---- linux-6.0-rc4/arch/arm64/boot/dts/allwinner/sun50i-h616-tanix-tx6s.dts	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.0-rc4/arch/arm64/boot/dts/allwinner/sun50i-h616-tanix-tx6s.dts	2022-09-06 11:11:51.999854347 +0200
-@@ -0,0 +1,392 @@
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.4.3/arch/arm64/boot/dts/allwinner/Makefile linux-6.4.3/arch/arm64/boot/dts/allwinner/Makefile
+--- linux-6.4.3/arch/arm64/boot/dts/allwinner/Makefile	2023-07-17 18:17:48.499756030 +0200
++++ linux-6.4.3/arch/arm64/boot/dts/allwinner/Makefile	2023-07-17 18:15:31.776425643 +0200
+@@ -45,3 +45,4 @@
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h618-orangepi-zero3.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tanix-tx6s.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tanix-tx6s-axp313.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h313-x96-q.dtb
+diff --speed-large-files --no-dereference --minimal -Naur linux-6.4.3/arch/arm64/boot/dts/allwinner/sun50i-h313-x96-q.dts linux-6.4.3/arch/arm64/boot/dts/allwinner/sun50i-h313-x96-q.dts
+--- linux-6.4.3/arch/arm64/boot/dts/allwinner/sun50i-h313-x96-q.dts	1970-01-01 01:00:00.000000000 +0100
++++ linux-6.4.3/arch/arm64/boot/dts/allwinner/sun50i-h313-x96-q.dts	2023-07-17 18:16:40.936424151 +0200
+@@ -0,0 +1,367 @@
 +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
 +/*
 + * Author: piotr.oniszczuk@gmail.com
@@ -18,19 +18,21 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm
 +/dts-v1/;
 +
 +#include "sun50i-h616.dtsi"
-+
++#include "sun50i-h313-cpu-opp.dtsi"
 +#include <dt-bindings/gpio/gpio.h>
 +#include <dt-bindings/interrupt-controller/arm-gic.h>
 +#include <dt-bindings/leds/common.h>
 +
 +/ {
-+	model = "Tanix TX6s";
-+	compatible = "tanix,tx6s", "allwinner,sun50i-h616";
++	model = "hechuang,x96-q";
++	compatible = "hechuang,x96-q", "allwinner,sun50i-h616";
 +
 +	aliases {
++		mmc0 = &mmc0;
++		mmc2 = &mmc2;
 +		ethernet0 = &emac1;
-+		serial0 = &uart0;
 +		ethernet1 = &wlan;
++		serial0 = &uart0;
 +	};
 +
 +	chosen {
@@ -51,11 +53,11 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm
 +	leds {
 +		compatible = "gpio-leds";
 +
-+		led-0 {
-+			function = LED_FUNCTION_POWER;
++		led-red {
++			function = LED_FUNCTION_DISK_ACTIVITY;
 +			color = <LED_COLOR_ID_RED>;
-+			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* PC12 */
-+			default-state = "on";
++			gpios = <&pio 7 6 GPIO_ACTIVE_HIGH>; /* PH6 */
++			linux,default-trigger = "mmc0";
 +		};
 +	};
 +
@@ -92,19 +94,10 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm
 +
 +	wifi_pwrseq: wifi_pwrseq {
 +		compatible = "mmc-pwrseq-simple";
-+		post-power-on-delay-ms = <200>;
-+	};
-+
-+	openvfd {
-+		compatible = "open,vfd";
-+		dev_name = "openvfd";
-+		openvfd_gpio_clk = <&pio 8 11 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-+		openvfd_gpio_dat = <&pio 8 12 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-+		vfd_gpio_chip_name = "0300b000.pinctrl";
-+		openvfd_chars = [02 04 03 02 01];
-+		openvfd_dot_bits = [00 01 03 02 04 05 06];
-+		openvfd_display_type = <0x03000001>;
-+		status = "okay";
++		clocks = <&rtc CLK_OSC32K_FANOUT>;
++		clock-names = "ext_clock";
++		pinctrl-names = "default";
++		pinctrl-0 = <&clk_losc>; /* PG10 with MUX3 set */
 +	};
 +};
 +
@@ -149,10 +142,6 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm
 +	status = "okay";
 +};
 +
-+&i2c3 {
-+	status = "okay";
-+};
-+
 +&emac1 {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&rmii_pins>;
@@ -165,15 +154,14 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm
 +};
 +
 +&mdio1 {
-+	rmii_phy: ethernet-phy@1 {
++	rmii_phy: ethernet-phy@0 {
 +		compatible = "ethernet-phy-ieee802.3-c22";
-+		reg = <1>;
++		reg = <0>;
 +	};
 +};
 +
 +&mmc0 {
 +	vmmc-supply = <&reg_dcdce>;
-+	//cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>; /* PF6 */
 +	broken-cd;
 +	bus-width = <4>;
 +	status = "okay";
@@ -189,8 +177,6 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm
 +
 +	wlan: wifi@1 {
 +		reg = <1>;
-+		compatible = "xradio,xr819",
-+			     "brcm,bcm4329-fmac";
 +		interrupt-parent = <&pio>;
 +		interrupts = <6 15 IRQ_TYPE_EDGE_RISING>; /* PG15 WL_HOSTWAKE*/
 +		interrupt-names = "host-wake";
@@ -371,34 +357,23 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.0-rc4/arch/arm
 +
 +&codec {
 +	allwinner,audio-routing =
-+		"Line Out", "LINEOUT";
++	        "Line Out", "LINEOUT";
 +	status = "okay";
 +};
 +
-+&ahub_codec {
++&ahub_dam_plat {
 +	status = "okay";
 +};
 +
-+&ahub_cpudai0 {
++&ahub_dam_mach {
 +	status = "okay";
 +};
 +
-+&ahub_cpudai1 {
++&ahub1_plat {
 +	status = "okay";
 +};
 +
-+&ahub_cpudai2 {
++&ahub1_mach {
 +	status = "okay";
 +};
 +
-+&sndahub {
-+	status = "okay";
-+};
-+
-+&ahub_i2s1 {
-+	status = "okay";
-+};
-+
-+&hdmi_audio {
-+	status = "okay";
-+};
