@@ -6,7 +6,7 @@
 # name: stb-ah6 - allwinner h6
 
 # INFO: based on warpme minimyth2 patches from https://github.com/warpme/minimyth2
-#       at commit a23b55bf348dd12c917a5d255d2e57e92d3c35a1
+#       at commit 67c1dec6e93743c8f4de1d5299d06f4036a8ea2b (linux-6.6 subdir)
 
 cd /compile/source/linux-stable-ah6
 
@@ -23,6 +23,8 @@ patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.p
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/eachlink-add-extra-opp-points-v5.15.patch
 # raise the temp limits a bit to avoid throttling too much
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v6.1.patch
+# fix kernel version number: + instead of -dirty at the end
+patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/fix-kernel-version-number-v6.6.patch
 
 export ARCH=arm64
 scripts/kconfig/merge_config.sh -m arch/arm64/configs/defconfig /compile/doc/kernel-config-options/docker-options.cfg /compile/doc/kernel-config-options/options-to-remove-generic.cfg /compile/doc/stable-aw/misc.ah6/options/options-to-remove-special.cfg /compile/doc/kernel-config-options/additional-options-generic.cfg /compile/doc/kernel-config-options/additional-options-aarch64.cfg /compile/doc/stable-aw/misc.ah6/options/additional-options-special.cfg
