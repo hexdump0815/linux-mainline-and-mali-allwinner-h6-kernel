@@ -60,7 +60,6 @@
 		opp-microvolt-speed0 = <1160000 1160000 1200000>;
 		opp-microvolt-speed1 = <1100000 1100000 1200000>;
 		opp-microvolt-speed2 = <1100000 1100000 1200000>;
-		status = "okay";
 		turbo-mode;
 	};
 	opp@1992000000 {
@@ -70,7 +69,6 @@
 		opp-microvolt-speed0 = <1160000 1160000 1200000>;
 		opp-microvolt-speed1 = <1100000 1100000 1200000>;
 		opp-microvolt-speed2 = <1100000 1100000 1200000>;
-		status = "okay";
 		turbo-mode;
 	};
 };
