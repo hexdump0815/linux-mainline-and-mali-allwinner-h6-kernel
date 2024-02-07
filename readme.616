@@ -16,6 +16,12 @@ for i in /compile/doc/stable-aw/misc.616/patches/minimyth2/*.patch; do
   patch -p1 < $i
 done
 
+# patches from https://patchwork.kernel.org
+for i in /compile/doc/stable-aw/misc.616/patches/patchwork/*.diff; do
+  echo === $i
+  patch -p1 < $i
+done
+
 # add some own dtb files
 cp -v /compile/doc/stable-aw/misc.616/dtb/*.dts arch/arm64/boot/dts/allwinner
 cp -v /compile/doc/stable-aw/misc.616/dtb/*.dtsi arch/arm64/boot/dts/allwinner

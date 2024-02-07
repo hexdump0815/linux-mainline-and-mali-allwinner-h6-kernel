@@ -1,0 +1,64 @@
+see: https://patchwork.kernel.org/project/linux-arm-kernel/cover/20231128005849.19044-1-andre.przywara@arm.com/
+
+diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+index fbd4212285e28..95a6ab9a5889b 100644
+--- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
++++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+@@ -20,6 +20,7 @@ properties:
+       - allwinner,sun50i-a100-ths
+       - allwinner,sun50i-h5-ths
+       - allwinner,sun50i-h6-ths
++      - allwinner,sun50i-h616-ths
+ 
+   clocks:
+     minItems: 1
+@@ -63,6 +64,7 @@ allOf:
+             enum:
+               - allwinner,sun50i-a100-ths
+               - allwinner,sun50i-h6-ths
++              - allwinner,sun50i-h616-ths
+ 
+     then:
+       properties:
+@@ -80,6 +82,18 @@ allOf:
+         clock-names:
+           minItems: 2
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: allwinner,sun50i-h616-ths
++
++    then:
++      properties:
++        syscon:
++          maxItems: 1
++          description: phandle to syscon device allowing access to SYS_CFG registers
++
+   - if:
+       properties:
+         compatible:
+@@ -97,16 +111,12 @@ allOf:
+           const: 1
+ 
+   - if:
+-      properties:
+-        compatible:
+-          contains:
+-            enum:
+-              - allwinner,sun8i-h3-ths
+-              - allwinner,sun8i-r40-ths
+-              - allwinner,sun50i-a64-ths
+-              - allwinner,sun50i-a100-ths
+-              - allwinner,sun50i-h5-ths
+-              - allwinner,sun50i-h6-ths
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - allwinner,sun8i-a83t-ths
+ 
+     then:
+       required:

@@ -1,0 +1,98 @@
+see: https://patchwork.kernel.org/project/linux-arm-kernel/cover/20231128005849.19044-1-andre.przywara@arm.com/
+
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 44554c3efc96c..920e419ce7343 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/nvmem-consumer.h>
+ #include <linux/of.h>
++#include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+@@ -66,6 +67,7 @@ struct tsensor {
+ struct ths_thermal_chip {
+ 	bool            has_mod_clk;
+ 	bool            has_bus_clk_reset;
++	bool		needs_syscon;
+ 	int		sensor_num;
+ 	int		offset;
+ 	int		scale;
+@@ -83,6 +85,7 @@ struct ths_device {
+ 	const struct ths_thermal_chip		*chip;
+ 	struct device				*dev;
+ 	struct regmap				*regmap;
++	struct regmap_field			*syscon_regmap_field;
+ 	struct reset_control			*reset;
+ 	struct clk				*bus_clk;
+ 	struct clk                              *mod_clk;
+@@ -325,6 +328,34 @@ static void sun8i_ths_reset_control_assert(void *data)
+ 	reset_control_assert(data);
+ }
+ 
++static struct regmap *sun8i_ths_get_syscon_regmap(struct device_node *node)
++{
++	struct device_node *syscon_node;
++	struct platform_device *syscon_pdev;
++	struct regmap *regmap = NULL;
++
++	syscon_node = of_parse_phandle(node, "syscon", 0);
++	if (!syscon_node)
++		return ERR_PTR(-ENODEV);
++
++	syscon_pdev = of_find_device_by_node(syscon_node);
++	if (!syscon_pdev) {
++		/* platform device might not be probed yet */
++		regmap = ERR_PTR(-EPROBE_DEFER);
++		goto out_put_node;
++	}
++
++	/* If no regmap is found then the other device driver is at fault */
++	regmap = dev_get_regmap(&syscon_pdev->dev, NULL);
++	if (!regmap)
++		regmap = ERR_PTR(-EINVAL);
++
++	platform_device_put(syscon_pdev);
++out_put_node:
++	of_node_put(syscon_node);
++	return regmap;
++}
++
+ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+ {
+ 	struct device *dev = tmdev->dev;
+@@ -369,6 +400,21 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+ 	if (ret)
+ 		return ret;
+ 
++	if (tmdev->chip->needs_syscon) {
++		const struct reg_field sun8i_syscon_reg_field =
++			REG_FIELD(0x0, 16, 16);
++		struct regmap *regmap;
++
++		regmap = sun8i_ths_get_syscon_regmap(dev->of_node);
++		if (IS_ERR(regmap))
++			return PTR_ERR(regmap);
++		tmdev->syscon_regmap_field = devm_regmap_field_alloc(dev,
++						      regmap,
++						      sun8i_syscon_reg_field);
++		if (IS_ERR(tmdev->syscon_regmap_field))
++			return PTR_ERR(tmdev->syscon_regmap_field);
++	}
++
+ 	ret = sun8i_ths_calibrate(tmdev);
+ 	if (ret)
+ 		return ret;
+@@ -415,6 +461,10 @@ static int sun50i_h6_thermal_init(struct ths_device *tmdev)
+ {
+ 	int val;
+ 
++	/* The H616 needs to have a bit in the SRAM control register cleared. */
++	if (tmdev->syscon_regmap_field)
++		regmap_field_write(tmdev->syscon_regmap_field, 0);
++
+ 	/*
+ 	 * The manual recommends an overall sample frequency of 50 KHz (20us,
+ 	 * 480 cycles at 24 MHz), which provides plenty of time for both the

@@ -1,0 +1,12 @@
+this is an adjusted form of the original patch which will patch properly against
+the minimyth2 patched tree and which keeps the minimyth2 thermal zones
+
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+@@ -1237,6 +1237,7 @@
+ 			resets = <&ccu RST_BUS_THS>;
+ 			nvmem-cells = <&ths_calibration>;
+ 			nvmem-cell-names = "calibration";
++			syscon = <&syscon>;
+ 			#thermal-sensor-cells = <1>;
+ 		};
