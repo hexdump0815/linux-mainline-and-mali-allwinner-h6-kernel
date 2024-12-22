@@ -1,0 +1,218 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+// Copyright (c) 2019 Jernej Skrabec <jernej.skrabec@siol.net>
+
+/dts-v1/;
+
+#include "sun50i-h6.dtsi"
+#include "sun50i-h6-cpu-opp.dtsi"
+#include "sun50i-h6-gpu-opp.dtsi"
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	aliases {
+		serial0 = &uart0;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	connector {
+		compatible = "hdmi-connector";
+		ddc-en-gpios = <&pio 7 2 GPIO_ACTIVE_HIGH>; /* PH2 */
+		type = "a";
+
+		port {
+			hdmi_con_in: endpoint {
+				remote-endpoint = <&hdmi_out_con>;
+			};
+		};
+	};
+
+// displays will most probably be handled via different includes in the end
+// 	/* used for FD650 LED display driver */
+// 	i2c {
+// 		compatible = "i2c-gpio";
+// 		sda-gpios = <&pio 7 6 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>; /* PH6 */
+// 		scl-gpios = <&pio 7 5 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>; /* PH5 */
+// 		i2c-gpio,delay-us = <5>;
+// 	};
+
+	reg_vcc1v8: regulator-vcc1v8 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc1v8";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+	};
+
+	reg_vcc3v3: regulator-vcc3v3 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc3v3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+	};
+
+// lets keep this off for now as it currently results in a deferred device
+// 	sound-spdif {
+// 		compatible = "simple-audio-card";
+// 		simple-audio-card,name = "sun50i-h6-spdif";
+// 
+// 		simple-audio-card,cpu {
+// 			sound-dai = <&spdif>;
+// 		};
+// 
+// 		simple-audio-card,codec {
+// 			sound-dai = <&spdif_out>;
+// 		};
+// 	};
+// 
+// 	spdif_out: spdif-out {
+// 		#sound-dai-cells = <0>;
+// 		compatible = "linux,spdif-dit";
+// 	};
+
+// wifi will most probably be handled via different includes in the end
+// 	wifi_pwrseq: wifi-pwrseq {
+// 		compatible = "mmc-pwrseq-simple";
+// 		clocks = <&rtc CLK_OSC32K_FANOUT>;
+// 		clock-names = "ext_clock";
+// 		reset-gpios = <&r_pio 1 3 GPIO_ACTIVE_LOW>; /* PM3 */
+// 	};
+};
+
+// required for internal eth phy
+&ac200_ephy {
+	status = "okay";
+};
+
+// required for internal eth phy
+&ac200_pwm_clk {
+	status = "okay";
+};
+
+&de {
+	status = "okay";
+};
+
+&dwc3 {
+	status = "okay";
+};
+
+&ehci0 {
+	status = "okay";
+};
+
+&ehci3 {
+	status = "okay";
+};
+
+// required for internal eth phy
+&emac {
+	pinctrl-names = "default";
+	pinctrl-0 = <&ext_rmii_pins>;
+	phy-mode = "rmii";
+	phy-handle = <&ext_rmii_phy>;
+	status = "okay";
+};
+
+&i2c3 {
+	status = "okay";
+};
+
+&hdmi {
+	status = "okay";
+};
+
+&hdmi_out {
+	hdmi_out_con: endpoint {
+		remote-endpoint = <&hdmi_con_in>;
+	};
+};
+
+// required for internal eth phy
+&mdio {
+	ext_rmii_phy: ethernet-phy@1 {
+		compatible = "ethernet-phy-ieee802.3-c22";
+		reg = <1>;
+	};
+};
+
+&mmc0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc0_pins>;
+	vmmc-supply = <&reg_vcc3v3>;
+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;
+	bus-width = <4>;
+	status = "okay";
+};
+
+// wifi will most probably be handled via different includes in the end
+// &mmc1 {
+// 	vmmc-supply = <&reg_vcc3v3>;
+// 	vqmmc-supply = <&reg_vcc1v8>;
+// 	mmc-pwrseq = <&wifi_pwrseq>;
+// 	bus-width = <4>;
+// 	non-removable;
+// 	status = "okay";
+// };
+
+&mmc2 {
+	vmmc-supply = <&reg_vcc3v3>;
+	vqmmc-supply = <&reg_vcc1v8>;
+	bus-width = <8>;
+	non-removable;
+	cap-mmc-hw-reset;
+	mmc-hs200-1_8v;
+	status = "okay";
+};
+
+&ohci0 {
+	status = "okay";
+};
+
+&ohci3 {
+	status = "okay";
+};
+
+&pio {
+	vcc-pc-supply = <&reg_vcc1v8>;
+	vcc-pd-supply = <&reg_vcc3v3>;
+	vcc-pg-supply = <&reg_vcc1v8>;
+};
+
+// required for internal eth phy
+&pwm {
+	status = "okay";
+};
+
+// ir remotes will most probably be handled via different includes in the end
+// &r_ir {
+// 	status = "okay";
+// };
+
+// lets keep this off for now as it currently results in a deferred device
+// &spdif {
+// 	pinctrl-names = "default";
+// 	pinctrl-0 = <&spdif_tx_pin>;
+// 	status = "okay";
+// };
+
+&uart0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_ph_pins>;
+	status = "okay";
+};
+
+&usb2otg {
+	dr_mode = "host";
+	status = "okay";
+};
+
+&usb2phy {
+	status = "okay";
+};
+
+&usb3phy {
+	status = "okay";
+};

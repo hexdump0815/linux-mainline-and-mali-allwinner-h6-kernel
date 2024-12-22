@@ -6,25 +6,27 @@
 # name: stb-ah6 - allwinner h6
 
 # INFO: based on warpme minimyth2 patches from https://github.com/warpme/minimyth2
-#       at commit 67c1dec6e93743c8f4de1d5299d06f4036a8ea2b (linux-6.6 subdir)
+#       at commit ebde095d4cac6809cf9e156ce636e14402fdd9d4 (linux-6.12 subdir)
 
 cd /compile/source/linux-stable-ah6
 
 # patches:
-# minimyth2 h6 patches
+# a few remaining warpme minimyth2 h6 patches - to be replaced with the original sources
 for i in /compile/doc/stable-aw/misc.ah6/patches/minimyth2/*.patch; do
   echo === $i
   patch -p1 < $i
 done
 
+# add some own dtb files
+cp -v /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
+cp -v /compile/doc/stable-aw/misc.ah6/dtb/*.dtsi arch/arm64/boot/dts/allwinner
+patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-own-dtb-files-v6.12.patch
 # make sure mmc devices always end up with the same device number
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
-# with proper cooling some h6 tv boxes run fine up to 2ghz - add disabled opp points for this
-patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/eachlink-add-extra-opp-points-v5.15.patch
 # raise the temp limits a bit to avoid throttling too much
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v6.1.patch
 # fix kernel version number: + instead of -dirty at the end
-patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/fix-kernel-version-number-v6.6.patch
+patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/fix-kernel-version-number-v6.12.5.patch
 
 export ARCH=arm64
 scripts/kconfig/merge_config.sh -m arch/arm64/configs/defconfig /compile/doc/kernel-config-options/docker-options.cfg /compile/doc/kernel-config-options/options-to-remove-generic.cfg /compile/doc/stable-aw/misc.ah6/options/options-to-remove-special.cfg /compile/doc/kernel-config-options/additional-options-generic.cfg /compile/doc/kernel-config-options/additional-options-aarch64.cfg /compile/doc/stable-aw/misc.ah6/options/additional-options-special.cfg
@@ -50,14 +52,6 @@ cp -v .config /boot/config-${kver}
 cp -v arch/arm64/boot/Image /boot/Image-${kver}
 mkdir /boot/dtb-${kver}
 cp -v arch/arm64/boot/dts/allwinner/sun50i-h6-*.dtb /boot/dtb-${kver}/
-# the below ones would only be relevant for the megous tree
-# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-plus.dtb /boot/dtb-${kver}/
-# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dtb /boot/dtb-${kver}/
-# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dtb /boot/dtb-${kver}/
-# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dtb /boot/dtb-${kver}/
-# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dtb /boot/dtb-${kver}/
-# cp -v arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dtb /boot/dtb-${kver}/
-# cp -v arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dtb /boot/dtb-${kver}/
 cp -v System.map /boot/System.map-${kver}
 cd /boot
 update-initramfs -c -k ${kver}

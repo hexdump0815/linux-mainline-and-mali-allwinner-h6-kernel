@@ -1,0 +1,94 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+// Copyright (c) 2019 Jernej Skrabec <jernej.skrabec@siol.net>
+
+/dts-v1/;
+
+#include "sun50i-h6-box.dtsi"
+
+/ {
+	model = "h6-box-fixed";
+	compatible = "h6,box-fixed", "allwinner,sun50i-h6";
+
+	reg_vdd_cpu_gpu: vdd-cpu-gpu {
+		compatible = "regulator-fixed";
+		regulator-name = "vdd-cpu-gpu";
+		regulator-min-microvolt = <1160000>;
+		regulator-max-microvolt = <1160000>;
+	};
+};
+
+&cpu0 {
+	cpu-supply = <&reg_vdd_cpu_gpu>;
+};
+
+// add some extra opp points at the top which can be enabled via turbo mode
+&cpu_opp_table {
+	opp@1896000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1896000000>;
+
+		opp-microvolt-speed0 = <1160000 1160000 1200000>;
+		opp-microvolt-speed1 = <1100000 1100000 1200000>;
+		opp-microvolt-speed2 = <1100000 1100000 1200000>;
+		turbo-mode;
+	};
+	opp@1992000000 {
+		clock-latency-ns = <244144>; /* 8 32k periods */
+		opp-hz = /bits/ 64 <1992000000>;
+
+		opp-microvolt-speed0 = <1160000 1160000 1200000>;
+		opp-microvolt-speed1 = <1100000 1100000 1200000>;
+		opp-microvolt-speed2 = <1100000 1100000 1200000>;
+		turbo-mode;
+	};
+};
+
+&gpu {
+	mali-supply = <&reg_vdd_cpu_gpu>;
+	status = "okay";
+};
+
+// disable the top gpu opp points to keep the temperature a bit lower
+// and avoid power instabilities
+&gpu_opp_table {
+	opp@540000000 {
+		status = "disabled";
+	};
+
+	opp@576000000 {
+		status = "disabled";
+	};
+
+	opp@624000000 {
+		status = "disabled";
+	};
+
+	opp@756000000 {
+		status = "disabled";
+	};
+};
+
+// ir remotes will most probably be handled via different includes in the end
+// &r_ir {
+// 	linux,rc-map-name = "rc-tanix-tx5max";
+// };
+
+// lower the sd card speed to avoid observed problems otherwise
+&mmc0 {
+	max-frequency = <50000000>;
+};
+
+// bt uarts will most probably be handled via different includes in the end
+// &uart1 {
+// 	pinctrl-names = "default";
+// 	pinctrl-0 = <&uart1_pins>, <&uart1_rts_cts_pins>;
+// 	uart-has-rtscts;
+// 	status = "okay";
+// 
+// 	bluetooth {
+// 		compatible = "realtek,rtl8822cs-bt";
+// 		device-wake-gpios = <&r_pio 1 2 GPIO_ACTIVE_HIGH>; /* PM2 */
+// 		host-wake-gpios = <&r_pio 1 1 GPIO_ACTIVE_HIGH>; /* PM1 */
+// 		enable-gpios = <&r_pio 1 4 GPIO_ACTIVE_HIGH>; /* PM4 */
+// 	};
+// };
