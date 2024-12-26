@@ -18,9 +18,9 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.2.11/drivers/i
  		    IOMMU_TLB_PREFETCH_MASTER_ENABLE(5));
 +	iommu_write(iommu, 0x84, 0);
 +	iommu_write(iommu, 0x30, 0);
+ 	iommu_write(iommu, IOMMU_BYPASS_REG, 0);
  	iommu_write(iommu, IOMMU_INT_ENABLE_REG, IOMMU_INT_MASK);
  	iommu_write(iommu, IOMMU_DM_AUT_CTRL_REG(SUN50I_IOMMU_ACI_NONE),
- 		    IOMMU_DM_AUT_CTRL_RD_UNAVAIL(SUN50I_IOMMU_ACI_NONE, 0) |
 @@ -523,14 +524,15 @@ static void *sun50i_iommu_alloc_page_table(struct sun50i_iommu *iommu,
  	dma_addr_t pt_dma;
  	u32 *page_table;
