@@ -26,6 +26,8 @@ patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-own-dtb-files-v6.12.patc
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
 # raise the temp limits a bit to avoid throttling too much
 patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v6.1.patch
+# remove panfrost purge log spam
+patch -p1 < /compile/doc/kernel-extra-patches/remove-panfrost-purge-log-spam/v6.12.12.patch
 # fix kernel version number: + instead of -dirty at the end
 patch -p1 < /compile/doc/kernel-extra-patches/fix-kernel-version/v6.12.5.patch
 

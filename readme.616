@@ -33,6 +33,8 @@ patch -p0 < /compile/doc/stable-aw/misc.616/patches/fixed-mmc-device-numbering.p
 patch -p0 < /compile/doc/stable-aw/misc.616/patches/h616-higher-temps-v6.1.patch
 # fix/hack eth for h618
 patch -p0 < /compile/doc/stable-aw/misc.616/patches/fix-h618-eth-hack.patch
+# remove panfrost purge log spam
+patch -p1 < /compile/doc/kernel-extra-patches/remove-panfrost-purge-log-spam/v6.12.12.patch
 # fix kernel version number: + instead of -dirty at the end
 patch -p1 < /compile/doc/kernel-extra-patches/fix-kernel-version/v6.6.patch
 
