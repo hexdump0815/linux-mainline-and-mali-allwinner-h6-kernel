@@ -48,7 +48,7 @@ make modules_install
 mkdir -p /lib/modules/${kver}/tools
 cp -v tools/perf/perf /lib/modules/${kver}/tools
 cp -v tools/power/cpupower/cpupower /lib/modules/${kver}/tools
-cp -v tools/power/cpupower/libcpupower.so.0.0.1 /lib/modules/${kver}/tools/libcpupower.so.0
+cp -v tools/power/cpupower/libcpupower.so.? /lib/modules/${kver}/tools
 # make headers_install INSTALL_HDR_PATH=/usr
 cp -v .config /boot/config-${kver}
 cp -v arch/arm64/boot/Image /boot/Image-${kver}
