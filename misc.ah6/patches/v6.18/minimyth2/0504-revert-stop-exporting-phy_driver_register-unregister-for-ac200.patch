@@ -1,10 +1,3 @@
-Patch from MiniMyth2 project
-
-Developed-by: Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
-Signed-off-by: Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
-
-
-
 diff --speed-large-files --no-dereference --minimal -Naur linux-6.18-rc4/drivers/net/phy/phy_device.c linux-6.18-rc4/drivers/net/phy/phy_device.c
 --- linux-6.18-rc4/drivers/net/phy/phy_device.c	2025-11-02 20:28:02.000000000 +0100
 +++ linux-6.18-rc4/drivers/net/phy/phy_device.c	2025-11-04 15:43:22.332181273 +0100
@@ -57,7 +50,3 @@ diff --speed-large-files --no-dereference --minimal -Naur linux-6.18-rc4/include
  int phy_drivers_register(struct phy_driver *new_driver, int n,
  			 struct module *owner);
  void phy_error(struct phy_device *phydev);
---
-
-MiniMyth2
-
