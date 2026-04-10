@@ -7,36 +7,31 @@
 # name: stb-616 - allwinner h313, h616 and h618
 
 # INFO: based on warpme minimyth2 patches from https://github.com/warpme/minimyth2
-#       at commit 67c1dec6e93743c8f4de1d5299d06f4036a8ea2b (linux-6.6 subdir)
+#       at commit fc4a5a95931419d4135722ba376682d17f1c8bce (linux-6.18 subdir)
+#       v6.19 is based on commit b316f72e32e09e9c5b7b4488bed000e830d64e12
+#       (linux-6.19 subdir) - use v6.19 as patchdir in that case
 
 cd /compile/source/linux-stable-616
 
-# minimyth2 h616 patches
-for i in /compile/doc/stable-aw/misc.616/patches/minimyth2/*.patch; do
+# patches for v6.18
+for i in /compile/doc/stable-aw/misc.616/patches/v6.18/*.patch; do
   echo === $i
   patch -p1 < $i
 done
 
-# patches from https://patchwork.kernel.org
-for i in /compile/doc/stable-aw/misc.616/patches/patchwork/*.diff; do
+# minimyth2 patches for v6.18
+for i in /compile/doc/stable-aw/misc.616/patches/v6.18/manjaro-h616/*.patch; do
   echo === $i
   patch -p1 < $i
 done
 
-# add some own dtb files
-cp -v /compile/doc/stable-aw/misc.616/dtb/*.dts arch/arm64/boot/dts/allwinner
-cp -v /compile/doc/stable-aw/misc.616/dtb/*.dtsi arch/arm64/boot/dts/allwinner
-patch -p0 < /compile/doc/stable-aw/misc.616/patches/add-own-dtb-files-v6.6.patch
-# make sure mmc devices always end up with the same device number
-patch -p0 < /compile/doc/stable-aw/misc.616/patches/fixed-mmc-device-numbering.patch
-# raise the temp limits a bit to avoid throttling too much
-patch -p0 < /compile/doc/stable-aw/misc.616/patches/h616-higher-temps-v6.1.patch
-# fix/hack eth for h618
-patch -p0 < /compile/doc/stable-aw/misc.616/patches/fix-h618-eth-hack.patch
+# # add some own dtb files
+cp -v /compile/doc/stable-aw/misc.616/dtb/sun50i-h*box*.dts arch/arm64/boot/dts/allwinner
+cp -v /compile/doc/stable-aw/misc.616/dtb/sun50i-h61x-*.dtsi arch/arm64/boot/dts/allwinner
 # remove panfrost purge log spam
 patch -p1 < /compile/doc/kernel-extra-patches/remove-panfrost-purge-log-spam/v6.12.12.patch
 # fix kernel version number: + instead of -dirty at the end
-patch -p1 < /compile/doc/kernel-extra-patches/fix-kernel-version/v6.6.patch
+patch -p1 < /compile/doc/kernel-extra-patches/fix-kernel-version/v6.12.5.patch
 
 export ARCH=arm64
 scripts/kconfig/merge_config.sh -m arch/arm64/configs/defconfig /compile/doc/kernel-config-options/docker-options.cfg /compile/doc/kernel-config-options/options-to-remove-generic.cfg /compile/doc/stable-aw/misc.616/options/options-to-remove-special.cfg /compile/doc/kernel-config-options/additional-options-generic.cfg /compile/doc/kernel-config-options/additional-options-aarch64.cfg /compile/doc/stable-aw/misc.616/options/additional-options-special.cfg

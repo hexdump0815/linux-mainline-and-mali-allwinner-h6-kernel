@@ -1,12 +1,15 @@
-// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Author: piotr.oniszczuk@gmail.com
+ * Copyright (C) 2026 hexdump0815
+ * Author: hexdump0815@gmail.com
+ * Based on: sun50i-h616-x96-mate.dts
  */
 
 /dts-v1/;
 
 #include "sun50i-h616.dtsi"
 #include "sun50i-h61x-30mv-cpu-opp.dtsi"
+
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/interrupt-controller/arm-gic.h>
 #include <dt-bindings/leds/common.h>
@@ -19,8 +22,8 @@
 		mmc0 = &mmc0;
 		mmc2 = &mmc2;
 		ethernet0 = &emac1;
+//		ethernet1 = &sdio_wifi;
 		serial0 = &uart0;
-		ethernet1 = &wlan;
 	};
 
 	chosen {
@@ -64,7 +67,7 @@
 	};
 
 	reg_vcc5v: vcc5v {
-		/* board wide 5V supply directly from the USB-C socket */
+		/* board wide 5V supply directly from the DC input */
 		compatible = "regulator-fixed";
 		regulator-name = "vcc-5v";
 		regulator-min-microvolt = <5000000>;
@@ -72,37 +75,62 @@
 		regulator-always-on;
 	};
 
-	reg_usb1_vbus: usb1-vbus {
+// check if possible
+	reg_vcc3v3: vcc3v3 {
+		/* discrete 3.3V regulator */
 		compatible = "regulator-fixed";
-		regulator-name = "usb1-vbus";
-		regulator-min-microvolt = <5000000>;
-		regulator-max-microvolt = <5000000>;
-		vin-supply = <&reg_vcc5v>;
-		enable-active-high;
-		/* gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; PC16 */
-		status = "okay";
-	};
-
-	reg_vcc_wifi: reg_vcc_wifi {
-		compatible = "regulator-fixed";
-		regulator-name = "vcc-wifi";
+		regulator-name = "vcc-3v3";
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
-		gpio = <&pio 6 18 GPIO_ACTIVE_HIGH>; /* PG18 WL_REG_ON */
 		regulator-always-on;
-		enable-active-high;
-		status = "okay";
 	};
 
-	wifi_pwrseq: wifi_pwrseq {
-		compatible = "mmc-pwrseq-simple";
-		post-power-on-delay-ms = <200>;
-	};
+// check if possible
+//	wifi_pwrseq: pwrseq {
+//		compatible = "mmc-pwrseq-simple";
+//		clocks = <&rtc CLK_OSC32K_FANOUT>;
+//		clock-names = "ext_clock";
+//		pinctrl-0 = <&x32clk_fanout_pin>;
+//		pinctrl-names = "default";
+//		reset-gpios = <&pio 6 18 GPIO_ACTIVE_LOW>; /* PG18 */
+//	};
+
+//	reg_usb1_vbus: usb1-vbus {
+//		compatible = "regulator-fixed";
+//		regulator-name = "usb1-vbus";
+//		regulator-min-microvolt = <5000000>;
+//		regulator-max-microvolt = <5000000>;
+//		vin-supply = <&reg_vcc5v>;
+//		enable-active-high;
+//		/* gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; PC16 */
+//		status = "okay";
+//	};
+
+//	reg_vcc_wifi: reg_vcc_wifi {
+//		compatible = "regulator-fixed";
+//		regulator-name = "vcc-wifi";
+//		regulator-min-microvolt = <3300000>;
+//		regulator-max-microvolt = <3300000>;
+//		gpio = <&pio 6 18 GPIO_ACTIVE_HIGH>; /* PG18 WL_REG_ON */
+//		regulator-always-on;
+//		enable-active-high;
+//		status = "okay";
+//	};
+
+//	wifi_pwrseq: wifi_pwrseq {
+//		compatible = "mmc-pwrseq-simple";
+//		post-power-on-delay-ms = <200>;
+//	};
+
+};
+
+&codec {
+	allwinner,audio-routing = "Line Out", "LINEOUT";
+	status = "okay";
 };
 
 &cpu0 {
 	cpu-supply = <&reg_dcdca>;
-	status = "okay";
 };
 
 &de {
@@ -113,6 +141,7 @@
 	status = "okay";
 };
 
+// check
 &ehci1 {
 	status = "okay";
 };
@@ -121,7 +150,19 @@
 	status = "okay";
 };
 
+// check
 &ehci3 {
+	status = "okay";
+};
+
+&emac1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&rmii_pins>;
+	phy-mode = "rmii";
+	phy-handle = <&rmii_phy>;
+	phy-supply = <&reg_aldo1>;
+	allwinner,rx-delay-ps = <3100>;
+	allwinner,tx-delay-ps = <700>;
 	status = "okay";
 };
 
@@ -141,18 +182,11 @@
 	status = "okay";
 };
 
-&i2c3 {
+&ir {
 	status = "okay";
 };
 
-&emac1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&rmii_pins>;
-	phy-mode = "rmii";
-	phy-handle = <&rmii_phy>;
-	phy-supply = <&reg_aldo1>;
-	allwinner,rx-delay-ps = <3100>;
-	allwinner,tx-delay-ps = <700>;
+&i2c3 {
 	status = "okay";
 };
 
@@ -165,37 +199,38 @@
 
 &mmc0 {
 	vmmc-supply = <&reg_dcdce>;
-	cd-gpios = <&pio 8 16 GPIO_ACTIVE_LOW>;	/* PI16 */
+// as the card detect gpio varies across disks lets just ignore it
+//	cd-gpios = <&pio 8 16 GPIO_ACTIVE_LOW>;	/* PI16 */
 // alternative cd-gpio settings for x96q
 //	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
+	broken-cd;
+	disable-wp;
 	bus-width = <4>;
 	status = "okay";
 };
 
-&mmc1 {
-	vmmc-supply = <&reg_dcdce>;
-	vqmmc-supply = <&reg_vcc_wifi>;
-	mmc-pwrseq = <&wifi_pwrseq>;
-	bus-width = <4>;
-	non-removable;
-	status = "okay";
-
-	wlan: wifi@1 {
-		reg = <1>;
-		compatible = "xradio,xr819",
-			     "brcm,bcm4329-fmac";
-		interrupt-parent = <&pio>;
-		interrupts = <6 15 IRQ_TYPE_EDGE_RISING>; /* PG15 WL_HOSTWAKE*/
-		interrupt-names = "host-wake";
-		local-mac-address = [dc 44 6d c0 ff 02];
-	};
-};
+// check if possible
+//&mmc1 {
+//	vmmc-supply = <&reg_dldo1>;
+//	vqmmc-supply = <&reg_aldo1>;
+//	mmc-pwrseq = <&wifi_pwrseq>;
+//	bus-width = <4>;
+//	non-removable;
+//	status = "okay";
+//
+//	sdio_wifi: wifi@1 {
+//		reg = <1>;
+//	};
+//};
 
 &mmc2 {
 	vmmc-supply = <&reg_dcdce>;
+	vqmmc-supply = <&reg_bldo1>;
 	bus-width = <8>;
 	non-removable;
 	cap-mmc-hw-reset;
+//	mmc-ddr-1_8v;
+//	mmc-hs200-1_8v;
 	status = "okay";
 };
 
@@ -203,6 +238,7 @@
 	status = "okay";
 };
 
+// check
 &ohci1 {
 	status = "okay";
 };
@@ -211,6 +247,7 @@
 	status = "okay";
 };
 
+// check
 &ohci3 {
 	status = "okay";
 };
@@ -243,18 +280,20 @@
 				regulator-name = "vcc-sys";
 			};
 
-			reg_aldo2: aldo2 {	/* 3.3V on headers */
-				regulator-always-on;
+			/* Enabled by the Android BSP */
+			reg_aldo2: aldo2 {
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-name = "vcc3v3-ext";
+				status = "disabled";
 			};
 
-			reg_aldo3: aldo3 {	/* 3.3V on headers */
-				regulator-always-on;
+			/* Enabled by the Android BSP */
+			reg_aldo3: aldo3 {
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-name = "vcc3v3-ext2";
+				status = "disabled";
 			};
 
 			reg_bldo1: bldo1 {
@@ -264,8 +303,12 @@
 				regulator-name = "vcc1v8";
 			};
 
-			bldo2 {
-				/* unused */
+			/* Enabled by the Android BSP */
+			reg_bldo2: bldo2 {
+				regulator-min-microvolt = <1800000>;
+				regulator-max-microvolt = <1800000>;
+				regulator-name = "vcc1v8-2";
+				status = "disabled";
 			};
 
 			bldo3 {
@@ -277,7 +320,9 @@
 			};
 
 			cldo1 {
-				/* reserved */
+				regulator-min-microvolt = <2500000>;
+				regulator-max-microvolt = <2500000>;
+				regulator-name = "vcc2v5";
 			};
 
 			cldo2 {
@@ -335,58 +380,24 @@
 	uart-has-rtscts;
 	status = "okay";
 
-	bluetooth {
-		compatible = "brcm,bcm43438-bt";
-		clocks = <&rtc 1>;
-		clock-names = "lpo";
-		vbat-supply = <&reg_dcdce>;
-		vddio-supply = <&reg_dcdce>;
-		device-wakeup-gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>; /* PL6 */
-		host-wakeup-gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>; /* PL5 */
-		shutdown-gpios = <&r_pio 0 4 GPIO_ACTIVE_HIGH>; /* PL4 */
-	};
+// check
+//	bluetooth {
+//		compatible = "brcm,bcm43438-bt";
+//		clocks = <&rtc 1>;
+//		clock-names = "lpo";
+//		vbat-supply = <&reg_dcdce>;
+//		vddio-supply = <&reg_dcdce>;
+//		device-wakeup-gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>; /* PL6 */
+//		host-wakeup-gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>; /* PL5 */
+//		shutdown-gpios = <&r_pio 0 4 GPIO_ACTIVE_HIGH>; /* PL4 */
+//	};
 };
 
 &usbotg {
-	dr_mode = "peripheral";
+	dr_mode = "host";	/* USB A type receptable */
 	status = "okay";
 };
 
 &usbphy {
-	usb1_vbus-supply = <&reg_usb1_vbus>;
 	status = "okay";
-};
-
-&ir {
-	linux,rc-map-name = "rc-beelink-gs1";
-	status = "okay";
-};
-
-&gpu_opp_table {
-	compatible = "operating-points-v2";
-	opp-125000000 {
-		opp-hz = /bits/ 64 <125000000>;
-		opp-microvolt = <860000>;
-		status = "okay";
-	};
-	opp-250000000 {
-		opp-hz = /bits/ 64 <250000000>;
-		opp-microvolt = <860000>;
-		status = "okay";
-	};
-	opp-432000000 {
-		opp-hz = /bits/ 64 <432000000>;
-		opp-microvolt = <860000>;
-		status = "okay";
-	};
-	opp-600000000 {
-		opp-hz = /bits/ 64 <600000000>;
-		opp-microvolt = <1020000>;
-		status = "okay";
-	};
-	opp-800000000 {
-		opp-hz = /bits/ 64 <800000000>;
-		opp-microvolt = <1080000>;
-		status = "disabled";
-	};
 };
