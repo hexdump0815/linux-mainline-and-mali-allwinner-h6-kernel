@@ -20,7 +20,7 @@ for i in /compile/doc/stable-aw/misc.616/patches/v6.18/*.patch; do
 done
 
 # minimyth2 patches for v6.18
-for i in /compile/doc/stable-aw/misc.616/patches/v6.18/manjaro-h616/*.patch; do
+for i in /compile/doc/stable-aw/misc.616/patches/v6.18/minimyth2/*.patch; do
   echo === $i
   patch -p1 < $i
 done
