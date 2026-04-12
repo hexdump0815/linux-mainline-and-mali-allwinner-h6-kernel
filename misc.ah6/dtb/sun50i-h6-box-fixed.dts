@@ -12,8 +12,8 @@
 	reg_vdd_cpu_gpu: vdd-cpu-gpu {
 		compatible = "regulator-fixed";
 		regulator-name = "vdd-cpu-gpu";
-		regulator-min-microvolt = <1160000>;
-		regulator-max-microvolt = <1160000>;
+		regulator-min-microvolt = <1200000>;
+		regulator-max-microvolt = <1200000>;
 	};
 };
 
