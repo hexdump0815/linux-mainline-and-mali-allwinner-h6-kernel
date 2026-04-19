@@ -1,5 +1,5 @@
---- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi.org	2020-10-15 00:00:56.136742978 +0200
-+++ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi	2020-10-15 00:02:52.049799383 +0200
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi.org	2020-10-15 00:00:56.136742978 +0200
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi	2020-10-15 00:02:52.049799383 +0200
 @@ -1124,13 +1124,13 @@
  
  			trips {

@@ -13,11 +13,9 @@
 
 cd /compile/source/linux-stable-616
 
-# patches for v6.18
-for i in /compile/doc/stable-aw/misc.616/patches/v6.18/*.patch; do
-  echo === $i
-  patch -p1 < $i
-done
+# add some own dtb files
+cp -v /compile/doc/stable-aw/misc.616/dtb/sun50i-h*box*.dts arch/arm64/boot/dts/allwinner
+cp -v /compile/doc/stable-aw/misc.616/dtb/sun50i-h61x-*.dtsi arch/arm64/boot/dts/allwinner
 
 # minimyth2 patches for v6.18
 for i in /compile/doc/stable-aw/misc.616/patches/v6.18/minimyth2/*.patch; do
@@ -25,9 +23,12 @@ for i in /compile/doc/stable-aw/misc.616/patches/v6.18/minimyth2/*.patch; do
   patch -p1 < $i
 done
 
-# # add some own dtb files
-cp -v /compile/doc/stable-aw/misc.616/dtb/sun50i-h*box*.dts arch/arm64/boot/dts/allwinner
-cp -v /compile/doc/stable-aw/misc.616/dtb/sun50i-h61x-*.dtsi arch/arm64/boot/dts/allwinner
+# other patches for v6.18
+for i in /compile/doc/stable-aw/misc.616/patches/v6.18/*.patch; do
+  echo === $i
+  patch -p1 < $i
+done
+
 # remove panfrost purge log spam
 patch -p1 < /compile/doc/kernel-extra-patches/remove-panfrost-purge-log-spam/v6.12.12.patch
 # fix kernel version number: + instead of -dirty at the end

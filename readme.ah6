@@ -16,14 +16,14 @@ cp -v /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
 cp -v /compile/doc/stable-aw/misc.ah6/dtb/*.dtsi arch/arm64/boot/dts/allwinner
 
 # patches:
-# patches for v6.18
-for i in /compile/doc/stable-aw/misc.ah6/patches/v6.18/*.patch; do
+# minimyth2 patches for v6.18
+for i in /compile/doc/stable-aw/misc.ah6/patches/v6.18/minimyth2/*.patch; do
   echo === $i
   patch -p1 < $i
 done
 
-# minimyth2 patches for v6.18
-for i in /compile/doc/stable-aw/misc.ah6/patches/v6.18/minimyth2/*.patch; do
+# other patches for v6.18
+for i in /compile/doc/stable-aw/misc.ah6/patches/v6.18/*.patch; do
   echo === $i
   patch -p1 < $i
 done
