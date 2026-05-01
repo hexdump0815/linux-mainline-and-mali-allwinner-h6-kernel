@@ -1,0 +1,116 @@
+- model the h6 opp points closer to the h616 ones with also more room at the
+  bottom to have more room for thermal throttling
+
+- make everything above 1ghz turbo mode as most h6 tv boxes cannot control the
+  cpu voltage by some supported pmic regulator and thus thermal throttling is
+less effective as it can only scale by frequency and not voltage and this
+results in the boxes overheating with time under constant full load, so better
+use a lower max frequency as default
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-cpu-opp.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6-cpu-opp.dtsi
+index 0baf0f8e4d27..ad26ed61de66 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h6-cpu-opp.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-cpu-opp.dtsi
+@@ -17,27 +17,18 @@ opp-480000000 {
+ 			opp-microvolt-speed2 = <820000 820000 1200000>;
+ 		};
+ 
+-		opp-720000000 {
++		opp-600000000 {
+ 			clock-latency-ns = <244144>; /* 8 32k periods */
+-			opp-hz = /bits/ 64 <720000000>;
++			opp-hz = /bits/ 64 <600000000>;
+ 
+ 			opp-microvolt-speed0 = <880000 880000 1200000>;
+ 			opp-microvolt-speed1 = <820000 820000 1200000>;
+ 			opp-microvolt-speed2 = <820000 820000 1200000>;
+ 		};
+ 
+-		opp-816000000 {
++		opp-792000000 {
+ 			clock-latency-ns = <244144>; /* 8 32k periods */
+-			opp-hz = /bits/ 64 <816000000>;
+-
+-			opp-microvolt-speed0 = <880000 880000 1200000>;
+-			opp-microvolt-speed1 = <820000 820000 1200000>;
+-			opp-microvolt-speed2 = <820000 820000 1200000>;
+-		};
+-
+-		opp-888000000 {
+-			clock-latency-ns = <244144>; /* 8 32k periods */
+-			opp-hz = /bits/ 64 <888000000>;
++			opp-hz = /bits/ 64 <792000000>;
+ 
+ 			opp-microvolt-speed0 = <880000 880000 1200000>;
+ 			opp-microvolt-speed1 = <820000 820000 1200000>;
+@@ -53,6 +44,16 @@ opp-1080000000 {
+ 			opp-microvolt-speed2 = <880000 880000 1200000>;
+ 		};
+ 
++		opp-1200000000 {
++			clock-latency-ns = <244144>; /* 8 32k periods */
++			opp-hz = /bits/ 64 <1200000000>;
++
++			opp-microvolt-speed0 = <1000000 1000000 1200000>;
++			opp-microvolt-speed1 = <940000 940000 1200000>;
++			opp-microvolt-speed2 = <940000 940000 1200000>;
++			turbo-mode;
++		};
++
+ 		opp-1320000000 {
+ 			clock-latency-ns = <244144>; /* 8 32k periods */
+ 			opp-hz = /bits/ 64 <1320000000>;
+@@ -60,15 +61,27 @@ opp-1320000000 {
+ 			opp-microvolt-speed0 = <1000000 1000000 1200000>;
+ 			opp-microvolt-speed1 = <940000 940000 1200000>;
+ 			opp-microvolt-speed2 = <940000 940000 1200000>;
++			turbo-mode;
++		};
++
++		opp-1416000000 {
++			clock-latency-ns = <244144>; /* 8 32k periods */
++			opp-hz = /bits/ 64 <1416000000>;
++
++			opp-microvolt-speed0 = <1060000 1060000 1200000>;
++			opp-microvolt-speed1 = <1000000 1000000 1200000>;
++			opp-microvolt-speed2 = <1000000 1000000 1200000>;
++			turbo-mode;
+ 		};
+ 
+-		opp-1488000000 {
++		opp-1512000000 {
+ 			clock-latency-ns = <244144>; /* 8 32k periods */
+-			opp-hz = /bits/ 64 <1488000000>;
++			opp-hz = /bits/ 64 <1512000000>;
+ 
+ 			opp-microvolt-speed0 = <1060000 1060000 1200000>;
+ 			opp-microvolt-speed1 = <1000000 1000000 1200000>;
+ 			opp-microvolt-speed2 = <1000000 1000000 1200000>;
++			turbo-mode;
+ 		};
+ 
+ 		opp-1608000000 {
+@@ -78,6 +91,7 @@ opp-1608000000 {
+ 			opp-microvolt-speed0 = <1090000 1090000 1200000>;
+ 			opp-microvolt-speed1 = <1030000 1030000 1200000>;
+ 			opp-microvolt-speed2 = <1030000 1030000 1200000>;
++			turbo-mode;
+ 		};
+ 
+ 		opp-1704000000 {
+@@ -87,6 +101,7 @@ opp-1704000000 {
+ 			opp-microvolt-speed0 = <1120000 1120000 1200000>;
+ 			opp-microvolt-speed1 = <1060000 1060000 1200000>;
+ 			opp-microvolt-speed2 = <1060000 1060000 1200000>;
++			turbo-mode;
+ 		};
+ 
+ 		opp-1800000000 {
+@@ -96,6 +111,7 @@ opp-1800000000 {
+ 			opp-microvolt-speed0 = <1160000 1160000 1200000>;
+ 			opp-microvolt-speed1 = <1100000 1100000 1200000>;
+ 			opp-microvolt-speed2 = <1100000 1100000 1200000>;
++			turbo-mode;
+ 		};
+ 	};
+ };
