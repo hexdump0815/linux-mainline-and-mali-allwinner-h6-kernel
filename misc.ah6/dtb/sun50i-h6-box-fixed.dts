@@ -75,7 +75,7 @@
 
 // lower the sd card speed to avoid observed problems otherwise
 &mmc0 {
-	max-frequency = <50000000>;
+	max-frequency = <25000000>;
 };
 
 // bt uarts will most probably be handled via different includes in the end
