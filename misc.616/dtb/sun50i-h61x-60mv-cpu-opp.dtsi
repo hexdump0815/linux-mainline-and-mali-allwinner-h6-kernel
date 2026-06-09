@@ -3,90 +3,120 @@
 
 / {
 	cpu_opp_table: cpu-opp-table {
-		compatible = "operating-points-v2";
+		compatible = "allwinner,sun50i-h616-operating-points";
+		nvmem-cells = <&cpu_speed_grade>;
 		opp-shared;
 
 		// delete the old nodes coming in from sun50i-h616-cpu-opp.dtsi to build everything from scratch
 		/delete-node/ opp-480000000;
 		/delete-node/ opp-600000000;
+		/delete-node/ opp-720000000;
 		/delete-node/ opp-792000000;
+		/delete-node/ opp-936000000;
 		/delete-node/ opp-1008000000;
+		/delete-node/ opp-1032000000;
 		/delete-node/ opp-1200000000;
-		/delete-node/ opp-1344000000;
+		/delete-node/ opp-1320000000;
 		/delete-node/ opp-1416000000;
 		/delete-node/ opp-1512000000;
-		/delete-node/ opp-1608000000;
 
 		opp-480000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <480000000>;
 			opp-microvolt = <900000 900000 900000>;
+			opp-supported-hw = <0xff>;
 		};
 
 		opp-600000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <600000000>;
 			opp-microvolt = <900000 900000 900000>;
+			opp-supported-hw = <0xff>;
 		};
 
 		opp-792000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <792000000>;
 			opp-microvolt = <950000 950000 950000>;
+			opp-supported-hw = <0xff>;
 		};
 
 		opp-1008000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <1008000000>;
 			opp-microvolt = <1020000 1020000 1020000>;
+			opp-supported-hw = <0xff>;
 		};
 
 		opp-1200000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <1200000000>;
 			opp-microvolt = <1080000 1080000 1080000>;
+			opp-supported-hw = <0xff>;
 		};
 
 		opp-1320000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <1320000000>;
-			opp-microvolt = <1150000 1150000 1150000>;
+			opp-microvolt = <1160000 1160000 1160000>;
+			opp-supported-hw = <0xff>;
 			turbo-mode;
 		};
 
 		opp-1416000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <1416000000>;
-			opp-microvolt = <1150000 1150000 1150000>;
+			opp-microvolt = <1160000 1160000 1160000>;
+			opp-supported-hw = <0xff>;
 			turbo-mode;
 		};
 
 		opp-1512000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <1512000000>;
-			opp-microvolt = <1150000 1150000 1150000>;
+			opp-microvolt = <1160000 1160000 1160000>;
+			opp-supported-hw = <0xff>;
 			turbo-mode;
 		};
 
 		opp-1608000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <1608000000>;
-			opp-microvolt = <1150000 1150000 1150000>;
+			opp-microvolt = <1160000 1160000 1160000>;
+			opp-supported-hw = <0xff>;
 			turbo-mode;
 		};
 
 		opp-1704000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <1704000000>;
-			opp-microvolt = <1150000 1150000 1150000>;
+			opp-microvolt = <1160000 1160000 1160000>;
+			opp-supported-hw = <0xff>;
 			turbo-mode;
 		};
 
 		opp-1800000000 {
 			clock-latency-ns = <244144>; /* 8 32k periods */
 			opp-hz = /bits/ 64 <1800000000>;
-			opp-microvolt = <1150000 1150000 1150000>;
+			opp-microvolt = <1160000 1160000 1160000>;
+			opp-supported-hw = <0xff>;
 			turbo-mode;
 		};
 	};
+};
+
+&cpu0 {
+	operating-points-v2 = <&cpu_opp_table>;
+};
+
+&cpu1 {
+	operating-points-v2 = <&cpu_opp_table>;
+};
+
+&cpu2 {
+	operating-points-v2 = <&cpu_opp_table>;
+};
+
+&cpu3 {
+	operating-points-v2 = <&cpu_opp_table>;
 };

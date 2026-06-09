@@ -7,25 +7,27 @@
 # name: stb-ah6 - allwinner h6
 
 # INFO: based on warpme minimyth2 patches from https://github.com/warpme/minimyth2
-#       at commit ebde095d4cac6809cf9e156ce636e14402fdd9d4 (linux-6.12 subdir)
+#       at commit b316f72e32e09e9c5b7b4488bed000e830d64e12 (linux-6.19 subdir)
 
 cd /compile/source/linux-stable-ah6
-
-# patches:
-# a few remaining warpme minimyth2 h6 patches - to be replaced with the original sources
-for i in /compile/doc/stable-aw/misc.ah6/patches/minimyth2/*.patch; do
-  echo === $i
-  patch -p1 < $i
-done
 
 # add some own dtb files
 cp -v /compile/doc/stable-aw/misc.ah6/dtb/*.dts arch/arm64/boot/dts/allwinner
 cp -v /compile/doc/stable-aw/misc.ah6/dtb/*.dtsi arch/arm64/boot/dts/allwinner
-patch -p1 < /compile/doc/stable-aw/misc.ah6/patches/add-own-dtb-files-v6.12.patch
-# make sure mmc devices always end up with the same device number
-patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/fixed-mmc-device-numbering.patch
-# raise the temp limits a bit to avoid throttling too much
-patch -p0 < /compile/doc/stable-aw/misc.ah6/patches/h6-higher-temps-v6.1.patch
+
+# patches:
+# minimyth2 patches for v6.18
+for i in /compile/doc/stable-aw/misc.ah6/patches/v6.18/minimyth2/*.patch; do
+  echo === $i
+  patch -p1 < $i
+done
+
+# other patches for v6.18
+for i in /compile/doc/stable-aw/misc.ah6/patches/v6.18/*.patch; do
+  echo === $i
+  patch -p1 < $i
+done
+
 # remove panfrost purge log spam
 patch -p1 < /compile/doc/kernel-extra-patches/remove-panfrost-purge-log-spam/v6.12.12.patch
 # fix kernel version number: + instead of -dirty at the end

@@ -1,0 +1,15 @@
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi.org	2026-04-19 09:55:06.680382413 +0200
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi	2026-04-19 09:53:53.355923310 +0200
+@@ -17,6 +17,12 @@
+ 	#address-cells = <1>;
+ 	#size-cells = <1>;
+
++	aliases {
++		mmc0 = &mmc0;
++		mmc1 = &mmc1;
++		mmc2 = &mmc2;
++	};
++
+ 	ac200_pwm_clk: ac200_clk {
+ 		compatible = "pwm-clock";
+ 		#clock-cells = <0>;
